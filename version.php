@@ -22,3 +22,4 @@ $plugin->release   = '1.3.1';
 $plugin->maturity  = MATURITY_STABLE;
 // Requires Moodle 4.4 or later (approximate build number for 4.4).
 $plugin->requires  = 2024042200;
+https://github.com/LeoLeto/Awakelab-moodle-emails.git

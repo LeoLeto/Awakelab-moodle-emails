@@ -35,14 +35,14 @@ $string['runpage:type_progress'] = 'Notificacions de Progrés (25% i 50%)';
 $string['runpage:confirm_progress'] = 'Revisar tots els estudiants de la categoria configurada i enviar correus als que hagin assolit el 25% o 50% de progrés (si no han estat notificats prèviament).';
 $string['runpage:type_courseend'] = 'Notificacions de Fi de Curs (7 dies abans i últim dia)';
 $string['runpage:confirm_courseend'] = 'Revisar cursos que finalitzen aviat (exactament dins de 7 dies) o avui, i enviar recordatoris als estudiants matriculats (si no han estat notificats prèviament).';
-$string['runpage:confirm'] = 'Fes clic al botó per iniciar la verificació. Es revisaran tots els estudiants de la categoria configurada i s'enviaran correus als que hagin assolit el 25% o 50% de progrés (si no han estat notificats prèviament).';
+$string['runpage:confirm'] = 'Fes clic al botó per iniciar la verificació. Es revisaran tots els estudiants de la categoria configurada i s\'enviaran correus als que hagin assolit el 25% o 50% de progrés (si no han estat notificats prèviament).';
 $string['run_progress_button'] = 'Provar Correus de Progrés';
 $string['run_courseend_button'] = 'Provar Correus de Fi de Curs';
 $string['backtosettings'] = 'Tornar a configuració';
 $string['run_now_button'] = 'Verificar progrés ara';
-$string['run_now_done'] = 'La verificació s’ha executat correctament.';
-$string['run_now_error'] = 'S’ha produït un error durant l’execució:';
-$string['runpage:nocategory'] = 'No hi ha cap categoria seleccionada a la configuració. Selecciona’n una per habilitar les operacions del connector.';
+$string['run_now_done'] = 'La verificació s\'ha executat correctament.';
+$string['run_now_error'] = 'S\'ha produït un error durant l\'execució:';
+$string['runpage:nocategory'] = 'No hi ha cap categoria seleccionada a la configuració. Selecciona\'n una per habilitar les operacions del connector.';
 
 // Settings.
 $string['settings:category'] = 'Categoria objectiu';
@@ -68,18 +68,18 @@ $string['privacy:metadata:local_courseprogressnotify_log'] = 'Registre de notifi
 $string['privacy:metadata:local_courseprogressnotify_log:userid'] = 'Usuari destinatari';
 $string['privacy:metadata:local_courseprogressnotify_log:courseid'] = 'Curs associat a la notificació';
 $string['privacy:metadata:local_courseprogressnotify_log:notification_type'] = 'Tipus de notificació enviada';
-$string['privacy:metadata:local_courseprogressnotify_log:entityid'] = 'Identificador de l’entitat associada (p. ex., Zoom o sessió)';
-$string['privacy:metadata:local_courseprogressnotify_log:time_sent'] = 'Marca temporal de l’enviament';
+$string['privacy:metadata:local_courseprogressnotify_log:entityid'] = 'Identificador de l\'entitat associada (p. ex., Zoom o sessió)';
+$string['privacy:metadata:local_courseprogressnotify_log:time_sent'] = 'Marca temporal de l\'enviament';
 
 // Email templates (from emails_ca.txt).
 $string['email_zoom_subject'] = 'Sessió Zoom del curs {{coursename}}';
 $string['email_zoom_body'] = '<p>Hola {{firstname}}!</p>
 
-<p>T’escrivim en relació al curs <strong>{{coursename}}</strong> que estàs realitzant.</p>
+<p>T\'escrivim en relació al curs <strong>{{coursename}}</strong> que estàs realitzant.</p>
 
 <p>Et recordem que el proper <strong>{{zoom_date}}</strong>, de <strong>{{zoom_start}}</strong> a <strong>{{zoom_end}}</strong>, tindrà lloc una sessió en directe per Zoom amb el/la tutor/a.</p>
 
-<p>El mateix dia de la sessió, quan accedeixis a la plataforma, veuràs l’enllaç per unir-te directament a la videotrucada.</p>
+<p>El mateix dia de la sessió, quan accedeixis a la plataforma, veuràs l\'enllaç per unir-te directament a la videotrucada.</p>
 
 <p>Aquesta sessió té com a objectiu:</p>
 <ul>
@@ -93,7 +93,7 @@ $string['email_zoom_body'] = '<p>Hola {{firstname}}!</p>
 $string['email_25_subject'] = 'Seguiment del 25% del curs {{coursename}}';
 $string['email_25_body'] = '<p>Benvingut/da {{firstname}},</p>
 
-<p>T’informem que has assolit el <strong>25%</strong> del curs <strong>{{coursename}}</strong>. Aquesta és la teva evolució fins avui:</p>
+<p>T\'informem que has assolit el <strong>25%</strong> del curs <strong>{{coursename}}</strong>. Aquesta és la teva evolució fins avui:</p>
 
 {{progress_table}}
 
@@ -102,10 +102,10 @@ $string['email_25_body'] = '<p>Benvingut/da {{firstname}},</p>
 <ul>
   <li>Arribar a una connexió mínima del 75% de les hores</li>
   <li>Visualitzar el 100% dels continguts</li>
-  <li>Realitzar les activitats d’avaluació</li>
+  <li>Realitzar les activitats d\'avaluació</li>
 </ul>
 
-<p>Recorda també completar el <strong>Qüestionari de valoració de l’alumne</strong>, disponible a l’apartat d’avaluació de la qualitat.</p>
+<p>Recorda també completar el <strong>Qüestionari de valoració de l\'alumne</strong>, disponible a l\'apartat d\'avaluació de la qualitat.</p>
 
 <p>Per a qualsevol dubte, contacta amb nosaltres.</p>
 
@@ -120,14 +120,14 @@ $string['email_50_body'] = '<p>Benvingut/da {{firstname}}!</p>
 
 {{progress_table}}
 
-<p>T’animem a continuar avançant i a contactar amb nosaltres davant qualsevol dubte.</p>
+<p>T\'animem a continuar avançant i a contactar amb nosaltres davant qualsevol dubte.</p>
 
 <p>Una salutació,</p>';
 
 $string['email_end_soon_subject'] = 'Recta final del curs {{coursename}}';
 $string['email_end_soon_body'] = '<p>Hola {{firstname}}!</p>
 
-<p>Hem entrat a l’última setmana del curs <strong>{{coursename}}</strong>, que finalitza el proper <strong>{{courseenddate}}</strong>.</p>
+<p>Hem entrat a l\'última setmana del curs <strong>{{coursename}}</strong>, que finalitza el proper <strong>{{courseenddate}}</strong>.</p>
 
 <p>Recorda els requisits de finalització:</p>
 
@@ -144,9 +144,9 @@ $string['email_end_soon_body'] = '<p>Hola {{firstname}}!</p>
 $string['email_last_day_subject'] = 'Instruccions de finalització del curs {{coursename}}';
 $string['email_last_day_body'] = '<p>Hola {{firstname}},</p>
 
-<p>Et recordem que demà és l’últim dia de formació del curs <strong>{{coursename}}</strong>.</p>
+<p>Et recordem que demà és l\'últim dia de formació del curs <strong>{{coursename}}</strong>.</p>
 
-<p>Ha estat un plaer comptar amb tu i esperem que l’experiència hagi estat profitosa.</p>
+<p>Ha estat un plaer comptar amb tu i esperem que l\'experiència hagi estat profitosa.</p>
 
 <p>Si encara no ho has fet, completa les avaluacions i verifica que has visualitzat tots els continguts per obtenir el diploma.</p>
 
@@ -161,12 +161,12 @@ $string['email_last_day_body'] = '<p>Hola {{firstname}},</p>
 $string['email_exam_subject'] = 'Examen presencial obligatori del curs {{coursename}}';
 $string['email_exam_body'] = '<p>Hola {{firstname}},</p>
 
-<p>Et recordem que el proper <strong>{{exam_date}}</strong> està programat l’examen presencial obligatori del curs <strong>{{coursename}}</strong>.</p>
+<p>Et recordem que el proper <strong>{{exam_date}}</strong> està programat l\'examen presencial obligatori del curs <strong>{{coursename}}</strong>.</p>
 
 <p><strong>Lloc:</strong> {{exam_location}}<br>
 <strong>Horari:</strong> de {{exam_start}} a {{exam_end}}</p>
 
-<p>És imprescindible haver completat totes les activitats i avaluacions per poder accedir a l’examen.</p>
+<p>És imprescindible haver completat totes les activitats i avaluacions per poder accedir a l\'examen.</p>
 
 <p>Recorda arribar amb antelació i portar el DNI o NIE.</p>
 
@@ -189,7 +189,7 @@ $string['email_tutoring_body'] = '<p>Hola {{firstname}},</p>
 $string['email_diploma_subject'] = 'Diploma del curs {{coursename}}';
 $string['email_diploma_body'] = '<p>Benvolgut/da {{firstname}},</p>
 
-<p>Des d’avui ja tens disponible al campus virtual el diploma del curs <strong>{{coursename}}</strong>.</p>
+<p>Des d\'avui ja tens disponible al campus virtual el diploma del curs <strong>{{coursename}}</strong>.</p>
 
 <p>Pots accedir al campus des del següent enllaç:</p>
 
