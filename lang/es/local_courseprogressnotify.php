@@ -1,0 +1,204 @@
+<?php
+// This file is part of Moodle - http://moodle.org/
+//
+// Moodle is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Moodle is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+
+defined('MOODLE_INTERNAL') || die();
+
+$string['pluginname'] = 'Notificaciones de progreso de curso';
+
+// Scheduled task names.
+$string['task_check_progress_25'] = 'Notificación de progreso 25%';
+$string['task_check_progress_50'] = 'Notificación de progreso 50%';
+$string['task_check_course_end_soon'] = 'Aviso: 7 días antes de finalizar el curso';
+$string['task_check_course_last_day'] = 'Aviso: último día del curso';
+$string['task_check_zoom_sessions'] = 'Recordatorios de sesiones Zoom';
+$string['task_check_presential_sessions'] = 'Recordatorios de sesiones presenciales';
+$string['task_check_diploma_available'] = 'Aviso: diploma disponible (30 días)';
+
+// Manual run page.
+$string['runpage:title'] = 'Verificación de progreso manual';
+$string['runpage:heading'] = 'Verificar progreso ahora';
+$string['runpage:desc'] = 'Puedes ejecutar manualmente diferentes verificaciones de notificaciones. Selecciona el tipo que deseas probar:';
+$string['runpage:type_progress'] = 'Notificaciones de Progreso (25% y 50%)';
+$string['runpage:confirm_progress'] = 'Revisar todos los estudiantes de la categoría configurada y enviar emails a quienes hayan alcanzado el 25% o 50% de progreso (si no han sido notificados previamente).';
+$string['runpage:type_courseend'] = 'Notificaciones de Fin de Curso (7 días antes y último día)';
+$string['runpage:confirm_courseend'] = 'Revisar cursos que finalizan pronto (exactamente dentro de 7 días) o hoy, y enviar recordatorios a los estudiantes matriculados (si no han sido notificados previamente).';
+$string['runpage:confirm'] = 'Haz clic en el botón para iniciar la verificación. Se revisarán todos los estudiantes de la categoría configurada y se enviarán emails a quienes hayan alcanzado el 25% o 50% de progreso (si no han sido notificados previamente).';
+$string['run_progress_button'] = 'Probar Emails de Progreso';
+$string['run_courseend_button'] = 'Probar Emails de Fin de Curso';
+$string['backtosettings'] = 'Volver a configuración';
+$string['run_now_button'] = 'Verificar Progreso Ahora';
+$string['run_now_done'] = 'La verificación se ejecutó correctamente.';
+$string['run_now_error'] = 'Se produjo un error durante la ejecución:';
+$string['runpage:nocategory'] = 'No hay una categoría seleccionada en la configuración. Selecciona una categoría para habilitar las operaciones del plugin.';
+
+// Settings.
+$string['settings:category'] = 'Categoría objetivo';
+$string['settings:category_desc'] = 'Selecciona la categoría donde se aplicará este plugin. Si no se selecciona ninguna (valor "Ninguna"), el plugin no realizará ninguna operación.';
+$string['settings:category:none'] = 'Ninguna (deshabilitado)';
+$string['settings:zoomdaysbefore'] = 'Días antes para la invitación Zoom';
+$string['settings:zoomdaysbefore_desc'] = 'Número de días antes de la fecha de la sesión Zoom para enviar la invitación automática.';
+$string['settings:presentialdaysbefore'] = 'Días antes para sesiones presenciales';
+$string['settings:presentialdaysbefore_desc'] = 'Número de días antes de la sesión presencial (examen/tutoría) para enviar el recordatorio.';
+
+// Run block in settings page.
+$string['settings:run:desc'] = 'Ejecuta manualmente la verificación de progreso desde esta página. Se aplicará únicamente a la categoría seleccionada.';
+
+// Progress table.
+$string['progress:header:activity'] = 'Actividad';
+$string['progress:header:status'] = 'Estado';
+$string['progress:status:complete'] = 'Completado';
+$string['progress:status:incomplete'] = 'Pendiente';
+
+// Privacy.
+$string['privacy:metadata'] = 'El plugin local_courseprogressnotify almacena registros de notificaciones enviadas a los usuarios.';
+$string['privacy:metadata:local_courseprogressnotify_log'] = 'Registro de notificaciones enviadas';
+$string['privacy:metadata:local_courseprogressnotify_log:userid'] = 'Usuario destinatario de la notificación';
+$string['privacy:metadata:local_courseprogressnotify_log:courseid'] = 'Curso asociado a la notificación';
+$string['privacy:metadata:local_courseprogressnotify_log:notification_type'] = 'Tipo de notificación enviada';
+$string['privacy:metadata:local_courseprogressnotify_log:entityid'] = 'Identificador de la entidad asociada (p.ej., Zoom o sesión)';
+$string['privacy:metadata:local_courseprogressnotify_log:time_sent'] = 'Marca temporal del envío';
+
+// Email templates (from emails_es.txt).
+$string['email_zoom_subject'] = 'Sesión Zoom del curso {{coursename}}';
+$string['email_zoom_body'] = '<p>¡Hola {{firstname}}!</p>
+
+<p>Te escribimos en relación al curso <strong>{{coursename}}</strong> que estás realizando.</p>
+
+<p>Te recordamos que el próximo <strong>{{zoom_date}}</strong>, de <strong>{{zoom_start}}</strong> a <strong>{{zoom_end}}</strong>, tendrá lugar una sesión en directo por Zoom con el/la tutor/a.</p>
+
+<p>El mismo día de la sesión, cuando accedas a la plataforma, verás el enlace para unirte directamente a la videollamada.</p>
+
+<p>Esta sesión tiene como objetivo:</p>
+<ul>
+  <li>Resolver dudas del curso</li>
+  <li>Profundizar en algún contenido específico</li>
+  <li>Realizar una sesión más dinámica y práctica</li>
+</ul>
+
+<p>¡Te esperamos!</p>';
+
+$string['email_25_subject'] = 'Seguimiento del 25% del curso {{coursename}}';
+$string['email_25_body'] = '<p>Bienvenido/a {{firstname}},</p>
+
+<p>Te informamos que has alcanzado el <strong>25%</strong> del curso <strong>{{coursename}}</strong>. A continuación, te mostramos tu evolución hasta el día de hoy:</p>
+
+{{progress_table}}
+
+<p>Aún hay tiempo para finalizar el curso, que concluye el <strong>{{courseenddate}}</strong>. Recuerda que para completarlo debes:</p>
+
+<ul>
+  <li>Alcanzar una conexión mínima del 75% de las horas totales del curso</li>
+  <li>Visualizar el 100% de los contenidos</li>
+  <li>Realizar las actividades de evaluación</li>
+</ul>
+
+<p>Te recordamos también que debes realizar el <strong>Cuestionario de valoración del alumno</strong>, disponible en el apartado de evaluación de la calidad.</p>
+
+<p>Ante cualquier duda, puedes ponerte en contacto con nosotros.</p>
+
+<p>Un saludo,</p>';
+
+$string['email_50_subject'] = 'Seguimiento mitad del curso {{coursename}}';
+$string['email_50_body'] = '<p>¡Bienvenido/a {{firstname}}!</p>
+
+<p>Ya hemos llegado a la mitad del curso <strong>{{coursename}}</strong>. El curso finaliza el <strong>{{courseenddate}}</strong>, y para completarlo es necesario haber visualizado todos los contenidos y realizado las actividades y evaluaciones.</p>
+
+<p>A continuación, puedes ver tu evolución hasta el día de hoy:</p>
+
+{{progress_table}}
+
+<p>Te animamos a seguir avanzando y te recordamos que puedes contactar con nosotros ante cualquier duda.</p>
+
+<p>Un saludo,</p>';
+
+$string['email_end_soon_subject'] = 'Recta final del curso {{coursename}}';
+$string['email_end_soon_body'] = '<p>¡Hola {{firstname}}!</p>
+
+<p>Te escribimos para recordarte que hemos entrado en la última semana del curso <strong>{{coursename}}</strong>, que finaliza el próximo <strong>{{courseenddate}}</strong>.</p>
+
+<p>Recuerda los requisitos de finalización:</p>
+
+<ul>
+  <li>Completar las evaluaciones del curso</li>
+  <li>Visualizar el 100% de los contenidos</li>
+  <li>Alcanzar una conexión mínima del 75% de las horas</li>
+</ul>
+
+<p>Aprovecha estos últimos días para finalizar el curso y resolver cualquier duda pendiente.</p>
+
+<p>¡Mucho ánimo!</p>';
+
+$string['email_last_day_subject'] = 'Instrucciones de finalización del curso {{coursename}}';
+$string['email_last_day_body'] = '<p>Hola {{firstname}},</p>
+
+<p>Te recordamos que mañana es el último día de formación del curso <strong>{{coursename}}</strong>.</p>
+
+<p>Ha sido un placer contar contigo durante este período y esperamos que la experiencia haya sido útil y enriquecedora.</p>
+
+<p>Si aún no lo has hecho, te animamos a completar las evaluaciones y verificar que has visualizado el 100% de los contenidos para poder obtener tu diploma.</p>
+
+<p>También puedes realizar el cuestionario de satisfacción final disponible en el apartado de evaluación de la calidad.</p>
+
+<p>Una vez finalizado el curso, nos pondremos en contacto contigo para informarte sobre la disponibilidad de descarga del diploma.</p>
+
+<p>Gracias por tu participación y compromiso.</p>
+
+<p>Un cordial saludo,</p>';
+
+$string['email_exam_subject'] = 'Examen presencial obligatorio del curso {{coursename}}';
+$string['email_exam_body'] = '<p>Hola {{firstname}},</p>
+
+<p>Te recordamos que el próximo <strong>{{exam_date}}</strong> está programado el examen presencial obligatorio correspondiente al curso <strong>{{coursename}}</strong>.</p>
+
+<p><strong>Lugar:</strong> {{exam_location}}<br>
+<strong>Horario:</strong> de {{exam_start}} a {{exam_end}}</p>
+
+<p>Para poder acceder al examen es imprescindible haber completado todas las actividades y evaluaciones del curso.</p>
+
+<p>Recuerda llegar con antelación y llevar tu DNI o NIE para la identificación.</p>
+
+<p>¡Mucha suerte!</p>';
+
+$string['email_tutoring_subject'] = 'Tutoría presencial obligatoria del curso {{coursename}}';
+$string['email_tutoring_body'] = '<p>Hola {{firstname}},</p>
+
+<p>Te recordamos que el próximo <strong>{{tutoring_date}}</strong> tendrá lugar la tutoría presencial obligatoria del curso <strong>{{coursename}}</strong>.</p>
+
+<p><strong>Lugar:</strong> {{tutoring_location}}<br>
+<strong>Horario:</strong> de {{tutoring_start}} a {{tutoring_end}}</p>
+
+<p>Durante la tutoría se realizarán actividades prácticas, exposición de contenidos y resolución de dudas.</p>
+
+<p>Te recomendamos llevar preparadas tus consultas.</p>
+
+<p>¡Nos vemos pronto!</p>';
+
+$string['email_diploma_subject'] = 'Diploma del curso {{coursename}}';
+$string['email_diploma_body'] = '<p>Estimado/a {{firstname}},</p>
+
+<p>Desde hoy ya tienes disponible en el campus virtual el diploma correspondiente al curso <strong>{{coursename}}</strong>.</p>
+
+<p>Puedes acceder al campus desde el siguiente enlace:</p>
+
+<p><a href="{{campus_url}}">{{campus_url}}</a></p>
+
+<p>Para descargar el diploma es necesario haber completado todos los requisitos del curso y la documentación solicitada.</p>
+
+<p>Si aún no lo has hecho, recuerda completar el cuestionario de satisfacción final.</p>
+
+<p>Muchas gracias por tu participación y te animamos a seguir formándote con nosotros.</p>
+
+<p>Un saludo,</p>';
