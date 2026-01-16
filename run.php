@@ -22,6 +22,7 @@ use local_courseprogressnotify\task\check_progress_50;
 use local_courseprogressnotify\task\check_course_end_soon;
 use local_courseprogressnotify\task\check_course_last_day;
 use local_courseprogressnotify\task\check_zoom_sessions;
+use local_courseprogressnotify\task\check_presential_sessions;
 
 require_login();
 $context = context_system::instance();
@@ -109,6 +110,16 @@ if ($confirm && !empty($type) && confirm_sesskey()) {
             $errors[] = 'Zoom task: ' . $e->getMessage();
             $output[] = 'ERROR in Zoom task: ' . $e->getMessage();
         }
+    } else if ($type === 'presential') {
+        try {
+            $output[] = '--- Executing Presential Sessions Check ---';
+            $tpresential = new check_presential_sessions();
+            $tpresential->execute();
+            $output[] = ob_get_contents();
+        } catch (Throwable $e) {
+            $errors[] = 'Presential task: ' . $e->getMessage();
+            $output[] = 'ERROR in Presential task: ' . $e->getMessage();
+        }
     }
     
     ob_end_clean();
@@ -170,6 +181,15 @@ if (!$categoryid) {
     
     $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'zoom', 'confirm' => 1, 'sesskey' => sesskey()]);
     echo html_writer::link($formurl, get_string('run_zoom_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+    echo $OUTPUT->box_end();
+    
+    // Presential sessions checks
+    echo $OUTPUT->box_start('generalbox mb-3');
+    echo html_writer::tag('h4', get_string('runpage:type_presential', 'local_courseprogressnotify'));
+    echo html_writer::tag('p', get_string('runpage:confirm_presential', 'local_courseprogressnotify'));
+    
+    $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'presential', 'confirm' => 1, 'sesskey' => sesskey()]);
+    echo html_writer::link($formurl, get_string('run_presential_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
     echo $OUTPUT->box_end();
 }
 }

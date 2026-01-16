@@ -14,8 +14,21 @@ Plugin local para Moodle 4.4 que envía emails automáticos a alumnos en funció
 1. Progreso del curso: 25% y 50%.
 2. Curso: 7 días antes de la fecha de fin y el día anterior al último día del curso.
 3. Zoom: recordatorio X días antes de la sesión (configurable).
-4. Presenciales: exámenes y tutorías (recordatorio X días antes, configurable).
+4. Presenciales: exámenes y tutorías (**detección automática desde eventos del calendario**).
 5. Diploma: 30 días después de finalizado el curso (solo aprobados).
+
+## Detección inteligente de sesiones presenciales
+Las sesiones presenciales (exámenes y tutorías) se detectan automáticamente de eventos del calendario:
+
+**Criterios de detección:**
+- El evento tiene el campo "Ubicación" poblado, O
+- La palabra "presencial" aparece en el título o descripción
+
+**Clasificación del tipo:**
+- **Examen**: si contiene palabras como "examen", "exámen", "evaluación", "prueba"
+- **Tutoría**: si contiene palabras como "tutoría", "tutoria", "asesoría", "consulta"
+
+La detección es **case-insensitive** y tolera acentos, reduciendo el margen de error humano.
 
 ## Instalación
 1. Copia la carpeta `local_courseprogressnotify` dentro de `moodle/local/`.
@@ -29,8 +42,7 @@ Plugin local para Moodle 4.4 que envía emails automáticos a alumnos en funció
 - `local_courseprogressnotify_log` (log de envíos):
   - `userid`, `courseid`, `notification_type`, `entityid` (nullable), `time_sent`
   - Índice único para evitar duplicados: `(userid, courseid, notification_type, entityid)`
-- `local_courseprogressnotify_sess` (sesiones presenciales):
-  - `courseid`, `type` (exam|tutoring), `name`, `location`, `starttime`, `endtime`, `visible`, `timecreated`
+  - Para sesiones presenciales, `entityid` almacena el ID del evento del calendario
 
 ## Cron (tareas)
 - `check_progress_25`
@@ -74,11 +86,9 @@ Los horarios están definidos en `db/tasks.php`. Ajusta los crontab si es necesa
   - `classes/email_builder.php`
   - `classes/notification_log.php`
   - `classes/zoom_provider.php`
+  - `classes/presential_provider.php` (detección inteligente de sesiones presenciales)
   - `classes/task/*`
 
 ## Seguridad y privacidad
 - Proveedor de privacidad incluido (`classes/privacy/provider.php`) con metadatos de la tabla de log.
-
-## Sin UI para sesiones presenciales
-- Las sesiones presenciales pueden insertarse mediante SQL o scripts propios: tabla `local_courseprogressnotify_sess`.
 
