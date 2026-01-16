@@ -21,6 +21,7 @@ use local_courseprogressnotify\task\check_progress_25;
 use local_courseprogressnotify\task\check_progress_50;
 use local_courseprogressnotify\task\check_course_end_soon;
 use local_courseprogressnotify\task\check_course_last_day;
+use local_courseprogressnotify\task\check_zoom_sessions;
 
 require_login();
 $context = context_system::instance();
@@ -98,6 +99,16 @@ if ($confirm && !empty($type) && confirm_sesskey()) {
             $errors[] = 'Last day task: ' . $e->getMessage();
             $output[] = 'ERROR in last day task: ' . $e->getMessage();
         }
+    } else if ($type === 'zoom') {
+        try {
+            $output[] = '--- Executing Zoom Sessions Check ---';
+            $tzoom = new check_zoom_sessions();
+            $tzoom->execute();
+            $output[] = ob_get_contents();
+        } catch (Throwable $e) {
+            $errors[] = 'Zoom task: ' . $e->getMessage();
+            $output[] = 'ERROR in Zoom task: ' . $e->getMessage();
+        }
     }
     
     ob_end_clean();
@@ -151,7 +162,16 @@ if (!$categoryid) {
     $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'courseend', 'confirm' => 1, 'sesskey' => sesskey()]);
     echo html_writer::link($formurl, get_string('run_courseend_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
     echo $OUTPUT->box_end();
+    
+    // Zoom session checks
+    echo $OUTPUT->box_start('generalbox mb-3');
+    echo html_writer::tag('h4', get_string('runpage:type_zoom', 'local_courseprogressnotify'));
+    echo html_writer::tag('p', get_string('runpage:confirm_zoom', 'local_courseprogressnotify'));
+    
+    $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'zoom', 'confirm' => 1, 'sesskey' => sesskey()]);
+    echo html_writer::link($formurl, get_string('run_zoom_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
     echo $OUTPUT->box_end();
+}
 }
 
 $backlink = html_writer::link(new moodle_url('/admin/settings.php', ['section' => 'local_courseprogressnotify']),
