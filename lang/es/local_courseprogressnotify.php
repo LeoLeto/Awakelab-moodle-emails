@@ -26,6 +26,8 @@ $string['task_check_course_last_day'] = 'Aviso: último día del curso';
 $string['task_check_zoom_sessions'] = 'Recordatorios de sesiones Zoom';
 $string['task_check_presential_sessions'] = 'Recordatorios de sesiones presenciales';
 $string['task_check_diploma_available'] = 'Aviso: diploma disponible (30 días)';
+$string['task_check_first_day_tasks'] = 'Primer día: tareas iniciales';
+$string['task_check_second_day_tasks'] = 'Segundo día: navegadores y ventanas emergentes';
 
 // Manual run page.
 $string['runpage:title'] = 'Verificación de progreso manual';
@@ -41,12 +43,18 @@ $string['runpage:type_presential'] = 'Notificaciones de Sesiones Presenciales (E
 $string['runpage:confirm_presential'] = 'Detectar automáticamente sesiones presenciales de eventos del calendario (por ubicación y palabras clave) y enviar recordatorios a los estudiantes matriculados (si no han sido notificados previamente).';
 $string['runpage:type_diploma'] = 'Notificaciones de Diploma Disponible (30 días)';
 $string['runpage:confirm_diploma'] = 'Revisar cursos que finalizaron hace exactamente 30 días y enviar notificación de diploma disponible a todos los estudiantes matriculados (si no han sido notificados previamente).';
+$string['runpage:type_firstday'] = 'Notificaciones de Primer Día (Tareas Iniciales)';
+$string['runpage:confirm_firstday'] = 'Revisar cursos que inician hoy y enviar a estudiantes las instrucciones sobre firma de normativa, recibo de material y requisitos del curso.';
+$string['runpage:type_secondday'] = 'Notificaciones de Segundo Día (Navegadores)';
+$string['runpage:confirm_secondday'] = 'Revisar cursos en su segundo día y enviar a estudiantes información sobre navegadores compatibles y configuración de ventanas emergentes.';
 $string['runpage:confirm'] = 'Haz clic en el botón para iniciar la verificación. Se revisarán todos los estudiantes de la categoría configurada y se enviarán emails a quienes hayan alcanzado el 25% o 50% de progreso (si no han sido notificados previamente).';
 $string['run_progress_button'] = 'Probar Emails de Progreso';
 $string['run_courseend_button'] = 'Probar Emails de Fin de Curso';
 $string['run_zoom_button'] = 'Probar Emails de Zoom';
 $string['run_presential_button'] = 'Probar Emails de Sesiones Presenciales';
 $string['run_diploma_button'] = 'Probar Emails de Diploma';
+$string['run_firstday_button'] = 'Probar Emails de Primer Día';
+$string['run_secondday_button'] = 'Probar Emails de Segundo Día';
 $string['backtosettings'] = 'Volver a configuración';
 $string['run_now_button'] = 'Verificar Progreso Ahora';
 $string['run_now_done'] = 'La verificación se ejecutó correctamente.';
@@ -211,3 +219,53 @@ $string['email_diploma_body'] = '<p>Estimado/a {{firstname}},</p>
 <p>Muchas gracias por tu participación y te animamos a seguir formándote con nosotros.</p>
 
 <p>Un saludo,</p>';
+
+// First day tasks email.
+$string['email_first_day_subject'] = 'Primeras tareas a realizar en la plataforma';
+$string['email_first_day_body'] = '<p>Hola a todos/as,</p>
+
+<p>Te escribimos en relación al curso <strong>{{coursename}}</strong> que estás realizando con nosotros.</p>
+
+<p>Como primera tarea del curso, debéis leer y firmar la normativa interna y el Recibo de Material. Podéis encontrarlos en la página inicial del campus virtual, en el apartado de Documentación, tal y como se muestra en la imagen que os adjuntamos a continuación:</p>
+
+<p><img src="{{image_documentation}}" alt="Ubicación de documentación" style="max-width: 100%; height: auto;"></p>
+
+<p>Es imprescindible firmar estos dos documentos para poder acceder a los contenidos de la formación.</p>
+
+<p>Aprovecho para recordaros los requisitos necesarios para poder finalizar el curso y obtener así vuestro diploma de aprovechamiento:</p>
+
+<ul>
+  <li>Visualizar como mínimo el <strong>75% de los contenidos</strong>. A través de la barra de progreso podréis ver en color rojo los contenidos pendientes de visualizar.</li>
+  <li>Cumplir con un <strong>tiempo mínimo de conexión del 75%</strong> de la duración de la formación.</li>
+  <li>Realizar las <strong>evaluaciones obligatorias</strong> (parciales y final).</li>
+</ul>
+
+<p>Si tenéis alguna duda sobre cómo utilizar la plataforma, podéis visualizar el siguiente videotutorial:</p>
+
+<p><img src="{{image_tutorial}}" alt="Video tutorial" style="max-width: 100%; height: auto;"></p>
+
+<p>Para cualquier consulta, no dudéis en poneros en contacto con el/la dinamizador/a correspondiente.</p>
+
+<p>Saludos.</p>';
+
+// Second day tasks email.
+$string['email_second_day_subject'] = 'Activación de ventanas emergentes y navegadores recomendados para acceder al campus';
+$string['email_second_day_body'] = '<p>Buenos días,</p>
+
+<p>Para poder visualizar correctamente todos los contenidos del curso, es necesario que las ventanas emergentes (pop-ups) y las cookies estén activadas en vuestro navegador. Si las tenéis bloqueadas, algunos recursos del curso no se abrirán con normalidad.</p>
+
+<p>Os recomendamos acceder al campus virtual desde los siguientes navegadores:</p>
+
+<ul>
+  <li>Mozilla Firefox</li>
+  <li>Google Chrome</li>
+  <li>Internet Explorer</li>
+</ul>
+
+<p>⚠️ <strong>Importante:</strong> El navegador Safari no es compatible con la plataforma y puede generar múltiples errores.</p>
+
+<p>Si aun así continuáis teniendo problemas, podéis consultar el documento de preguntas frecuentes (FAQ) que encontraréis en el apartado de documentación de la plataforma.</p>
+
+<p>Para cualquier duda, podéis contactar con vuestro/a dinamizador/a del curso.</p>
+
+<p>Muchas gracias.</p>';

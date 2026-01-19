@@ -16,6 +16,8 @@ Plugin local para Moodle 4.4 que envía emails automáticos a alumnos en funció
 3. Zoom: recordatorio X días antes de la sesión (configurable).
 4. Presenciales: exámenes y tutorías (**detección automática desde eventos del calendario**).
 5. Diploma: 30 días después de finalizado el curso (todos los estudiantes).
+6. **Primer día**: tareas iniciales (firma de normativa y recibo de material, con imágenes).
+7. **Segundo día**: información sobre navegadores compatibles y ventanas emergentes.
 
 ## Detección inteligente de sesiones presenciales
 Las sesiones presenciales (exámenes y tutorías) se detectan automáticamente de eventos del calendario:
@@ -29,6 +31,13 @@ Las sesiones presenciales (exámenes y tutorías) se detectan automáticamente d
 - **Tutoría**: si contiene palabras como "tutoría", "tutoria", "asesoría", "consulta"
 
 La detección es **case-insensitive** y tolera acentos, reduciendo el margen de error humano.
+
+## Imágenes en emails
+Los emails del primer día incluyen imágenes embebidas:
+- `pix/email_documentation_location.png` - Captura mostrando ubicación de documentación
+- `pix/email_tutorial_video.png` - Captura indicando dónde encontrar videotutorial
+
+Las imágenes se deben añadir manualmente en la carpeta `pix` del plugin.
 
 ## Instalación
 1. Copia la carpeta `local_courseprogressnotify` dentro de `moodle/local/`.
@@ -52,6 +61,8 @@ La detección es **case-insensitive** y tolera acentos, reduciendo el margen de 
 - `check_zoom_sessions`
 - `check_presential_sessions`
 - `check_diploma_available`
+- `check_first_day_tasks`
+- `check_second_day_tasks`
 
 Los horarios están definidos en `db/tasks.php`. Ajusta los crontab si es necesario.
 
@@ -79,6 +90,8 @@ Los horarios están definidos en `db/tasks.php`. Ajusta los crontab si es necesa
 - Fin de curso: "7 días antes" se envía únicamente cuando faltan exactamente 7 días; el "día anterior al último" se envía un día antes de la fecha de fin (cuando el curso termina mañana).
 - Zoom y Presenciales: recordatorios enviados en la franja del día N antes (medianoche a medianoche según servidor).
 - Diploma: se envía a los 30 días exactos tras la fecha de fin a todos los estudiantes matriculados.
+- Primer día: se envía el día que inicia el curso (según `course.startdate`).
+- Segundo día: se envía al día siguiente del inicio del curso.
 
 ## Desarrollo
 - Clases clave:

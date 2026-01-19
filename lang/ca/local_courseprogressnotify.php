@@ -26,6 +26,8 @@ $string['task_check_course_last_day'] = 'Avís: darrer dia del curs';
 $string['task_check_zoom_sessions'] = 'Recordatoris de sessions Zoom';
 $string['task_check_presential_sessions'] = 'Recordatoris de sessions presencials';
 $string['task_check_diploma_available'] = 'Avís: diploma disponible (30 dies)';
+$string['task_check_first_day_tasks'] = 'Primer dia: tasques inicials';
+$string['task_check_second_day_tasks'] = 'Segon dia: navegadors i finestres emergents';
 
 // Manual run page.
 $string['runpage:title'] = 'Verificació manual del progrés';
@@ -41,12 +43,18 @@ $string['runpage:type_presential'] = 'Notificacions de Sessions Presencials (Ex�
 $string['runpage:confirm_presential'] = 'Detectar automàticament sessions presencials d\'esdeveniments del calendari (per ubicació i paraules clau) i enviar recordatoris als estudiants matriculats (si no han estat notificats prèviament).';
 $string['runpage:type_diploma'] = 'Notificacions de Diploma Disponible (30 dies)';
 $string['runpage:confirm_diploma'] = 'Revisar cursos que van finalitzar fa exactament 30 dies i enviar notificació de diploma disponible a tots els estudiants matriculats (si no han estat notificats prèviament).';
+$string['runpage:type_firstday'] = 'Notificacions de Primer Dia (Tasques Inicials)';
+$string['runpage:confirm_firstday'] = 'Revisar cursos que inicien avui i enviar als estudiants les instruccions sobre signatura de normativa, rebut de material i requisits del curs.';
+$string['runpage:type_secondday'] = 'Notificacions de Segon Dia (Navegadors)';
+$string['runpage:confirm_secondday'] = 'Revisar cursos en el seu segon dia i enviar als estudiants informació sobre navegadors compatibles i configuració de finestres emergents.';
 $string['runpage:confirm'] = 'Fes clic al botó per iniciar la verificació. Es revisaran tots els estudiants de la categoria configurada i s\'enviaran correus als que hagin assolit el 25% o 50% de progrés (si no han estat notificats prèviament).';
 $string['run_progress_button'] = 'Provar Correus de Progrés';
 $string['run_courseend_button'] = 'Provar Correus de Fi de Curs';
 $string['run_zoom_button'] = 'Provar Correus de Zoom';
 $string['run_presential_button'] = 'Provar Correus de Sessions Presencials';
 $string['run_diploma_button'] = 'Provar Correus de Diploma';
+$string['run_firstday_button'] = 'Provar Correus de Primer Dia';
+$string['run_secondday_button'] = 'Provar Correus de Segon Dia';
 $string['backtosettings'] = 'Tornar a configuració';
 $string['run_now_button'] = 'Verificar progrés ara';
 $string['run_now_done'] = 'La verificació s\'ha executat correctament.';
@@ -211,3 +219,53 @@ $string['email_diploma_body'] = '<p>Benvolgut/da {{firstname}},</p>
 <p>Moltes gràcies per la teva participació.</p>
 
 <p>Una salutació,</p>';
+
+// First day tasks email.
+$string['email_first_day_subject'] = 'Primeres tasques a realitzar a la plataforma';
+$string['email_first_day_body'] = '<p>Hola a tothom!</p>
+
+<p>T\'escrivim en relació al curs <strong>{{coursename}}</strong> que estàs realitzant amb nosaltres.</p>
+
+<p>Com a primera tasca, heu de llegir i signar la normativa interna i el Rebut de Material. Podeu trobar-la en la pàgina inicial del campus virtual a l\'apartat documentació tal i com es mostra a la imatge que t\'adjunto a continuació:</p>
+
+<p><img src="{{image_documentation}}" alt="Ubicació de documentació" style="max-width: 100%; height: auto;"></p>
+
+<p>Es imprescindible signar aquests dos documents per poder tenir accés als continguts de la formació.</p>
+
+<p>Aprofito per recordar-vos els requisits necessaris per a poder finalitzar el curs i obtenir així el vostre diploma d\'aprofitament:</p>
+
+<ul>
+  <li>Visualitzar com a mínim el <strong>75% de continguts</strong>. A través de la barra de progrés podràs veure marcat en color vermell els continguts pendents de visualitzar.</li>
+  <li>Complir amb un <strong>temps de connexió mínim del 75%</strong> de la durada de la formació.</li>
+  <li>Realitzar les <strong>avaluacions obligatòries</strong> (parcials i final).</li>
+</ul>
+
+<p>Si tens algun dubte a referència de com utilitzar la plataforma pots visualitzar el videotutorial següent:</p>
+
+<p><img src="{{image_tutorial}}" alt="Video tutorial" style="max-width: 100%; height: auto;"></p>
+
+<p>Per a qualsevol consulta no dubteu en posar-vos en contacte amb el dinamitzador/a corresponent.</p>
+
+<p>Salutacions.</p>';
+
+// Second day tasks email.
+$string['email_second_day_subject'] = 'Activació de finestres emergents i navegadors recomanats per accedir al campus';
+$string['email_second_day_body'] = '<p>Bon dia,</p>
+
+<p>Per tal de visualitzar correctament tots els continguts del curs, és necessari que les finestres emergents (pop-ups) i les cookies estiguin habilitades al vostre navegador. Si les teniu bloquejades, alguns recursos del curs no s\'obriran amb normalitat.</p>
+
+<p>Us recomanem accedir al campus virtual des dels navegadors següents:</p>
+
+<ul>
+  <li>Mozilla Firefox</li>
+  <li>Google Chrome</li>
+  <li>Internet Explorer</li>
+</ul>
+
+<p>⚠️ <strong>Important:</strong> El navegador Safari no és compatible amb la plataforma i pot generar múltiples errors.</p>
+
+<p>Si, tot i així, continueu tenint problemes podeu consultar el document preguntes freqüents (FAQ) que trobareu en l\'apartat de documentació de la plataforma.</p>
+
+<p>Per a qualsevol dubte, podeu contactar amb el vostre dinamitzador/a del curs.</p>
+
+<p>Moltes gràcies.</p>';

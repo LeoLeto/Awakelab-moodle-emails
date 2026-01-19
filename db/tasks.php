@@ -80,4 +80,22 @@ $tasks = [
         'month'     => '*',
         'dayofweek' => '*',
     ],
+    [
+        'classname' => '\\local_courseprogressnotify\\task\\check_first_day_tasks',
+        'blocking'  => 0,
+        'minute'    => '0',
+        'hour'      => '9',
+        'day'       => '*',
+        'month'     => '*',
+        'dayofweek' => '*',
+    ],
+    [
+        'classname' => '\\local_courseprogressnotify\\task\\check_second_day_tasks',
+        'blocking'  => 0,
+        'minute'    => '30',
+        'hour'      => '9',
+        'day'       => '*',
+        'month'     => '*',
+        'dayofweek' => '*',
+    ],
 ];

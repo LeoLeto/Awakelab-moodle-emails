@@ -24,6 +24,8 @@ use local_courseprogressnotify\task\check_course_last_day;
 use local_courseprogressnotify\task\check_zoom_sessions;
 use local_courseprogressnotify\task\check_presential_sessions;
 use local_courseprogressnotify\task\check_diploma_available;
+use local_courseprogressnotify\task\check_first_day_tasks;
+use local_courseprogressnotify\task\check_second_day_tasks;
 
 require_login();
 $context = context_system::instance();
@@ -131,6 +133,26 @@ if ($confirm && !empty($type) && confirm_sesskey()) {
             $errors[] = 'Diploma task: ' . $e->getMessage();
             $output[] = 'ERROR in Diploma task: ' . $e->getMessage();
         }
+    } else if ($type === 'firstday') {
+        try {
+            $output[] = '--- Executing First Day Tasks Check ---';
+            $tfirstday = new check_first_day_tasks();
+            $tfirstday->execute();
+            $output[] = ob_get_contents();
+        } catch (Throwable $e) {
+            $errors[] = 'First day task: ' . $e->getMessage();
+            $output[] = 'ERROR in First day task: ' . $e->getMessage();
+        }
+    } else if ($type === 'secondday') {
+        try {
+            $output[] = '--- Executing Second Day Tasks Check ---';
+            $tsecondday = new check_second_day_tasks();
+            $tsecondday->execute();
+            $output[] = ob_get_contents();
+        } catch (Throwable $e) {
+            $errors[] = 'Second day task: ' . $e->getMessage();
+            $output[] = 'ERROR in Second day task: ' . $e->getMessage();
+        }
     }
     
     ob_end_clean();
@@ -210,6 +232,24 @@ if (!$categoryid) {
     
     $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'diploma', 'confirm' => 1, 'sesskey' => sesskey()]);
     echo html_writer::link($formurl, get_string('run_diploma_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+    echo $OUTPUT->box_end();
+    
+    // First day tasks
+    echo $OUTPUT->box_start('generalbox mb-3');
+    echo html_writer::tag('h4', get_string('runpage:type_firstday', 'local_courseprogressnotify'));
+    echo html_writer::tag('p', get_string('runpage:confirm_firstday', 'local_courseprogressnotify'));
+    
+    $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'firstday', 'confirm' => 1, 'sesskey' => sesskey()]);
+    echo html_writer::link($formurl, get_string('run_firstday_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+    echo $OUTPUT->box_end();
+    
+    // Second day tasks
+    echo $OUTPUT->box_start('generalbox mb-3');
+    echo html_writer::tag('h4', get_string('runpage:type_secondday', 'local_courseprogressnotify'));
+    echo html_writer::tag('p', get_string('runpage:confirm_secondday', 'local_courseprogressnotify'));
+    
+    $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'secondday', 'confirm' => 1, 'sesskey' => sesskey()]);
+    echo html_writer::link($formurl, get_string('run_secondday_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
     echo $OUTPUT->box_end();
 }
 
