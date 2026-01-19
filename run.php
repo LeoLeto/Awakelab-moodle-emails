@@ -23,6 +23,7 @@ use local_courseprogressnotify\task\check_course_end_soon;
 use local_courseprogressnotify\task\check_course_last_day;
 use local_courseprogressnotify\task\check_zoom_sessions;
 use local_courseprogressnotify\task\check_presential_sessions;
+use local_courseprogressnotify\task\check_diploma_available;
 
 require_login();
 $context = context_system::instance();
@@ -120,6 +121,16 @@ if ($confirm && !empty($type) && confirm_sesskey()) {
             $errors[] = 'Presential task: ' . $e->getMessage();
             $output[] = 'ERROR in Presential task: ' . $e->getMessage();
         }
+    } else if ($type === 'diploma') {
+        try {
+            $output[] = '--- Executing Diploma Available Check (30 days) ---';
+            $tdiploma = new check_diploma_available();
+            $tdiploma->execute();
+            $output[] = ob_get_contents();
+        } catch (Throwable $e) {
+            $errors[] = 'Diploma task: ' . $e->getMessage();
+            $output[] = 'ERROR in Diploma task: ' . $e->getMessage();
+        }
     }
     
     ob_end_clean();
@@ -190,6 +201,15 @@ if (!$categoryid) {
     
     $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'presential', 'confirm' => 1, 'sesskey' => sesskey()]);
     echo html_writer::link($formurl, get_string('run_presential_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+    echo $OUTPUT->box_end();
+    
+    // Diploma checks
+    echo $OUTPUT->box_start('generalbox mb-3');
+    echo html_writer::tag('h4', get_string('runpage:type_diploma', 'local_courseprogressnotify'));
+    echo html_writer::tag('p', get_string('runpage:confirm_diploma', 'local_courseprogressnotify'));
+    
+    $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'diploma', 'confirm' => 1, 'sesskey' => sesskey()]);
+    echo html_writer::link($formurl, get_string('run_diploma_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
     echo $OUTPUT->box_end();
 }
 
