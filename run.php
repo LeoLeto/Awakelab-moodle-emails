@@ -192,7 +192,6 @@ if (!$categoryid) {
     echo html_writer::link($formurl, get_string('run_presential_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
     echo $OUTPUT->box_end();
 }
-}
 
 $backlink = html_writer::link(new moodle_url('/admin/settings.php', ['section' => 'local_courseprogressnotify']),
     get_string('backtosettings', 'local_courseprogressnotify'));
