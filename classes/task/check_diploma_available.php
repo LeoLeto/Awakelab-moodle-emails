@@ -18,7 +18,6 @@ class check_diploma_available extends scheduled_task {
 
     public function execute() {
         global $DB, $CFG;
-        require_once($CFG->libdir . '/gradelib.php');
         
         mtrace('Running task: diploma available (30 days after course end)');
         
@@ -60,7 +59,6 @@ class check_diploma_available extends scheduled_task {
                 continue;
             }
             
-            $passed = 0;
             $notified = 0;
             
             foreach ($students as $user) {
@@ -68,18 +66,15 @@ class check_diploma_available extends scheduled_task {
                     continue;
                 }
                 
-                if ($this->user_is_approved_in_course($user->id, $course->id)) {
-                    $passed++;
-                    $placeholders = [
-                        'campus_url' => (new \moodle_url('/course/view.php', ['id' => $course->id]))->out(false),
-                    ];
-                    email_builder::send($user, $course, 'diploma', $placeholders, 'diploma_available');
-                    $notified++;
-                    $totalnotifs++;
-                }
+                $placeholders = [
+                    'campus_url' => (new \moodle_url('/course/view.php', ['id' => $course->id]))->out(false),
+                ];
+                email_builder::send($user, $course, 'diploma', $placeholders, 'diploma_available');
+                $notified++;
+                $totalnotifs++;
             }
             
-            mtrace("    Students passed: {$passed}, Notified: {$notified}");
+            mtrace("    Notified: {$notified}");
         }
         
         mtrace("Diploma check complete. Total notifications sent: {$totalnotifs}");
@@ -97,35 +92,5 @@ class check_diploma_available extends scheduled_task {
                  WHERE u.deleted = 0 AND u.suspended = 0";
         $params = ['courseid' => $courseid, 'courseid2' => $courseid, 'ctxlevel' => CONTEXT_COURSE];
         return $DB->get_records_sql($sql, $params);
-    }
-
-    protected function user_is_approved_in_course(int $userid, int $courseid): bool {
-        global $DB;
-        
-        // Get the course grade item
-        $gradeitem = \grade_item::fetch(['courseid' => $courseid, 'itemtype' => 'course']);
-        
-        if (!$gradeitem) {
-            return false;
-        }
-        
-        // Get student's final grade
-        $grade = \grade_grade::fetch(['itemid' => $gradeitem->id, 'userid' => $userid]);
-        
-        if (!$grade || $grade->finalgrade === null) {
-            return false; // No grade yet
-        }
-        
-        // Check gradepass - if not set or 0, we could either require explicit pass grade or accept any grade
-        // Here we're strict: must have gradepass > 0 and student must meet it
-        $gradepass = $gradeitem->gradepass ?? 0;
-        
-        if ($gradepass <= 0) {
-            // No passing grade configured - strict interpretation: don't send diploma
-            return false;
-        }
-        
-        $finalgrade = (float)$grade->finalgrade;
-        return $finalgrade >= $gradepass;
     }
 }

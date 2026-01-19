@@ -15,7 +15,7 @@ Plugin local para Moodle 4.4 que envía emails automáticos a alumnos en funció
 2. Curso: 7 días antes de la fecha de fin y el día anterior al último día del curso.
 3. Zoom: recordatorio X días antes de la sesión (configurable).
 4. Presenciales: exámenes y tutorías (**detección automática desde eventos del calendario**).
-5. Diploma: 30 días después de finalizado el curso (solo aprobados).
+5. Diploma: 30 días después de finalizado el curso (todos los estudiantes).
 
 ## Detección inteligente de sesiones presenciales
 Las sesiones presenciales (exámenes y tutorías) se detectan automáticamente de eventos del calendario:
@@ -78,7 +78,7 @@ Los horarios están definidos en `db/tasks.php`. Ajusta los crontab si es necesa
 - Progreso: se calcula mediante `completion_info` por actividad. La tabla HTML de progreso se construye automáticamente.
 - Fin de curso: "7 días antes" se envía únicamente cuando faltan exactamente 7 días; el "día anterior al último" se envía un día antes de la fecha de fin (cuando el curso termina mañana).
 - Zoom y Presenciales: recordatorios enviados en la franja del día N antes (medianoche a medianoche según servidor).
-- Diploma: se envía a los 30 días exactos tras la fecha de fin y solo si la calificación final es >= `gradepass` del curso.
+- Diploma: se envía a los 30 días exactos tras la fecha de fin a todos los estudiantes matriculados.
 
 ## Desarrollo
 - Clases clave:
