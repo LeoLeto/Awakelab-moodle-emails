@@ -55,6 +55,7 @@ $string['run_presential_button'] = 'Probar Emails de Sesiones Presenciales';
 $string['run_diploma_button'] = 'Probar Emails de Diploma';
 $string['run_firstday_button'] = 'Probar Emails de Primer Día';
 $string['run_secondday_button'] = 'Probar Emails de Segundo Día';
+$string['run_clear_button'] = 'Limpiar Logs y Ejecutar';
 $string['backtosettings'] = 'Volver a configuración';
 $string['run_now_button'] = 'Verificar Progreso Ahora';
 $string['run_now_done'] = 'La verificación se ejecutó correctamente.';

@@ -40,6 +40,7 @@ $PAGE->set_heading(get_string('runpage:title', 'local_courseprogressnotify'));
 
 $type = optional_param('type', '', PARAM_ALPHA);
 $confirm = optional_param('confirm', 0, PARAM_BOOL);
+$clearlogs = optional_param('clearlogs', 0, PARAM_BOOL);
 
 if ($confirm && !empty($type) && confirm_sesskey()) {
     echo $OUTPUT->header();
@@ -57,6 +58,47 @@ if ($confirm && !empty($type) && confirm_sesskey()) {
     $output[] = 'Type: ' . $type;
     $output[] = 'Time: ' . userdate(time());
     $output[] = 'Category ID: ' . get_config('local_courseprogressnotify', 'categoryid');
+    
+    // Clear logs if requested
+    if ($clearlogs) {
+        global $DB;
+        $notificationtypes = [];
+        
+        switch ($type) {
+            case 'progress':
+                $notificationtypes = ['progress_25', 'progress_50'];
+                break;
+            case 'courseend':
+                $notificationtypes = ['course_end_soon', 'course_last_day'];
+                break;
+            case 'zoom':
+                $notificationtypes = ['zoom'];
+                break;
+            case 'presential':
+                $notificationtypes = ['presential_exam', 'presential_tutoring'];
+                break;
+            case 'diploma':
+                $notificationtypes = ['diploma'];
+                break;
+            case 'firstday':
+                $notificationtypes = ['first_day_tasks'];
+                break;
+            case 'secondday':
+                $notificationtypes = ['second_day_tasks'];
+                break;
+        }
+        
+        foreach ($notificationtypes as $notiftype) {
+            list($insql, $params) = $DB->get_in_or_equal($notiftype);
+            $count = $DB->count_records_select('local_courseprogressnotify_log', "notification_type $insql", $params);
+            if ($count > 0) {
+                $DB->delete_records_select('local_courseprogressnotify_log', "notification_type $insql", $params);
+                $output[] = "✓ Cleared {$count} log entries for notification type: {$notiftype}";
+            }
+        }
+        $output[] = '';
+    }
+    
     $output[] = '';
     
     ob_start();
@@ -196,6 +238,9 @@ if (!$categoryid) {
     
     $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'progress', 'confirm' => 1, 'sesskey' => sesskey()]);
     echo html_writer::link($formurl, get_string('run_progress_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+    echo ' ';
+    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'progress', 'confirm' => 1, 'clearlogs' => 1, 'sesskey' => sesskey()]);
+    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning']);
     echo $OUTPUT->box_end();
     
     // Course end checks (7 days before and last day)
@@ -205,6 +250,9 @@ if (!$categoryid) {
     
     $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'courseend', 'confirm' => 1, 'sesskey' => sesskey()]);
     echo html_writer::link($formurl, get_string('run_courseend_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+    echo ' ';
+    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'courseend', 'confirm' => 1, 'clearlogs' => 1, 'sesskey' => sesskey()]);
+    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning']);
     echo $OUTPUT->box_end();
     
     // Zoom session checks
@@ -214,6 +262,9 @@ if (!$categoryid) {
     
     $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'zoom', 'confirm' => 1, 'sesskey' => sesskey()]);
     echo html_writer::link($formurl, get_string('run_zoom_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+    echo ' ';
+    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'zoom', 'confirm' => 1, 'clearlogs' => 1, 'sesskey' => sesskey()]);
+    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning']);
     echo $OUTPUT->box_end();
     
     // Presential sessions checks
@@ -223,6 +274,9 @@ if (!$categoryid) {
     
     $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'presential', 'confirm' => 1, 'sesskey' => sesskey()]);
     echo html_writer::link($formurl, get_string('run_presential_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+    echo ' ';
+    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'presential', 'confirm' => 1, 'clearlogs' => 1, 'sesskey' => sesskey()]);
+    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning']);
     echo $OUTPUT->box_end();
     
     // Diploma checks
@@ -232,6 +286,9 @@ if (!$categoryid) {
     
     $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'diploma', 'confirm' => 1, 'sesskey' => sesskey()]);
     echo html_writer::link($formurl, get_string('run_diploma_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+    echo ' ';
+    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'diploma', 'confirm' => 1, 'clearlogs' => 1, 'sesskey' => sesskey()]);
+    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning']);
     echo $OUTPUT->box_end();
     
     // First day tasks
@@ -241,6 +298,9 @@ if (!$categoryid) {
     
     $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'firstday', 'confirm' => 1, 'sesskey' => sesskey()]);
     echo html_writer::link($formurl, get_string('run_firstday_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+    echo ' ';
+    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'firstday', 'confirm' => 1, 'clearlogs' => 1, 'sesskey' => sesskey()]);
+    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning']);
     echo $OUTPUT->box_end();
     
     // Second day tasks
@@ -250,6 +310,9 @@ if (!$categoryid) {
     
     $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'secondday', 'confirm' => 1, 'sesskey' => sesskey()]);
     echo html_writer::link($formurl, get_string('run_secondday_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+    echo ' ';
+    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'secondday', 'confirm' => 1, 'clearlogs' => 1, 'sesskey' => sesskey()]);
+    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning']);
     echo $OUTPUT->box_end();
 }
 

@@ -55,6 +55,7 @@ $string['run_presential_button'] = 'Test On-site Session Emails';
 $string['run_diploma_button'] = 'Test Diploma Emails';
 $string['run_firstday_button'] = 'Test First Day Emails';
 $string['run_secondday_button'] = 'Test Second Day Emails';
+$string['run_clear_button'] = 'Clear Logs & Run';
 $string['backtosettings'] = 'Back to settings';
 $string['run_now_button'] = 'Run Now';
 $string['run_now_done'] = 'Verification completed successfully.';
