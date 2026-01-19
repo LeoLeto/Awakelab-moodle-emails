@@ -26,6 +26,8 @@ $string['task_check_course_last_day'] = 'Reminder: last day of course';
 $string['task_check_zoom_sessions'] = 'Zoom session reminders';
 $string['task_check_presential_sessions'] = 'On-site session reminders';
 $string['task_check_diploma_available'] = 'Reminder: diploma available (30 days)';
+$string['task_check_first_day_tasks'] = 'First day tasks reminder';
+$string['task_check_second_day_tasks'] = 'Second day tasks reminder';
 
 // Manual run page.
 $string['runpage:title'] = 'Manual progress verification';
@@ -39,11 +41,20 @@ $string['runpage:type_zoom'] = 'Zoom Session Notifications';
 $string['runpage:confirm_zoom'] = 'Check upcoming Zoom sessions and send reminder emails to enrolled students.';
 $string['runpage:type_presential'] = 'On-site Session Notifications (Exams and Tutoring)';
 $string['runpage:confirm_presential'] = 'Check upcoming on-site sessions and send reminder emails to enrolled students.';
+$string['runpage:type_diploma'] = 'Diploma Available Notifications';
+$string['runpage:confirm_diploma'] = 'Check courses that ended 30 days ago and send diploma availability reminders to enrolled students.';
+$string['runpage:type_firstday'] = 'First Day Tasks Notifications';
+$string['runpage:confirm_firstday'] = 'Check courses starting today and send first day tasks reminders to enrolled students.';
+$string['runpage:type_secondday'] = 'Second Day Tasks Notifications';
+$string['runpage:confirm_secondday'] = 'Check courses that started yesterday and send second day tasks reminders to enrolled students.';
 $string['runpage:confirm'] = 'Click the button below to start the verification. This will check all students in the configured category and send emails to those who have reached 25% or 50% progress (if they haven\'t been notified yet).';
 $string['run_progress_button'] = 'Test Progress Emails';
 $string['run_courseend_button'] = 'Test Course End Emails';
 $string['run_zoom_button'] = 'Test Zoom Emails';
 $string['run_presential_button'] = 'Test On-site Session Emails';
+$string['run_diploma_button'] = 'Test Diploma Emails';
+$string['run_firstday_button'] = 'Test First Day Emails';
+$string['run_secondday_button'] = 'Test Second Day Emails';
 $string['backtosettings'] = 'Back to settings';
 $string['run_now_button'] = 'Run Now';
 $string['run_now_done'] = 'Verification completed successfully.';
@@ -208,3 +219,47 @@ $string['email_diploma_body'] = '<p>Dear {{firstname}},</p>
 <p>Thank you for your participation. We encourage you to keep learning with us.</p>
 
 <p>Regards,</p>';
+
+// First day tasks email.
+$string['email_first_day_subject'] = 'First tasks to complete on the platform';
+$string['email_first_day_body'] = '<p>Hello everyone,</p>
+
+<p>Welcome to the course <strong>{{coursename}}</strong>!</p>
+
+<p>As a first step, we ask you to complete two important tasks:</p>
+
+<ol>
+<li><strong>Sign the regulations receipt</strong>: You will find it in the course documentation section. This document outlines the course rules and expectations.</li>
+<li><strong>Sign the equipment receipt</strong>: If applicable, confirm receipt of any materials or equipment provided for the course.</li>
+</ol>
+
+<p><strong>Where to find these documents:</strong></p>
+<p><img src="{{image_documentation}}" alt="Documentation location" style="max-width: 800px; width: 100%; height: auto;" /></p>
+
+<p>Additionally, we recommend watching the introductory tutorial video available in the course:</p>
+<p><img src="{{image_tutorial}}" alt="Tutorial video location" style="max-width: 800px; width: 100%; height: auto;" /></p>
+
+<p>If you have any questions, please don\'t hesitate to contact us.</p>
+
+<p>Best regards,</p>';
+
+// Second day tasks email.
+$string['email_second_day_subject'] = 'Important: compatible browsers and pop-ups';
+$string['email_second_day_body'] = '<p>Hello {{firstname}},</p>
+
+<p>This is a reminder about technical requirements for the course <strong>{{coursename}}</strong>:</p>
+
+<p><strong>Compatible browsers:</strong></p>
+<ul>
+<li>Google Chrome (recommended)</li>
+<li>Mozilla Firefox</li>
+<li>Microsoft Edge</li>
+<li>Safari (on macOS)</li>
+</ul>
+
+<p><strong>Important:</strong> Make sure to enable pop-up windows in your browser. Some course activities and external resources require pop-ups to function correctly.</p>
+
+<p>If you experience technical issues, please contact support.</p>
+
+<p>Best regards,</p>';
+
