@@ -99,6 +99,8 @@ $string['email_zoom_body'] = '<p>Hello {{firstname}}!</p>
 
 <p>On the day of the session, when you access the platform, you will see the link to join the video call directly.</p>
 
+<p><img src="{{image_zoom_link}}" alt="Zoom link location" style="max-width: 100%; height: auto;"></p>
+
 <p>This session aims to:</p>
 <ul>
   <li>Resolve course questions</li>

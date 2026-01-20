@@ -96,7 +96,7 @@ $string['email_zoom_body'] = '<p>Hola {{firstname}}!</p>
 <p>Et recordem que el proper <strong>{{zoom_date}}</strong>, de <strong>{{zoom_start}}</strong> a <strong>{{zoom_end}}</strong>, tindrà lloc una sessió en directe per Zoom amb el/la tutor/a.</p>
 
 <p>El mateix dia de la sessió, quan accedeixis a la plataforma, veuràs l\'enllaç per unir-te directament a la videotrucada.</p>
-
+<p><img src="{{image_zoom_link}}" alt="Ubicació de l\'enllaç Zoom" style="max-width: 100%; height: auto;"></p>
 <p>Aquesta sessió té com a objectiu:</p>
 <ul>
   <li>Resoldre dubtes del curs</li>
