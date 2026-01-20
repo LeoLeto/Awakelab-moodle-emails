@@ -135,9 +135,12 @@ $string['email_50_body'] = '<p>Welcome {{firstname}}!</p>
 
 <p>We have reached the middle of the course <strong>{{coursename}}</strong>. The course ends on <strong>{{courseenddate}}</strong>, and to complete it you need to view all content and complete the activities and assessments.</p>
 
-<p>Here is your progress to date. Green shows the content you have already viewed and red shows what you still need to complete.</p>
+<p>You can check your progress on the basic aspects of this course by consulting the COURSE PROGRESS bars. Both are located in the right column of your main screen and show in green the milestones achieved and in red those you still need to complete.</p>
 
-<p><img src="{{image_progress_50}}" alt="Progress report" style="max-width: 100%; height: auto;"></p>
+<p><img src="{{image_progress_50}}" alt="Course progress location" style="max-width: 100%; height: auto;"></p>
+
+<p>Here is your progress to date:</p>
+
 {{progress_table}}
 
 <p>Keep going, and contact us if you have any questions.</p>

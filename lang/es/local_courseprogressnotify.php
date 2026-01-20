@@ -136,9 +136,11 @@ $string['email_50_body'] = '<p>¡Bienvenido/a {{firstname}}!</p>
 
 <p>Ya hemos llegado a la mitad del curso <strong>{{coursename}}</strong>. El curso finaliza el <strong>{{courseenddate}}</strong>, y para completarlo es necesario haber visualizado todos los contenidos y realizado las actividades y evaluaciones.</p>
 
-<p>A continuación, puedes ver tu evolución hasta el día de hoy. En verde verás los contenidos ya visualizados y el rojo los que aún tiene que afrontar.</p>
+<p>Puedes conocer la evolución respecto a los aspectos básicos de este curso consultando las barras de PROGRESO DEL CURSO. Ambas se encuentran ubicadas en la columna derecha de su pantalla principal y muestran en color verde los mojones alcanzados y el rojo los que aún tiene que afrontar.</p>
 
-<p><img src="{{image_progress_50}}" alt="Informe de progreso" style="max-width: 100%; height: auto;"></p>
+<p><img src="{{image_progress_50}}" alt="Ubicación del progreso del curso" style="max-width: 100%; height: auto;"></p>
+
+<p>Ésta es su evolución hasta el día de hoy:</p>
 
 {{progress_table}}
 

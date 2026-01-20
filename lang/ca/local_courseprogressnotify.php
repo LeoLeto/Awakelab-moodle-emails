@@ -134,9 +134,11 @@ $string['email_50_body'] = '<p>Benvingut/da {{firstname}}!</p>
 
 <p>Ja hem arribat a la meitat del curs <strong>{{coursename}}</strong>. El curs finalitza el <strong>{{courseenddate}}</strong> i per completar-lo cal visualitzar tots els continguts i realitzar les activitats.</p>
 
-<p>Aquesta és la teva evolució fins avui. En verd veuràs els continguts ja visualitzats i el vermell els que encara has d\'afrontar.</p>
+<p>Pots conèixer l\'evolució respecte als aspectes bàsics d\'aquest curs consultant les barres de PROGRÉS DEL CURS. Totes dues es troben ubicades a la columna dreta de la teva pantalla principal i mostren en color verd els fites assolides i el vermell els que encara has d\'afrontar.</p>
 
-<p><img src="{{image_progress_50}}" alt="Informe de progrés" style="max-width: 100%; height: auto;"></p>
+<p><img src="{{image_progress_50}}" alt="Ubicació del progrés del curs" style="max-width: 100%; height: auto;"></p>
+
+<p>Aquesta és la teva evolució fins al dia d\'avui:</p>
 
 {{progress_table}}
 
