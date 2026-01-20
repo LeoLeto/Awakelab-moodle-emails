@@ -72,7 +72,7 @@ if ($confirm && !empty($type) && confirm_sesskey()) {
                 $notificationtypes = ['course_end_soon', 'course_last_day'];
                 break;
             case 'zoom':
-                $notificationtypes = ['zoom'];
+                $notificationtypes = ['zoom_reminder'];
                 break;
             case 'presential':
                 $notificationtypes = ['presential_exam', 'presential_tutoring'];
