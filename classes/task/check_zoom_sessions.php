@@ -23,29 +23,49 @@ class check_zoom_sessions extends scheduled_task {
 
         $days = (int)get_config('local_courseprogressnotify', 'zoomdaysbefore');
         if ($days <= 0) { $days = 2; }
+        mtrace("Days before setting: {$days}");
 
         $categoryid = (int)get_config('local_courseprogressnotify', 'categoryid');
         if (!$categoryid) {
             mtrace('No category configured; skipping.');
             return;
         }
+        mtrace("Category ID: {$categoryid}");
 
         $now = time();
         // Window covers exactly the day that is $days ahead.
         $from = usergetmidnight($now + ($days * DAYSECS));
         $to   = $from + DAYSECS;
+        mtrace("Looking for Zoom sessions between " . userdate($from, '%Y-%m-%d %H:%M') . " and " . userdate($to, '%Y-%m-%d %H:%M'));
 
         $sessions = zoom_provider::get_upcoming_between($from, $to);
+        mtrace("Found " . count($sessions) . " Zoom sessions in the time window");
+        
         if (empty($sessions)) {
+            mtrace('No Zoom sessions found in the time window.');
             return;
         }
 
+        $totalnotifs = 0;
         foreach ($sessions as $session) {
+            mtrace("\nProcessing Zoom session: {$session->name} (ID: {$session->id})");
+            
             $course = get_course($session->course);
-            if ((int)$course->category !== $categoryid) { continue; }
+            mtrace("  Course: {$course->fullname} (category: {$course->category})");
+            
+            if ((int)$course->category !== $categoryid) {
+                mtrace("  ✗ Skipping (not in target category)");
+                continue;
+            }
+            
             $students = $this->get_course_students($course->id);
-            if (empty($students)) { continue; }
+            mtrace("  Found " . count($students) . " enrolled students");
+            
+            if (empty($students)) {
+                continue;
+            }
 
+            $notified = 0;
             foreach ($students as $user) {
                 if (notification_log::has_sent($user->id, $course->id, 'zoom_reminder', $session->id)) {
                     continue;
@@ -65,8 +85,12 @@ class check_zoom_sessions extends scheduled_task {
                     'image_zoom_link' => $imgurl->out(false),
                 ];
                 email_builder::send($user, $course, 'zoom', $placeholders, 'zoom_reminder', $session->id);
+                $notified++;
+                $totalnotifs++;
             }
+            mtrace("  → Sent {$notified} notifications for this session");
         }
+        mtrace("\n✓ Total Zoom notifications sent: {$totalnotifs}");
     }
 
     protected function get_course_students(int $courseid): array {
