@@ -30,8 +30,8 @@ $string['task_check_first_day_tasks'] = 'Primer dia: tasques inicials';
 $string['task_check_second_day_tasks'] = 'Segon dia: navegadors i finestres emergents';
 
 // Manual run page.
-$string['runpage:title'] = 'Verificació manual del progrés';
-$string['runpage:heading'] = 'Verificar progrés ara';
+$string['runpage:title'] = 'Verificació manual de notificacions';
+$string['runpage:heading'] = 'Verificar notificacions ara';
 $string['runpage:desc'] = 'Pots executar manualment diferents verificacions de notificacions. Selecciona el tipus que vols provar:';
 $string['runpage:type_progress'] = 'Notificacions de Progrés (25% i 50%)';
 $string['runpage:confirm_progress'] = 'Revisar tots els estudiants de la categoria configurada i enviar correus als que hagin assolit el 25% o 50% de progrés (si no han estat notificats prèviament).';
@@ -54,8 +54,10 @@ $string['run_zoom_button'] = 'Provar Correus de Zoom';
 $string['run_presential_button'] = 'Provar Correus de Sessions Presencials';
 $string['run_diploma_button'] = 'Provar Correus de Diploma';
 $string['run_firstday_button'] = 'Provar Correus de Primer Dia';
-$string['run_secondday_button'] = 'Provar Correus de Segon Dia';$string['run_clear_button'] = 'Netejar registres i executar';$string['backtosettings'] = 'Tornar a configuració';
-$string['run_now_button'] = 'Verificar progrés ara';
+$string['run_secondday_button'] = 'Provar Correus de Segon Dia';
+$string['run_clear_button'] = 'Netejar registres i executar';
+$string['backtosettings'] = 'Tornar a configuració';
+$string['run_now_button'] = 'Verificar notificacions ara';
 $string['run_now_done'] = 'La verificació s\'ha executat correctament.';
 $string['run_now_error'] = 'S\'ha produït un error durant l\'execució:';
 $string['runpage:nocategory'] = 'No hi ha cap categoria seleccionada a la configuració. Selecciona\'n una per habilitar les operacions del connector.';
@@ -70,7 +72,7 @@ $string['settings:presentialdaysbefore'] = 'Dies abans per a sessions presencial
 $string['settings:presentialdaysbefore_desc'] = 'Nombre de dies abans de la sessió presencial (examen/tutoria) per enviar el recordatori.';
 
 // Run block in settings page.
-$string['settings:run:desc'] = 'Executa manualment la verificació del progrés des d’aquesta pàgina. Només s’aplicarà a la categoria seleccionada.';
+$string['settings:run:desc'] = 'Executa manualment les verificacions de notificacions des d\'aquesta pàgina. Només s\'aplicarà a la categoria seleccionada.';
 
 // Progress table.
 $string['progress:header:activity'] = 'Activitat';

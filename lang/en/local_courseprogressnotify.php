@@ -30,8 +30,8 @@ $string['task_check_first_day_tasks'] = 'First day tasks reminder';
 $string['task_check_second_day_tasks'] = 'Second day tasks reminder';
 
 // Manual run page.
-$string['runpage:title'] = 'Manual progress verification';
-$string['runpage:heading'] = 'Run progress check now';
+$string['runpage:title'] = 'Manual notifications verification';
+$string['runpage:heading'] = 'Run notifications check now';
 $string['runpage:desc'] = 'You can manually run different notification checks. Select the type you want to test:';
 $string['runpage:type_progress'] = 'Progress Notifications (25% and 50%)';
 $string['runpage:confirm_progress'] = 'Check all students in the configured category and send emails to those who have reached 25% or 50% progress (if they haven\'t been notified yet).';
@@ -72,7 +72,7 @@ $string['settings:presentialdaysbefore'] = 'Days before on-site sessions';
 $string['settings:presentialdaysbefore_desc'] = 'Number of days before the on-site session (exam/tutoring) to send the reminder.';
 
 // Run block in settings page.
-$string['settings:run:desc'] = 'Manually run the progress verification from this page. It will apply only to the selected category.';
+$string['settings:run:desc'] = 'Manually run the notifications verification from this page. It will apply only to the selected category.';
 
 // Progress table.
 $string['progress:header:activity'] = 'Activity';

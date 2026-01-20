@@ -30,8 +30,8 @@ $string['task_check_first_day_tasks'] = 'Primer día: tareas iniciales';
 $string['task_check_second_day_tasks'] = 'Segundo día: navegadores y ventanas emergentes';
 
 // Manual run page.
-$string['runpage:title'] = 'Verificación de progreso manual';
-$string['runpage:heading'] = 'Verificar progreso ahora';
+$string['runpage:title'] = 'Verificación manual de notificaciones';
+$string['runpage:heading'] = 'Verificar notificaciones ahora';
 $string['runpage:desc'] = 'Puedes ejecutar manualmente diferentes verificaciones de notificaciones. Selecciona el tipo que deseas probar:';
 $string['runpage:type_progress'] = 'Notificaciones de Progreso (25% y 50%)';
 $string['runpage:confirm_progress'] = 'Revisar todos los estudiantes de la categoría configurada y enviar emails a quienes hayan alcanzado el 25% o 50% de progreso (si no han sido notificados previamente).';
@@ -57,7 +57,7 @@ $string['run_firstday_button'] = 'Probar Emails de Primer Día';
 $string['run_secondday_button'] = 'Probar Emails de Segundo Día';
 $string['run_clear_button'] = 'Limpiar Logs y Ejecutar';
 $string['backtosettings'] = 'Volver a configuración';
-$string['run_now_button'] = 'Verificar Progreso Ahora';
+$string['run_now_button'] = 'Verificar Notificaciones Ahora';
 $string['run_now_done'] = 'La verificación se ejecutó correctamente.';
 $string['run_now_error'] = 'Se produjo un error durante la ejecución:';
 $string['runpage:nocategory'] = 'No hay una categoría seleccionada en la configuración. Selecciona una categoría para habilitar las operaciones del plugin.';
@@ -72,7 +72,7 @@ $string['settings:presentialdaysbefore'] = 'Días antes para sesiones presencial
 $string['settings:presentialdaysbefore_desc'] = 'Número de días antes de la sesión presencial (examen/tutoría) para enviar el recordatorio.';
 
 // Run block in settings page.
-$string['settings:run:desc'] = 'Ejecuta manualmente la verificación de progreso desde esta página. Se aplicará únicamente a la categoría seleccionada.';
+$string['settings:run:desc'] = 'Ejecuta manualmente las verificaciones de notificaciones desde esta página. Se aplicará únicamente a la categoría seleccionada.';
 
 // Progress table.
 $string['progress:header:activity'] = 'Actividad';
