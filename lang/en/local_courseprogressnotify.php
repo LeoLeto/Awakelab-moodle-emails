@@ -112,7 +112,6 @@ $string['email_25_subject'] = '25% progress for course {{coursename}}';
 $string['email_25_body'] = '<p>Welcome {{firstname}},</p>
 
 <p>You have reached <strong>25%</strong> of the course <strong>{{coursename}}</strong>. Below is your progress to date:</p>
-
 {{progress_table}}
 
 <p>There is still time to finish the course, which ends on <strong>{{courseenddate}}</strong>. To complete it, you must:</p>
@@ -125,6 +124,8 @@ $string['email_25_body'] = '<p>Welcome {{firstname}},</p>
 
 <p>Please also complete the <strong>Student evaluation questionnaire</strong>, available in the quality evaluation section.</p>
 
+<p><img src="{{image_progress_25}}" alt="Progress report" style="max-width: 100%; height: auto;"></p>
+
 <p>If you have any questions, contact us.</p>
 
 <p>Regards,</p>';
@@ -134,8 +135,9 @@ $string['email_50_body'] = '<p>Welcome {{firstname}}!</p>
 
 <p>We have reached the middle of the course <strong>{{coursename}}</strong>. The course ends on <strong>{{courseenddate}}</strong>, and to complete it you need to view all content and complete the activities and assessments.</p>
 
-<p>Here is your progress to date:</p>
+<p>Here is your progress to date. Green shows the content you have already viewed and red shows what you still need to complete.</p>
 
+<p><img src="{{image_progress_50}}" alt="Progress report" style="max-width: 100%; height: auto;"></p>
 {{progress_table}}
 
 <p>Keep going, and contact us if you have any questions.</p>

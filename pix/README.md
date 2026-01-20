@@ -8,6 +8,8 @@ The following image files are required for the first day and second day task not
 
 - `email_documentation_location.png` - Screenshot showing where to find course documentation
 - `email_tutorial_video.png` - Screenshot showing the tutorial video in the course
+- `email_progress_report_25.png` - Screenshot showing the 25% progress report section
+- `email_progress_report_50.png` - Screenshot showing the 50% progress report section
 
 **Note:** All screenshots are in Catalan and will be used for all language versions.
 

@@ -83,10 +83,12 @@ class check_progress_25 extends scheduled_task {
                 $percent = progress_calculator::get_progress_percentage($course, $user);
                 mtrace("  User {$user->id} ({$user->email}): progress = {$percent}%");
                 if ($percent >= 25.0) {
+                    $imgurl = new \moodle_url('/local/courseprogressnotify/pix/email_progress_report_25.png');
                     $placeholders = [
                         'progress_percentage' => (string)$percent,
                         'courseenddate' => $this->format_date_for_user($user, $course->enddate),
                         'progress_table' => progress_calculator::build_progress_table_html($course, $user),
+                        'image_progress_25' => $imgurl->out(false),
                     ];
                     $result = email_builder::send($user, $course, '25', $placeholders, 'progress_25');
                     if ($result) {

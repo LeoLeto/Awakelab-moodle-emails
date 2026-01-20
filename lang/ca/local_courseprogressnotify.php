@@ -123,6 +123,8 @@ $string['email_25_body'] = '<p>Benvingut/da {{firstname}},</p>
 
 <p>Recorda també completar el <strong>Qüestionari de valoració de l\'alumne</strong>, disponible a l\'apartat d\'avaluació de la qualitat.</p>
 
+<p><img src="{{image_progress_25}}" alt="Informe de progrés" style="max-width: 100%; height: auto;"></p>
+
 <p>Per a qualsevol dubte, contacta amb nosaltres.</p>
 
 <p>Salutacions,</p>';
@@ -132,7 +134,9 @@ $string['email_50_body'] = '<p>Benvingut/da {{firstname}}!</p>
 
 <p>Ja hem arribat a la meitat del curs <strong>{{coursename}}</strong>. El curs finalitza el <strong>{{courseenddate}}</strong> i per completar-lo cal visualitzar tots els continguts i realitzar les activitats.</p>
 
-<p>Aquesta és la teva evolució fins avui:</p>
+<p>Aquesta és la teva evolució fins avui. En verd veuràs els continguts ja visualitzats i el vermell els que encara has d\'afrontar.</p>
+
+<p><img src="{{image_progress_50}}" alt="Informe de progrés" style="max-width: 100%; height: auto;"></p>
 
 {{progress_table}}
 

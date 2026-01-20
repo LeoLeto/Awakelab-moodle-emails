@@ -125,6 +125,8 @@ $string['email_25_body'] = '<p>Bienvenido/a {{firstname}},</p>
 
 <p>Te recordamos también que debes realizar el <strong>Cuestionario de valoración del alumno</strong>, disponible en el apartado de evaluación de la calidad.</p>
 
+<p><img src="{{image_progress_25}}" alt="Informe de progreso" style="max-width: 100%; height: auto;"></p>
+
 <p>Ante cualquier duda, puedes ponerte en contacto con nosotros.</p>
 
 <p>Un saludo,</p>';
@@ -134,7 +136,9 @@ $string['email_50_body'] = '<p>¡Bienvenido/a {{firstname}}!</p>
 
 <p>Ya hemos llegado a la mitad del curso <strong>{{coursename}}</strong>. El curso finaliza el <strong>{{courseenddate}}</strong>, y para completarlo es necesario haber visualizado todos los contenidos y realizado las actividades y evaluaciones.</p>
 
-<p>A continuación, puedes ver tu evolución hasta el día de hoy:</p>
+<p>A continuación, puedes ver tu evolución hasta el día de hoy. En verde verás los contenidos ya visualizados y el rojo los que aún tiene que afrontar.</p>
+
+<p><img src="{{image_progress_50}}" alt="Informe de progreso" style="max-width: 100%; height: auto;"></p>
 
 {{progress_table}}
 
