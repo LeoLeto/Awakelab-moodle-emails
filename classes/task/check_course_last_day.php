@@ -54,8 +54,10 @@ class check_course_last_day extends scheduled_task {
                     mtrace("  User {$user->id} ({$user->email}): already notified");
                     continue;
                 }
+                $imgurl = new \moodle_url('/local/courseprogressnotify/pix/email_quality_survey_location.png');
                 $placeholders = [
                     'courseenddate' => $this->format_date_for_user($user, $course->enddate),
+                    'image_quality_survey' => $imgurl->out(false),
                 ];
                 $result = email_builder::send($user, $course, 'last_day', $placeholders, 'course_last_day');
                 if ($result) {

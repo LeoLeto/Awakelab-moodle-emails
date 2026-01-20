@@ -178,6 +178,8 @@ $string['email_last_day_body'] = '<p>Hola {{firstname}},</p>
 
 <p>También puedes realizar el cuestionario de satisfacción final disponible en el apartado de evaluación de la calidad.</p>
 
+<p><img src="{{image_quality_survey}}" alt="Ubicación del cuestionario de calidad" style="max-width: 100%; height: auto;"></p>
+
 <p>Una vez finalizado el curso, nos pondremos en contacto contigo para informarte sobre la disponibilidad de descarga del diploma.</p>
 
 <p>Gracias por tu participación y compromiso.</p>

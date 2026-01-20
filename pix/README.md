@@ -11,6 +11,7 @@ The following image files are required for the first day and second day task not
 - `email_progress_report_25.png` - Screenshot showing the 25% progress report section
 - `email_progress_report_50.png` - Screenshot showing the 50% progress report section
 - `email_zoom_link_location.png` - Screenshot showing where the Zoom link appears in the platform
+- `email_quality_survey_location.png` - Screenshot showing where to find the quality evaluation survey
 
 **Note:** All screenshots are in Catalan and will be used for all language versions.
 

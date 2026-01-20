@@ -172,7 +172,9 @@ $string['email_last_day_body'] = '<p>Hola {{firstname}},</p>
 
 <p>Si encara no ho has fet, completa les avaluacions i verifica que has visualitzat tots els continguts per obtenir el diploma.</p>
 
-<p>També pots realitzar el qüestionari de satisfacció final.</p>
+<p>També pots realitzar el qüestionari de satisfacció final disponible a l\'apartat d\'avaluació de la qualitat.</p>
+
+<p><img src="{{image_quality_survey}}" alt="Ubicació del qüestionari de qualitat" style="max-width: 100%; height: auto;"></p>
 
 <p>Un cop finalitzat el curs, ens posarem en contacte per informar-te de la disponibilitat del diploma.</p>
 

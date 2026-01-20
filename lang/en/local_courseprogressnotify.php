@@ -175,7 +175,9 @@ $string['email_last_day_body'] = '<p>Hello {{firstname}},</p>
 
 <p>If you have not done so yet, please complete the assessments and ensure you have viewed 100% of the contents to obtain your diploma.</p>
 
-<p>You can also complete the final satisfaction survey.</p>
+<p>You can also complete the final satisfaction survey available in the quality evaluation section.</p>
+
+<p><img src="{{image_quality_survey}}" alt="Quality survey location" style="max-width: 100%; height: auto;"></p>
 
 <p>After the course ends, we will contact you to inform you about the availability of the diploma download.</p>
 
