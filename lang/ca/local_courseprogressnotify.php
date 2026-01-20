@@ -237,7 +237,7 @@ $string['email_first_day_body'] = '<p>Hola a tothom!</p>
 
 <p>Com a primera tasca, heu de llegir i signar la normativa interna i el Rebut de Material. Podeu trobar-la en la pàgina inicial del campus virtual a l\'apartat documentació tal i com es mostra a la imatge que t\'adjunto a continuació:</p>
 
-<p><img src="{{image_documentation}}" alt="Ubicació de documentació" style="max-width: 100%; height: auto;"></p>
+<p><img src="{{image_documentation}}" alt="Ubicació de documentació" style="max-width: 70%; height: auto;"></p>
 
 <p>Es imprescindible signar aquests dos documents per poder tenir accés als continguts de la formació.</p>
 
@@ -251,7 +251,7 @@ $string['email_first_day_body'] = '<p>Hola a tothom!</p>
 
 <p>Si tens algun dubte a referència de com utilitzar la plataforma pots visualitzar el videotutorial següent:</p>
 
-<p><img src="{{image_tutorial}}" alt="Video tutorial" style="max-width: 100%; height: auto;"></p>
+<p><img src="{{image_tutorial}}" alt="Video tutorial" style="max-width: 70%; height: auto;"></p>
 
 <p>Per a qualsevol consulta no dubteu en posar-vos en contacte amb el dinamitzador/a corresponent.</p>
 

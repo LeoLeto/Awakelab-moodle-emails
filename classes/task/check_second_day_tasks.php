@@ -63,6 +63,7 @@ class check_second_day_tasks extends scheduled_task {
             
             foreach ($students as $user) {
                 if (notification_log::has_sent($user->id, $course->id, 'second_day_tasks')) {
+                    mtrace("    ✓ Already sent to {$user->firstname} {$user->lastname} ({$user->email}) - skipping");
                     continue;
                 }
                 

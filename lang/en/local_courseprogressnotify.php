@@ -244,10 +244,10 @@ $string['email_first_day_body'] = '<p>Hello everyone,</p>
 </ol>
 
 <p><strong>Where to find these documents:</strong></p>
-<p><img src="{{image_documentation}}" alt="Documentation location" style="max-width: 800px; width: 100%; height: auto;" /></p>
+<p><img src="{{image_documentation}}" alt="Documentation location" style="max-width: 560px; width: 70%; height: auto;" /></p>
 
 <p>Additionally, we recommend watching the introductory tutorial video available in the course:</p>
-<p><img src="{{image_tutorial}}" alt="Tutorial video location" style="max-width: 800px; width: 100%; height: auto;" /></p>
+<p><img src="{{image_tutorial}}" alt="Tutorial video location" style="max-width: 560px; width: 70%; height: auto;" /></p>
 
 <p>If you have any questions, please don\'t hesitate to contact us.</p>
 

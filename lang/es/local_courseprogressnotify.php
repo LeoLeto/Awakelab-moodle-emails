@@ -239,7 +239,7 @@ $string['email_first_day_body'] = '<p>Hola a todos/as,</p>
 
 <p>Como primera tarea del curso, debéis leer y firmar la normativa interna y el Recibo de Material. Podéis encontrarlos en la página inicial del campus virtual, en el apartado de Documentación, tal y como se muestra en la imagen que os adjuntamos a continuación:</p>
 
-<p><img src="{{image_documentation}}" alt="Ubicación de documentación" style="max-width: 100%; height: auto;"></p>
+<p><img src="{{image_documentation}}" alt="Ubicación de documentación" style="max-width: 70%; height: auto;"></p>
 
 <p>Es imprescindible firmar estos dos documentos para poder acceder a los contenidos de la formación.</p>
 
@@ -253,7 +253,7 @@ $string['email_first_day_body'] = '<p>Hola a todos/as,</p>
 
 <p>Si tenéis alguna duda sobre cómo utilizar la plataforma, podéis visualizar el siguiente videotutorial:</p>
 
-<p><img src="{{image_tutorial}}" alt="Video tutorial" style="max-width: 100%; height: auto;"></p>
+<p><img src="{{image_tutorial}}" alt="Video tutorial" style="max-width: 70%; height: auto;"></p>
 
 <p>Para cualquier consulta, no dudéis en poneros en contacto con el/la dinamizador/a correspondiente.</p>
 
