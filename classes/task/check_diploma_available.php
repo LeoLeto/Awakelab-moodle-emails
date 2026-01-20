@@ -63,6 +63,7 @@ class check_diploma_available extends scheduled_task {
             
             foreach ($students as $user) {
                 if (notification_log::has_sent($user->id, $course->id, 'diploma_available')) {
+                    mtrace("    ✓ Already sent to {$user->firstname} {$user->lastname} ({$user->email}) - skipping");
                     continue;
                 }
                 

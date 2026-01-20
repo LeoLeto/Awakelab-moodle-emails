@@ -78,7 +78,7 @@ if ($confirm && !empty($type) && confirm_sesskey()) {
                 $notificationtypes = ['presential_exam', 'presential_tutoring'];
                 break;
             case 'diploma':
-                $notificationtypes = ['diploma'];
+                $notificationtypes = ['diploma_available'];
                 break;
             case 'firstday':
                 $notificationtypes = ['first_day_tasks'];
