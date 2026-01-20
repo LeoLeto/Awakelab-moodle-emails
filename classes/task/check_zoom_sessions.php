@@ -68,6 +68,7 @@ class check_zoom_sessions extends scheduled_task {
             $notified = 0;
             foreach ($students as $user) {
                 if (notification_log::has_sent($user->id, $course->id, 'zoom_reminder', $session->id)) {
+                    mtrace("    ✓ Already sent to {$user->firstname} {$user->lastname} ({$user->email}) - skipping");
                     continue;
                 }
                 $datefmt = get_string('strftimedate', 'langconfig');
