@@ -41,21 +41,6 @@ if ($hassiteconfig) {
         $versioninfo
     ));
 
-    // Category dropdown (0 = none/disabled).
-    $options = [0 => get_string('settings:category:none', 'local_courseprogressnotify')];
-    $categories = $DB->get_records_sql("SELECT id, name, depth FROM {course_categories} ORDER BY sortorder");
-    foreach ($categories as $c) {
-        $prefix = str_repeat('— ', max(0, (int)$c->depth - 1));
-        $options[(int)$c->id] = $prefix . format_string($c->name);
-    }
-    $settings->add(new admin_setting_configselect(
-        'local_courseprogressnotify/categoryid',
-        get_string('settings:category', 'local_courseprogressnotify'),
-        get_string('settings:category_desc', 'local_courseprogressnotify') . ' ' . get_string('settings:category_fallback', 'local_courseprogressnotify'),
-        0,
-        $options
-    ));
-
     // Days before Zoom session to send invitation reminder.
     $settings->add(new admin_setting_configtext(
         'local_courseprogressnotify/zoomdaysbefore',
@@ -76,9 +61,8 @@ if ($hassiteconfig) {
 
     // Add a manual run block inside the settings page.
     $runurl = new moodle_url('/local/courseprogressnotify/run.php');
-    $categoryid = (int)get_config('local_courseprogressnotify', 'categoryid');
     $customfield = get_config('local_courseprogressnotify', 'customfield_shortname');
-    $disabled = !$categoryid && empty($customfield);
+    $disabled = empty($customfield);
     $desc = html_writer::tag('p', get_string('settings:run:desc', 'local_courseprogressnotify'));
     if ($disabled) {
         $desc .= $OUTPUT->notification(get_string('runpage:nocategory', 'local_courseprogressnotify'), \core\output\notification::NOTIFY_WARNING);

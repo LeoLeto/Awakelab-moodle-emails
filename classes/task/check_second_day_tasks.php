@@ -21,19 +21,14 @@ class check_second_day_tasks extends scheduled_task {
         
         mtrace('Running task: second day tasks notification (browser compatibility)');
         
-        $categoryid = (int)get_config('local_courseprogressnotify', 'categoryid');
         $customfieldshortname = get_config('local_courseprogressnotify', 'customfield_shortname');
         
-        if (!$categoryid && empty($customfieldshortname)) {
-            mtrace('No category or custom field configured; skipping.');
+        if (empty($customfieldshortname)) {
+            mtrace('No custom field configured; skipping.');
             return;
         }
         
-        if (!empty($customfieldshortname)) {
-            mtrace("Using custom field: {$customfieldshortname}");
-        } else {
-            mtrace("Category ID: {$categoryid}");
-        }
+        mtrace("Using custom field: {$customfieldshortname}");
 
         $now = time();
         $yesterdaystart = usergetmidnight($now - DAYSECS);
@@ -50,9 +45,9 @@ class check_second_day_tasks extends scheduled_task {
             ]
         );
         
-        // Filter courses based on custom field or category
-        $courses = array_filter($courses, function($course) use ($categoryid, $customfieldshortname) {
-            return $this->is_course_enabled($course->id, $course->category, $categoryid, $customfieldshortname);
+        // Filter courses based on custom field
+        $courses = array_filter($courses, function($course) use ($customfieldshortname) {
+            return $this->is_course_enabled($course->id, $customfieldshortname);
         });
         
         if (empty($courses)) {
@@ -106,16 +101,25 @@ class check_second_day_tasks extends scheduled_task {
         return $DB->get_records_sql($sql, $params);
     }
 
-    private function is_course_enabled($courseid, $coursecategory, $configcategoryid, $customfieldshortname) {
+    /**
+     * Check if notifications are enabled for a course via custom field.
+     * @param int $courseid Course ID
+     * @param string $customfieldshortname Custom field shortname from settings
+     * @return bool True if notifications should be sent for this course
+     */
+    private function is_course_enabled($courseid, $customfieldshortname) {
         global $DB;
-        if (!empty($customfieldshortname)) {
-            $field = $DB->get_record('customfield_field', ['shortname' => $customfieldshortname]);
-            if ($field) {
-                $data = $DB->get_record('customfield_data', ['fieldid' => $field->id, 'instanceid' => $courseid]);
-                return $data && $data->value == 1;
-            }
+        
+        $field = $DB->get_record('customfield_field', ['shortname' => $customfieldshortname]);
+        if (!$field) {
             return false;
         }
-        return $configcategoryid > 0 && $coursecategory == $configcategoryid;
+        
+        $data = $DB->get_record('customfield_data', [
+            'fieldid' => $field->id,
+            'instanceid' => $courseid
+        ]);
+        
+        return $data && $data->value == 1;
     }
 }

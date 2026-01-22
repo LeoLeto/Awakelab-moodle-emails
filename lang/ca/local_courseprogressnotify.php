@@ -20,8 +20,7 @@ $string['pluginname'] = 'Notificacions de progrés de curs';
 
 // Custom field settings.
 $string['customfield_shortname'] = 'Nom curt del camp personalitzat';
-$string['customfield_shortname_desc'] = 'Introduïu el nom curt del camp personalitzat del curs (casella de verificació) que habilita les notificacions per a cursos individuals. Si es configura, només els cursos amb aquest camp habilitat rebran notificacions. Deixeu-lo buit per utilitzar només la selecció basada en categories. El camp personalitzat s\'ha de crear a Administració del lloc → Cursos → Camps personalitzats del curs. Recomanat: courseemailnotifications_enabled';
-$string['settings:category_fallback'] = 'Aquesta configuració s\'utilitza com a alternativa si no es configura cap camp personalitzat.';
+$string['customfield_shortname_desc'] = 'Introduïu el nom curt del camp personalitzat del curs (casella de verificació) que habilita les notificacions per a cursos individuals. Només els cursos amb aquest camp habilitat rebran notificacions. El camp personalitzat s\'ha de crear a Administració del lloc → Cursos → Camps personalitzats del curs. Recomanat: courseemailnotifications_enabled';
 
 // Scheduled task names.
 $string['task_check_progress_25'] = 'Notificació de progrés 25%';
@@ -39,7 +38,7 @@ $string['runpage:title'] = 'Verificació manual de notificacions';
 $string['runpage:heading'] = 'Verificar notificacions ara';
 $string['runpage:desc'] = 'Pots executar manualment diferents verificacions de notificacions. Selecciona el tipus que vols provar:';
 $string['runpage:type_progress'] = 'Notificacions de Progrés (25% i 50%)';
-$string['runpage:confirm_progress'] = 'Revisar tots els estudiants de la categoria configurada i enviar correus als que hagin assolit el 25% o 50% de progrés (si no han estat notificats prèviament).';
+$string['runpage:confirm_progress'] = 'Revisar tots els estudiants dels cursos amb notificacions habilitades i enviar correus als que hagin assolit el 25% o 50% de progrés (si no han estat notificats prèviament).';
 $string['runpage:type_courseend'] = 'Notificacions de Fi de Curs (7 dies abans i últim dia)';
 $string['runpage:confirm_courseend'] = 'Revisar cursos que finalitzen aviat (exactament dins de 7 dies) o avui, i enviar recordatoris als estudiants matriculats (si no han estat notificats prèviament).';
 $string['runpage:type_zoom'] = 'Notificacions de Sessions Zoom';
@@ -52,7 +51,7 @@ $string['runpage:type_firstday'] = 'Notificacions de Primer Dia (Tasques Inicial
 $string['runpage:confirm_firstday'] = 'Revisar cursos que inicien avui i enviar als estudiants les instruccions sobre signatura de normativa, rebut de material i requisits del curs.';
 $string['runpage:type_secondday'] = 'Notificacions de Segon Dia (Navegadors)';
 $string['runpage:confirm_secondday'] = 'Revisar cursos en el seu segon dia i enviar als estudiants informació sobre navegadors compatibles i configuració de finestres emergents.';
-$string['runpage:confirm'] = 'Fes clic al botó per iniciar la verificació. Es revisaran tots els estudiants de la categoria configurada i s\'enviaran correus als que hagin assolit el 25% o 50% de progrés (si no han estat notificats prèviament).';
+$string['runpage:confirm'] = 'Fes clic al botó per iniciar la verificació. Es revisaran tots els estudiants dels cursos amb notificacions habilitades i s\'enviaran correus als que hagin assolit el 25% o 50% de progrés (si no han estat notificats prèviament).';
 $string['run_progress_button'] = 'Provar Correus de Progrés';
 $string['run_courseend_button'] = 'Provar Correus de Fi de Curs';
 $string['run_zoom_button'] = 'Provar Correus de Zoom';
@@ -65,19 +64,17 @@ $string['backtosettings'] = 'Tornar a configuració';
 $string['run_now_button'] = 'Verificar notificacions ara';
 $string['run_now_done'] = 'La verificació s\'ha executat correctament.';
 $string['run_now_error'] = 'S\'ha produït un error durant l\'execució:';
-$string['runpage:nocategory'] = 'No hi ha cap categoria seleccionada a la configuració. Selecciona\'n una per habilitar les operacions del connector.';
+$string['runpage:nocategory'] = 'No hi ha cap camp personalitzat configurat. Configureu el nom curt del camp personalitzat per habilitar les operacions del connector.';
 
 // Settings.
-$string['settings:category'] = 'Categoria objectiu';
-$string['settings:category_desc'] = 'Selecciona la categoria on s’aplicarà aquest connector. Si no se’n selecciona cap ("Cap"), el connector no realitzarà cap operació.';
-$string['settings:category:none'] = 'Cap (deshabilitat)';
+
 $string['settings:zoomdaysbefore'] = 'Dies abans per a la invitació Zoom';
 $string['settings:zoomdaysbefore_desc'] = 'Nombre de dies abans de la data de la sessió Zoom per enviar la invitació automàtica.';
 $string['settings:presentialdaysbefore'] = 'Dies abans per a sessions presencials';
 $string['settings:presentialdaysbefore_desc'] = 'Nombre de dies abans de la sessió presencial (examen/tutoria) per enviar el recordatori.';
 
 // Run block in settings page.
-$string['settings:run:desc'] = 'Executa manualment les verificacions de notificacions des d\'aquesta pàgina. Només s\'aplicarà a la categoria seleccionada.';
+$string['settings:run:desc'] = 'Executa manualment les verificacions de notificacions des d\'aquesta pàgina. S\'aplicarà als cursos amb notificacions habilitades mitjançant el camp personalitzat.';
 
 // Progress table.
 $string['progress:header:activity'] = 'Activitat';

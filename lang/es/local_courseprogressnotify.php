@@ -20,8 +20,7 @@ $string['pluginname'] = 'Notificaciones de progreso de curso';
 
 // Custom field settings.
 $string['customfield_shortname'] = 'Nombre corto del campo personalizado';
-$string['customfield_shortname_desc'] = 'Introduzca el nombre corto del campo personalizado del curso (casilla de verificación) que habilita las notificaciones para cursos individuales. Si se configura, solo los cursos con este campo habilitado recibirán notificaciones. Déjelo vacío para usar únicamente la selección basada en categorías. El campo personalizado debe crearse en Administración del sitio → Cursos → Campos personalizados del curso. Recomendado: courseemailnotifications_enabled';
-$string['settings:category_fallback'] = 'Esta configuración se utiliza como alternativa si no se configura ningún campo personalizado.';
+$string['customfield_shortname_desc'] = 'Introduzca el nombre corto del campo personalizado del curso (casilla de verificación) que habilita las notificaciones para cursos individuales. Solo los cursos con este campo habilitado recibirán notificaciones. El campo personalizado debe crearse en Administración del sitio → Cursos → Campos personalizados del curso. Recomendado: courseemailnotifications_enabled';
 
 // Scheduled task names.
 $string['task_check_progress_25'] = 'Notificación de progreso 25%';
@@ -39,7 +38,7 @@ $string['runpage:title'] = 'Verificación manual de notificaciones';
 $string['runpage:heading'] = 'Verificar notificaciones ahora';
 $string['runpage:desc'] = 'Puedes ejecutar manualmente diferentes verificaciones de notificaciones. Selecciona el tipo que deseas probar:';
 $string['runpage:type_progress'] = 'Notificaciones de Progreso (25% y 50%)';
-$string['runpage:confirm_progress'] = 'Revisar todos los estudiantes de la categoría configurada y enviar emails a quienes hayan alcanzado el 25% o 50% de progreso (si no han sido notificados previamente).';
+$string['runpage:confirm_progress'] = 'Revisar todos los estudiantes de los cursos con notificaciones habilitadas y enviar emails a quienes hayan alcanzado el 25% o 50% de progreso (si no han sido notificados previamente).';
 $string['runpage:type_courseend'] = 'Notificaciones de Fin de Curso (7 días antes y último día)';
 $string['runpage:confirm_courseend'] = 'Revisar cursos que finalizan pronto (exactamente dentro de 7 días) o mañana, y enviar recordatorios a los estudiantes matriculados (si no han sido notificados previamente).';
 $string['runpage:type_zoom'] = 'Notificaciones de Sesiones Zoom';
@@ -52,7 +51,7 @@ $string['runpage:type_firstday'] = 'Notificaciones de Primer Día (Tareas Inicia
 $string['runpage:confirm_firstday'] = 'Revisar cursos que inician hoy y enviar a estudiantes las instrucciones sobre firma de normativa, recibo de material y requisitos del curso.';
 $string['runpage:type_secondday'] = 'Notificaciones de Segundo Día (Navegadores)';
 $string['runpage:confirm_secondday'] = 'Revisar cursos en su segundo día y enviar a estudiantes información sobre navegadores compatibles y configuración de ventanas emergentes.';
-$string['runpage:confirm'] = 'Haz clic en el botón para iniciar la verificación. Se revisarán todos los estudiantes de la categoría configurada y se enviarán emails a quienes hayan alcanzado el 25% o 50% de progreso (si no han sido notificados previamente).';
+$string['runpage:confirm'] = 'Haz clic en el botón para iniciar la verificación. Se revisarán todos los estudiantes de los cursos con notificaciones habilitadas y se enviarán emails a quienes hayan alcanzado el 25% o 50% de progreso (si no han sido notificados previamente).';
 $string['run_progress_button'] = 'Probar Emails de Progreso';
 $string['run_courseend_button'] = 'Probar Emails de Fin de Curso';
 $string['run_zoom_button'] = 'Probar Emails de Zoom';
@@ -65,19 +64,16 @@ $string['backtosettings'] = 'Volver a configuración';
 $string['run_now_button'] = 'Verificar Notificaciones Ahora';
 $string['run_now_done'] = 'La verificación se ejecutó correctamente.';
 $string['run_now_error'] = 'Se produjo un error durante la ejecución:';
-$string['runpage:nocategory'] = 'No hay una categoría seleccionada en la configuración. Selecciona una categoría para habilitar las operaciones del plugin.';
+$string['runpage:nocategory'] = 'No hay un campo personalizado configurado. Configure el nombre corto del campo personalizado para habilitar las operaciones del plugin.';
 
 // Settings.
-$string['settings:category'] = 'Categoría objetivo';
-$string['settings:category_desc'] = 'Selecciona la categoría donde se aplicará este plugin. Si no se selecciona ninguna (valor "Ninguna"), el plugin no realizará ninguna operación.';
-$string['settings:category:none'] = 'Ninguna (deshabilitado)';
 $string['settings:zoomdaysbefore'] = 'Días antes para la invitación Zoom';
 $string['settings:zoomdaysbefore_desc'] = 'Número de días antes de la fecha de la sesión Zoom para enviar la invitación automática.';
 $string['settings:presentialdaysbefore'] = 'Días antes para sesiones presenciales';
 $string['settings:presentialdaysbefore_desc'] = 'Número de días antes de la sesión presencial (examen/tutoría) para enviar el recordatorio.';
 
 // Run block in settings page.
-$string['settings:run:desc'] = 'Ejecuta manualmente las verificaciones de notificaciones desde esta página. Se aplicará únicamente a la categoría seleccionada.';
+$string['settings:run:desc'] = 'Ejecuta manualmente las verificaciones de notificaciones desde esta página. Se aplicará a los cursos con notificaciones habilitadas mediante el campo personalizado.';
 
 // Progress table.
 $string['progress:header:activity'] = 'Actividad';

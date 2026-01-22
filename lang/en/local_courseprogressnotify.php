@@ -20,8 +20,7 @@ $string['pluginname'] = 'Course progress notifications';
 
 // Custom field settings.
 $string['customfield_shortname'] = 'Custom field shortname';
-$string['customfield_shortname_desc'] = 'Enter the shortname of the course custom field (checkbox) that enables notifications for individual courses. If configured, only courses with this field enabled will receive notifications. Leave empty to use category-based selection only. The custom field must be created in Site administration → Courses → Course custom fields. Recommended: courseemailnotifications_enabled';
-$string['settings:category_fallback'] = 'This setting is used as a fallback if no custom field is configured.';
+$string['customfield_shortname_desc'] = 'Enter the shortname of the course custom field (checkbox) that enables notifications for individual courses. Only courses with this field enabled will receive notifications. The custom field must be created in Site administration → Courses → Course custom fields. Recommended: courseemailnotifications_enabled';
 
 // Scheduled task names.
 $string['task_check_progress_25'] = 'Progress notification 25%';
@@ -39,7 +38,7 @@ $string['runpage:title'] = 'Manual notifications verification';
 $string['runpage:heading'] = 'Run notifications check now';
 $string['runpage:desc'] = 'You can manually run different notification checks. Select the type you want to test:';
 $string['runpage:type_progress'] = 'Progress Notifications (25% and 50%)';
-$string['runpage:confirm_progress'] = 'Check all students in the configured category and send emails to those who have reached 25% or 50% progress (if they haven\'t been notified yet).';
+$string['runpage:confirm_progress'] = 'Check all students in courses with notifications enabled and send emails to those who have reached 25% or 50% progress (if they haven\'t been notified yet).';
 $string['runpage:type_courseend'] = 'Course End Notifications (7 days before and last day)';
 $string['runpage:confirm_courseend'] = 'Check courses ending soon (exactly 7 days away) or today, and send reminder emails to enrolled students (if they haven\'t been notified yet).';
 $string['runpage:type_zoom'] = 'Zoom Session Notifications';
@@ -52,7 +51,7 @@ $string['runpage:type_firstday'] = 'First Day Tasks Notifications';
 $string['runpage:confirm_firstday'] = 'Check courses starting today and send first day tasks reminders to enrolled students.';
 $string['runpage:type_secondday'] = 'Second Day Tasks Notifications';
 $string['runpage:confirm_secondday'] = 'Check courses that started yesterday and send second day tasks reminders to enrolled students.';
-$string['runpage:confirm'] = 'Click the button below to start the verification. This will check all students in the configured category and send emails to those who have reached 25% or 50% progress (if they haven\'t been notified yet).';
+$string['runpage:confirm'] = 'Click the button below to start the verification. This will check all students in courses with notifications enabled and send emails to those who have reached 25% or 50% progress (if they haven\'t been notified yet).';
 $string['run_progress_button'] = 'Test Progress Emails';
 $string['run_courseend_button'] = 'Test Course End Emails';
 $string['run_zoom_button'] = 'Test Zoom Emails';
@@ -65,19 +64,16 @@ $string['backtosettings'] = 'Back to settings';
 $string['run_now_button'] = 'Run Now';
 $string['run_now_done'] = 'Verification completed successfully.';
 $string['run_now_error'] = 'An error occurred while running:';
-$string['runpage:nocategory'] = 'No category selected in settings. Select a category to enable the plugin operations.';
+$string['runpage:nocategory'] = 'No custom field configured in settings. Configure the custom field shortname to enable the plugin operations.';
 
 // Settings.
-$string['settings:category'] = 'Target category';
-$string['settings:category_desc'] = 'Select the category where this plugin will apply. If none is selected ("None"), the plugin will not perform any operation.';
-$string['settings:category:none'] = 'None (disabled)';
 $string['settings:zoomdaysbefore'] = 'Days before Zoom invitation';
 $string['settings:zoomdaysbefore_desc'] = 'Number of days before the Zoom session date to send the automatic invitation.';
 $string['settings:presentialdaysbefore'] = 'Days before on-site sessions';
 $string['settings:presentialdaysbefore_desc'] = 'Number of days before the on-site session (exam/tutoring) to send the reminder.';
 
 // Run block in settings page.
-$string['settings:run:desc'] = 'Manually run the notifications verification from this page. It will apply only to the selected category.';
+$string['settings:run:desc'] = 'Manually run the notifications verification from this page. It will apply to courses with notifications enabled via the custom field.';
 
 // Progress table.
 $string['progress:header:activity'] = 'Activity';

@@ -21,26 +21,21 @@ class check_progress_50 extends scheduled_task {
         global $DB;
         mtrace('=== Running task: progress 50% ===');
 
-        $categoryid = (int)get_config('local_courseprogressnotify', 'categoryid');
         $customfieldshortname = get_config('local_courseprogressnotify', 'customfield_shortname');
         
-        if (!$categoryid && empty($customfieldshortname)) {
-            mtrace('✗ No category or custom field configured; skipping.');
+        if (empty($customfieldshortname)) {
+            mtrace('✗ No custom field configured; skipping.');
             return;
         }
         
-        if (!empty($customfieldshortname)) {
-            mtrace("✓ Using custom field: {$customfieldshortname}");
-        } else {
-            mtrace("✓ Using category ID: {$categoryid}");
-        }
+        mtrace("✓ Using custom field: {$customfieldshortname}");
 
         $courses = $DB->get_records('course', ['visible' => 1, 'enablecompletion' => 1], '', 'id, fullname, enddate, startdate, category');
         $now = time();
         
-        // Filter courses based on custom field or category.
-        $courses = array_filter($courses, function($course) use ($categoryid, $customfieldshortname) {
-            return $this->is_course_enabled($course->id, $course->category, $categoryid, $customfieldshortname);
+        // Filter courses based on custom field.
+        $courses = array_filter($courses, function($course) use ($customfieldshortname) {
+            return $this->is_course_enabled($course->id, $customfieldshortname);
         });
         
         $coursecount = count($courses);
@@ -117,32 +112,25 @@ class check_progress_50 extends scheduled_task {
     }
 
     /**
-     * Check if notifications are enabled for a course.
+     * Check if notifications are enabled for a course via custom field.
      * @param int $courseid Course ID
-     * @param int $coursecategory Course category ID
-     * @param int $configcategoryid Configured category ID from settings
      * @param string $customfieldshortname Custom field shortname from settings
      * @return bool True if notifications should be sent for this course
      */
-    private function is_course_enabled($courseid, $coursecategory, $configcategoryid, $customfieldshortname) {
+    private function is_course_enabled($courseid, $customfieldshortname) {
         global $DB;
         
-        // If custom field is configured, check it first.
-        if (!empty($customfieldshortname)) {
-            $field = $DB->get_record('customfield_field', ['shortname' => $customfieldshortname]);
-            if ($field) {
-                $data = $DB->get_record('customfield_data', [
-                    'fieldid' => $field->id,
-                    'instanceid' => $courseid
-                ]);
-                // Return true only if the custom field is explicitly set to 1 (checked).
-                return $data && $data->value == 1;
-            }
-            // If custom field is configured but doesn't exist, don't fall back to category.
+        $field = $DB->get_record('customfield_field', ['shortname' => $customfieldshortname]);
+        if (!$field) {
             return false;
         }
         
-        // Fallback to category-based check.
-        return $configcategoryid > 0 && $coursecategory == $configcategoryid;
+        $data = $DB->get_record('customfield_data', [
+            'fieldid' => $field->id,
+            'instanceid' => $courseid
+        ]);
+        
+        // Return true only if the custom field is explicitly set to 1 (checked).
+        return $data && $data->value == 1;
     }
 }
