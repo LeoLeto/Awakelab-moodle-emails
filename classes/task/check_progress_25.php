@@ -58,7 +58,7 @@ class check_progress_25 extends scheduled_task {
         mtrace("Found {$coursecount} eligible course(s) with completion enabled");
 
         if (empty($courses)) {
-            mtrace('✗ No eligible courses found in the configured category.');
+            mtrace('✗ No eligible courses found with notifications enabled.');
             return;
         }
 

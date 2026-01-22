@@ -37,7 +37,7 @@ class check_course_end_soon extends scheduled_task {
             return $this->is_course_enabled($course->id, $customfieldshortname);
         });
         $coursecount = count($courses);
-        mtrace("Found {$coursecount} course(s) with end dates in category");
+        mtrace("Found {$coursecount} course(s) with end dates and notifications enabled");
         
         $processedcount = 0;
         $sentcount = 0;

@@ -44,7 +44,7 @@ class check_course_last_day extends scheduled_task {
         });
         
         $coursecount = count($courses);
-        mtrace("Found {$coursecount} course(s) ending tomorrow in category");
+        mtrace("Found {$coursecount} course(s) ending tomorrow with notifications enabled");
         
         $processedcount = 0;
         $sentcount = 0;
