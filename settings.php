@@ -76,7 +76,9 @@ if ($hassiteconfig) {
 
     // Add a manual run block inside the settings page.
     $runurl = new moodle_url('/local/courseprogressnotify/run.php');
-    $disabled = !((int)get_config('local_courseprogressnotify', 'categoryid'));
+    $categoryid = (int)get_config('local_courseprogressnotify', 'categoryid');
+    $customfield = get_config('local_courseprogressnotify', 'customfield_shortname');
+    $disabled = !$categoryid && empty($customfield);
     $desc = html_writer::tag('p', get_string('settings:run:desc', 'local_courseprogressnotify'));
     if ($disabled) {
         $desc .= $OUTPUT->notification(get_string('runpage:nocategory', 'local_courseprogressnotify'), \core\output\notification::NOTIFY_WARNING);

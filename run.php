@@ -226,7 +226,8 @@ echo $OUTPUT->header();
 echo $OUTPUT->heading(get_string('runpage:heading', 'local_courseprogressnotify'));
 
 $categoryid = (int)get_config('local_courseprogressnotify', 'categoryid');
-if (!$categoryid) {
+$customfield = get_config('local_courseprogressnotify', 'customfield_shortname');
+if (!$categoryid && empty($customfield)) {
     echo $OUTPUT->notification(get_string('runpage:nocategory', 'local_courseprogressnotify'), notification::NOTIFY_WARNING);
 } else {
     echo html_writer::tag('p', get_string('runpage:desc', 'local_courseprogressnotify'));

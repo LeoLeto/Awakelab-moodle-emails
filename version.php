@@ -18,7 +18,7 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_courseprogressnotify';
 $plugin->version   = 2026012200; // YYYYMMDDHH (build number).
-$plugin->release   = '1.7.1';
+$plugin->release   = '1.7.2';
 $plugin->maturity  = MATURITY_STABLE;
 // Requires Moodle 4.4 or later (approximate build number for 4.4).
 $plugin->requires  = 2024042200;
