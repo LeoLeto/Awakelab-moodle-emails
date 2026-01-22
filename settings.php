@@ -19,6 +19,15 @@ defined('MOODLE_INTERNAL') || die();
 if ($hassiteconfig) {
     $settings = new admin_settingpage('local_courseprogressnotify', get_string('pluginname', 'local_courseprogressnotify'));
 
+    // Custom field shortname for per-course notification control.
+    $settings->add(new admin_setting_configtext(
+        'local_courseprogressnotify/customfield_shortname',
+        get_string('customfield_shortname', 'local_courseprogressnotify'),
+        get_string('customfield_shortname_desc', 'local_courseprogressnotify'),
+        'courseemailnotifications_enabled',
+        PARAM_TEXT
+    ));
+
     // Plugin version info
     $plugin = new stdClass();
     require(__DIR__ . '/version.php');
@@ -42,7 +51,7 @@ if ($hassiteconfig) {
     $settings->add(new admin_setting_configselect(
         'local_courseprogressnotify/categoryid',
         get_string('settings:category', 'local_courseprogressnotify'),
-        get_string('settings:category_desc', 'local_courseprogressnotify'),
+        get_string('settings:category_desc', 'local_courseprogressnotify') . ' ' . get_string('settings:category_fallback', 'local_courseprogressnotify'),
         0,
         $options
     ));

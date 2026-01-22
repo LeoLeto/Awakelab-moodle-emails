@@ -18,6 +18,11 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Notificaciones de progreso de curso';
 
+// Custom field settings.
+$string['customfield_shortname'] = 'Nombre corto del campo personalizado';
+$string['customfield_shortname_desc'] = 'Introduzca el nombre corto del campo personalizado del curso (casilla de verificación) que habilita las notificaciones para cursos individuales. Si se configura, solo los cursos con este campo habilitado recibirán notificaciones. Déjelo vacío para usar únicamente la selección basada en categorías. El campo personalizado debe crearse en Administración del sitio → Cursos → Campos personalizados del curso. Recomendado: courseemailnotifications_enabled';
+$string['settings:category_fallback'] = 'Esta configuración se utiliza como alternativa si no se configura ningún campo personalizado.';
+
 // Scheduled task names.
 $string['task_check_progress_25'] = 'Notificación de progreso 25%';
 $string['task_check_progress_50'] = 'Notificación de progreso 50%';

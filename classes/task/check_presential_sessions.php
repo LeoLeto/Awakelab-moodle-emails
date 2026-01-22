@@ -30,9 +30,17 @@ class check_presential_sessions extends scheduled_task {
         if ($days <= 0) { $days = 2; }
 
         $categoryid = (int)get_config('local_courseprogressnotify', 'categoryid');
-        if (!$categoryid) {
-            mtrace('No category configured; skipping.');
+        $customfieldshortname = get_config('local_courseprogressnotify', 'customfield_shortname');
+        
+        if (!$categoryid && empty($customfieldshortname)) {
+            mtrace('No category or custom field configured; skipping.');
             return;
+        }
+        
+        if (!empty($customfieldshortname)) {
+            mtrace("Using custom field: {$customfieldshortname}");
+        } else {
+            mtrace("Category ID: {$categoryid}");
         }
 
         // Time window: N days from now (midnight to midnight)
@@ -42,8 +50,13 @@ class check_presential_sessions extends scheduled_task {
 
         mtrace("Checking presential events {$days} days ahead: " . userdate($from, '%Y-%m-%d') . " to " . userdate($to, '%Y-%m-%d'));
 
-        // Get all courses in the configured category
-        $courses = $DB->get_records('course', ['category' => $categoryid, 'visible' => 1]);
+        // Get all visible courses
+        $courses = $DB->get_records('course', ['visible' => 1]);
+        
+        // Filter courses based on custom field or category
+        $courses = array_filter($courses, function($course) use ($categoryid, $customfieldshortname) {
+            return $this->is_course_enabled($course->id, $course->category, $categoryid, $customfieldshortname);
+        });
         
         $totalevents = 0;
         $totalnotifs = 0;
@@ -111,5 +124,18 @@ class check_presential_sessions extends scheduled_task {
                  WHERE u.deleted = 0 AND u.suspended = 0";
         $params = ['courseid' => $courseid, 'courseid2' => $courseid, 'ctxlevel' => CONTEXT_COURSE];
         return $DB->get_records_sql($sql, $params);
+    }
+
+    private function is_course_enabled($courseid, $coursecategory, $configcategoryid, $customfieldshortname) {
+        global $DB;
+        if (!empty($customfieldshortname)) {
+            $field = $DB->get_record('customfield_field', ['shortname' => $customfieldshortname]);
+            if ($field) {
+                $data = $DB->get_record('customfield_data', ['fieldid' => $field->id, 'instanceid' => $courseid]);
+                return $data && $data->value == 1;
+            }
+            return false;
+        }
+        return $configcategoryid > 0 && $coursecategory == $configcategoryid;
     }
 }

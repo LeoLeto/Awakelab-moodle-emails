@@ -18,6 +18,11 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Notificacions de progrés de curs';
 
+// Custom field settings.
+$string['customfield_shortname'] = 'Nom curt del camp personalitzat';
+$string['customfield_shortname_desc'] = 'Introduïu el nom curt del camp personalitzat del curs (casella de verificació) que habilita les notificacions per a cursos individuals. Si es configura, només els cursos amb aquest camp habilitat rebran notificacions. Deixeu-lo buit per utilitzar només la selecció basada en categories. El camp personalitzat s\'ha de crear a Administració del lloc → Cursos → Camps personalitzats del curs. Recomanat: courseemailnotifications_enabled';
+$string['settings:category_fallback'] = 'Aquesta configuració s\'utilitza com a alternativa si no es configura cap camp personalitzat.';
+
 // Scheduled task names.
 $string['task_check_progress_25'] = 'Notificació de progrés 25%';
 $string['task_check_progress_50'] = 'Notificació de progrés 50%';

@@ -22,9 +22,17 @@ class check_diploma_available extends scheduled_task {
         mtrace('Running task: diploma available (30 days after course end)');
         
         $categoryid = (int)get_config('local_courseprogressnotify', 'categoryid');
-        if (!$categoryid) {
-            mtrace('No category configured; skipping.');
+        $customfieldshortname = get_config('local_courseprogressnotify', 'customfield_shortname');
+        
+        if (!$categoryid && empty($customfieldshortname)) {
+            mtrace('No category or custom field configured; skipping.');
             return;
+        }
+        
+        if (!empty($customfieldshortname)) {
+            mtrace("Using custom field: {$customfieldshortname}");
+        } else {
+            mtrace("Category ID: {$categoryid}");
         }
 
         $now = time();
@@ -33,15 +41,19 @@ class check_diploma_available extends scheduled_task {
 
         mtrace("Checking courses that ended exactly 30 days ago: " . userdate($targetdaystart, '%Y-%m-%d'));
 
-        // Courses that ended exactly 30 days ago in selected category.
+        // Courses that ended exactly 30 days ago
         $courses = $DB->get_records_select('course', 
-            'visible = 1 AND enddate > 0 AND enddate >= :from AND enddate < :to AND category = :cat', 
+            'visible = 1 AND enddate > 0 AND enddate >= :from AND enddate < :to', 
             [
                 'from' => $targetdaystart,
                 'to' => $targetdayend,
-                'cat' => $categoryid,
             ]
         );
+        
+        // Filter courses based on custom field or category
+        $courses = array_filter($courses, function($course) use ($categoryid, $customfieldshortname) {
+            return $this->is_course_enabled($course->id, $course->category, $categoryid, $customfieldshortname);
+        });
         
         if (empty($courses)) {
             mtrace('  No courses ended exactly 30 days ago.');
@@ -93,5 +105,18 @@ class check_diploma_available extends scheduled_task {
                  WHERE u.deleted = 0 AND u.suspended = 0";
         $params = ['courseid' => $courseid, 'courseid2' => $courseid, 'ctxlevel' => CONTEXT_COURSE];
         return $DB->get_records_sql($sql, $params);
+    }
+
+    private function is_course_enabled($courseid, $coursecategory, $configcategoryid, $customfieldshortname) {
+        global $DB;
+        if (!empty($customfieldshortname)) {
+            $field = $DB->get_record('customfield_field', ['shortname' => $customfieldshortname]);
+            if ($field) {
+                $data = $DB->get_record('customfield_data', ['fieldid' => $field->id, 'instanceid' => $courseid]);
+                return $data && $data->value == 1;
+            }
+            return false;
+        }
+        return $configcategoryid > 0 && $coursecategory == $configcategoryid;
     }
 }

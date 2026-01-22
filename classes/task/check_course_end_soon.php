@@ -22,13 +22,25 @@ class check_course_end_soon extends scheduled_task {
         $now = time();
 
         $categoryid = (int)get_config('local_courseprogressnotify', 'categoryid');
-        if (!$categoryid) {
-            mtrace('\u2717 No category configured; skipping.');
+        $customfieldshortname = get_config('local_courseprogressnotify', 'customfield_shortname');
+        
+        if (!$categoryid && empty($customfieldshortname)) {
+            mtrace('✗ No category or custom field configured; skipping.');
             return;
         }
-        mtrace("\u2713 Category ID configured: {$categoryid}");
+        
+        if (!empty($customfieldshortname)) {
+            mtrace("✓ Using custom field: {$customfieldshortname}");
+        } else {
+            mtrace("✓ Using category ID: {$categoryid}");
+        }
 
-        $courses = $DB->get_records_select('course', 'visible = 1 AND enddate > 0 AND category = :cat', ['cat' => $categoryid]);
+        $courses = $DB->get_records_select('course', 'visible = 1 AND enddate > 0', []);
+        
+        // Filter courses based on custom field or category
+        $courses = array_filter($courses, function($course) use ($categoryid, $customfieldshortname) {
+            return $this->is_course_enabled($course->id, $course->category, $categoryid, $customfieldshortname);
+        });
         $coursecount = count($courses);
         mtrace("Found {$coursecount} course(s) with end dates in category");
         
@@ -86,5 +98,18 @@ class check_course_end_soon extends scheduled_task {
         if (empty($timestamp)) { return ''; }
         $defaulttz = \core_date::get_user_timezone($user);
         return userdate($timestamp, get_string('strftimedatetime', 'langconfig'), $defaulttz);
+    }
+
+    private function is_course_enabled($courseid, $coursecategory, $configcategoryid, $customfieldshortname) {
+        global $DB;
+        if (!empty($customfieldshortname)) {
+            $field = $DB->get_record('customfield_field', ['shortname' => $customfieldshortname]);
+            if ($field) {
+                $data = $DB->get_record('customfield_data', ['fieldid' => $field->id, 'instanceid' => $courseid]);
+                return $data && $data->value == 1;
+            }
+            return false;
+        }
+        return $configcategoryid > 0 && $coursecategory == $configcategoryid;
     }
 }

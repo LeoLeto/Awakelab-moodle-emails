@@ -37,18 +37,30 @@ class check_progress_25 extends scheduled_task {
         mtrace('=== Running task: progress 25% ===');
 
         $categoryid = (int)get_config('local_courseprogressnotify', 'categoryid');
-        if (!$categoryid) {
-            mtrace('✗ No category configured; skipping.');
+        $customfieldshortname = get_config('local_courseprogressnotify', 'customfield_shortname');
+        
+        if (!$categoryid && empty($customfieldshortname)) {
+            mtrace('✗ No category or custom field configured; skipping.');
             return;
         }
-        mtrace("✓ Category ID configured: {$categoryid}");
+        
+        if (!empty($customfieldshortname)) {
+            mtrace("✓ Using custom field: {$customfieldshortname}");
+        } else {
+            mtrace("✓ Using category ID: {$categoryid}");
+        }
 
-        // Fetch courses with completion enabled and visible in selected category.
-        $courses = $DB->get_records('course', ['visible' => 1, 'enablecompletion' => 1, 'category' => $categoryid], '', 'id, fullname, enddate, startdate');
+        // Fetch all courses with completion enabled and visible (we'll filter by custom field/category below).
+        $courses = $DB->get_records('course', ['visible' => 1, 'enablecompletion' => 1], '', 'id, fullname, enddate, startdate, category');
         $now = time();
         
+        // Filter courses based on custom field or category.
+        $courses = array_filter($courses, function($course) use ($categoryid, $customfieldshortname) {
+            return $this->is_course_enabled($course->id, $course->category, $categoryid, $customfieldshortname);
+        });
+        
         $coursecount = count($courses);
-        mtrace("Found {$coursecount} course(s) in category with completion enabled");
+        mtrace("Found {$coursecount} eligible course(s) with completion enabled");
 
         if (empty($courses)) {
             mtrace('✗ No eligible courses found in the configured category.');
@@ -131,5 +143,35 @@ class check_progress_25 extends scheduled_task {
         // Format in user's timezone and language.
         $defaulttz = \core_date::get_user_timezone($user);
         return userdate($timestamp, get_string('strftimedatetime', 'langconfig'), $defaulttz);
+    }
+
+    /**
+     * Check if notifications are enabled for a course.
+     * @param int $courseid Course ID
+     * @param int $coursecategory Course category ID
+     * @param int $configcategoryid Configured category ID from settings
+     * @param string $customfieldshortname Custom field shortname from settings
+     * @return bool True if notifications should be sent for this course
+     */
+    private function is_course_enabled($courseid, $coursecategory, $configcategoryid, $customfieldshortname) {
+        global $DB;
+        
+        // If custom field is configured, check it first.
+        if (!empty($customfieldshortname)) {
+            $field = $DB->get_record('customfield_field', ['shortname' => $customfieldshortname]);
+            if ($field) {
+                $data = $DB->get_record('customfield_data', [
+                    'fieldid' => $field->id,
+                    'instanceid' => $courseid
+                ]);
+                // Return true only if the custom field is explicitly set to 1 (checked).
+                return $data && $data->value == 1;
+            }
+            // If custom field is configured but doesn't exist, don't fall back to category.
+            return false;
+        }
+        
+        // Fallback to category-based check.
+        return $configcategoryid > 0 && $coursecategory == $configcategoryid;
     }
 }

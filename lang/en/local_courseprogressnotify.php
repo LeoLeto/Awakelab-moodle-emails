@@ -18,6 +18,11 @@ defined('MOODLE_INTERNAL') || die();
 
 $string['pluginname'] = 'Course progress notifications';
 
+// Custom field settings.
+$string['customfield_shortname'] = 'Custom field shortname';
+$string['customfield_shortname_desc'] = 'Enter the shortname of the course custom field (checkbox) that enables notifications for individual courses. If configured, only courses with this field enabled will receive notifications. Leave empty to use category-based selection only. The custom field must be created in Site administration → Courses → Course custom fields. Recommended: courseemailnotifications_enabled';
+$string['settings:category_fallback'] = 'This setting is used as a fallback if no custom field is configured.';
+
 // Scheduled task names.
 $string['task_check_progress_25'] = 'Progress notification 25%';
 $string['task_check_progress_50'] = 'Progress notification 50%';
