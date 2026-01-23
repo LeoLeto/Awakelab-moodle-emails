@@ -76,7 +76,7 @@ class presential_provider {
         }
 
         // Check for tutoring keywords (with or without accent, partial matches)
-        if (preg_match('/\b(tutoria|tuto|asesoria|consulta)\b/ui', $searchtext)) {
+        if (preg_match('/\b(tutoria|tuto|asesoria|consulta|sesion)\b/ui', $searchtext)) {
             return 'tutoring';
         }
 
