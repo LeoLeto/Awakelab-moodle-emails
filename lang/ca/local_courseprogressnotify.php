@@ -72,6 +72,8 @@ $string['settings:zoomdaysbefore'] = 'Dies abans per a la invitació Zoom';
 $string['settings:zoomdaysbefore_desc'] = 'Nombre de dies abans de la data de la sessió Zoom per enviar la invitació automàtica.';
 $string['settings:presentialdaysbefore'] = 'Dies abans per a sessions presencials';
 $string['settings:presentialdaysbefore_desc'] = 'Nombre de dies abans de la sessió presencial (examen/tutoria) per enviar el recordatori.';
+$string['settings:send_combined_email'] = 'Enviar correus combinats en espanyol i català';
+$string['settings:send_combined_email_desc'] = 'Quan està habilitat, els correus contindran tant la versió en espanyol com en català en el mateix missatge. Quan està deshabilitat, els correus s\'enviaran només en l\'idioma preferit de l\'usuari.';
 
 // Run block in settings page.
 $string['settings:run:desc'] = 'Executa manualment les verificacions de notificacions des d\'aquesta pàgina. S\'aplicarà als cursos amb notificacions habilitades mitjançant el camp personalitzat.';

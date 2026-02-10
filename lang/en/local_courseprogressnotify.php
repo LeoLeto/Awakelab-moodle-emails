@@ -71,6 +71,8 @@ $string['settings:zoomdaysbefore'] = 'Days before Zoom invitation';
 $string['settings:zoomdaysbefore_desc'] = 'Number of days before the Zoom session date to send the automatic invitation.';
 $string['settings:presentialdaysbefore'] = 'Days before on-site sessions';
 $string['settings:presentialdaysbefore_desc'] = 'Number of days before the on-site session (exam/tutoring) to send the reminder.';
+$string['settings:send_combined_email'] = 'Send Spanish and Catalan emails combined';
+$string['settings:send_combined_email_desc'] = 'When enabled, emails will contain both Spanish and Catalan versions in the same message. When disabled, emails will be sent in the user\'s preferred language only.';
 
 // Run block in settings page.
 $string['settings:run:desc'] = 'Manually run the notifications verification from this page. It will apply to courses with notifications enabled via the custom field.';

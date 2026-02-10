@@ -58,6 +58,15 @@ class email_builder {
             return false;
         }
 
+        // Check if combined email setting is enabled
+        $sendcombined = get_config('local_courseprogressnotify', 'send_combined_email');
+
+        if ($sendcombined) {
+            // Send combined Spanish and Catalan email
+            return self::send_combined_email($user, $course, $key, $placeholders, $notificationtype, $entityid);
+        }
+
+        // Original behavior: use user's preferred language
         $lang = empty($user->lang) ? current_language() : $user->lang;
         $reset = force_current_language($lang);
 
@@ -115,5 +124,84 @@ class email_builder {
             $replacements['{{' . $k . '}}'] = (string)$v;
         }
         return strtr($template, $replacements);
+    }
+
+    /**
+     * Send combined Spanish and Catalan email.
+     *
+     * @param \stdClass $user Recipient user
+     * @param \stdClass $course Course
+     * @param string $key Email key
+     * @param array $placeholders Placeholder mapping
+     * @param string $notificationtype Type for the log table
+     * @param int|null $entityid Optional related entity id
+     * @return bool
+     */
+    private static function send_combined_email(\stdClass $user, \stdClass $course, string $key, array $placeholders,
+                                               string $notificationtype, ?int $entityid = null): bool {
+        global $CFG;
+
+        // Ensure basic placeholders exist.
+        $placeholders['firstname'] = $placeholders['firstname'] ?? $user->firstname;
+        $placeholders['lastname']  = $placeholders['lastname'] ?? $user->lastname;
+        $placeholders['coursename'] = $placeholders['coursename'] ?? format_string($course->fullname, true, ['context' => \context_course::instance($course->id)]);
+        $placeholders['campus_url'] = $placeholders['campus_url'] ?? (new moodle_url('/'))->out(false);
+
+        $subjectkey = 'email_' . $key . '_subject';
+        $bodykey    = 'email_' . $key . '_body';
+
+        // Load strings directly from our plugin's language files.
+        $stringses = self::load_lang_strings('es');
+        $stringsca = self::load_lang_strings('ca');
+
+        $subjectes = $stringses[$subjectkey] ?? '';
+        $bodyhtmles = $stringses[$bodykey] ?? '';
+        $subjectca = $stringsca[$subjectkey] ?? '';
+        $bodyhtmlca = $stringsca[$bodykey] ?? '';
+
+        // Replace placeholders in both versions
+        $subjectes = self::replace_placeholders($subjectes, $placeholders);
+        $bodyhtmles = self::replace_placeholders($bodyhtmles, $placeholders);
+        $subjectca = self::replace_placeholders($subjectca, $placeholders);
+        $bodyhtmlca = self::replace_placeholders($bodyhtmlca, $placeholders);
+
+        // Use Spanish subject (or combine both if needed)
+        $subject = $subjectes;
+
+        // Combine both bodies with a clear separator
+        $separator = '<hr style="margin: 30px 0; border: 2px solid #0066cc;" />';
+        $bodyhtml = $bodyhtmles . $separator . $bodyhtmlca;
+
+        // Build plain text fallback
+        $bodytext = html_to_text($bodyhtmles) . "\n\n" . str_repeat('-', 50) . "\n\n" . html_to_text($bodyhtmlca);
+
+        $from = \core_user::get_support_user();
+        
+        mtrace("    → Sending combined email: {$subject}");
+        $sent = email_to_user($user, $from, $subject, $bodytext, $bodyhtml);
+
+        if ($sent) {
+            notification_log::log_sent($user->id, $course->id, $notificationtype, $entityid);
+            mtrace("    ✓ Combined email sent successfully");
+        } else {
+            mtrace("    ✗ email_to_user() returned false - check Moodle email configuration");
+        }
+        return $sent;
+    }
+
+    /**
+     * Load language strings directly from the plugin's lang file.
+     *
+     * @param string $lang Language code ('es', 'ca', 'en')
+     * @return array The $string array from the language file
+     */
+    private static function load_lang_strings(string $lang): array {
+        $langfile = __DIR__ . '/../lang/' . $lang . '/local_courseprogressnotify.php';
+        if (!file_exists($langfile)) {
+            return [];
+        }
+        $string = [];
+        include($langfile);
+        return $string;
     }
 }
