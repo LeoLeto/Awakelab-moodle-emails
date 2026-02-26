@@ -74,6 +74,14 @@ $string['settings:presentialdaysbefore_desc'] = 'Number of days before the on-si
 $string['settings:send_combined_email'] = 'Send Spanish and Catalan emails combined';
 $string['settings:send_combined_email_desc'] = 'When enabled, emails will contain both Spanish and Catalan versions in the same message. When disabled, emails will be sent in the user\'s preferred language only.';
 
+// Matching keywords for presential session classification.
+$string['settings:presential_keywords_heading'] = 'Matching keywords';
+$string['settings:presential_keywords_heading_desc'] = 'These keywords determine how presential calendar events are classified as exams or tutoring sessions. <strong>An event is only detected as presential if it has a location set.</strong> Accents are ignored when matching (e.g., &ldquo;sessi&oacute;&rdquo; also matches &ldquo;sessio&rdquo;). Enter one keyword per line.';
+$string['settings:presential_exam_keywords'] = 'Exam keywords';
+$string['settings:presential_exam_keywords_desc'] = 'If any of these words appears in a calendar event\'s name or description, it will be classified as an <strong>exam</strong>. One keyword per line.';
+$string['settings:presential_tutoring_keywords'] = 'Tutoring / session keywords';
+$string['settings:presential_tutoring_keywords_desc'] = 'If any of these words appears in a calendar event\'s name or description, it will be classified as a <strong>tutoring session</strong>. One keyword per line.';
+
 // Run block in settings page.
 $string['settings:run:desc'] = 'Manually run the notifications verification from this page. It will apply to courses with notifications enabled via the custom field.';
 

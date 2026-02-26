@@ -75,6 +75,14 @@ $string['settings:presentialdaysbefore_desc'] = 'Nombre de dies abans de la sess
 $string['settings:send_combined_email'] = 'Enviar correus combinats en espanyol i català';
 $string['settings:send_combined_email_desc'] = 'Quan està habilitat, els correus contindran tant la versió en espanyol com en català en el mateix missatge. Quan està deshabilitat, els correus s\'enviaran només en l\'idioma preferit de l\'usuari.';
 
+// Paraules clau per a classificació de sessions presencials.
+$string['settings:presential_keywords_heading'] = 'Paraules clau de classificació';
+$string['settings:presential_keywords_heading_desc'] = 'Aquestes paraules clau determinen com es classifiquen els esdeveniments del calendari com a exàmens o tutories. <strong>Un esdeveniment només es detecta com a presencial si té una ubicació definida.</strong> Els accents s\'ignoren en comparar (p.ex., &ldquo;sessi&oacute;&rdquo; també coincideix amb &ldquo;sessio&rdquo;). Introduïu una paraula clau per línia.';
+$string['settings:presential_exam_keywords'] = 'Paraules clau per a exàmens';
+$string['settings:presential_exam_keywords_desc'] = 'Si alguna d\'aquestes paraules apareix al nom o descripció d\'un esdeveniment del calendari, es classificarà com a <strong>examen</strong>. Una paraula clau per línia.';
+$string['settings:presential_tutoring_keywords'] = 'Paraules clau per a tutories / sessions';
+$string['settings:presential_tutoring_keywords_desc'] = 'Si alguna d\'aquestes paraules apareix al nom o descripció d\'un esdeveniment del calendari, es classificarà com a <strong>tutoria</strong>. Una paraula clau per línia.';
+
 // Run block in settings page.
 $string['settings:run:desc'] = 'Executa manualment les verificacions de notificacions des d\'aquesta pàgina. S\'aplicarà als cursos amb notificacions habilitades mitjançant el camp personalitzat.';
 

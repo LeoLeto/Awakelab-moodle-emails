@@ -59,6 +59,29 @@ if ($hassiteconfig) {
         PARAM_INT
     ));
 
+    // ── Matching keywords ────────────────────────────────────────────────────
+    $settings->add(new admin_setting_heading(
+        'local_courseprogressnotify_presential_keywords',
+        get_string('settings:presential_keywords_heading', 'local_courseprogressnotify'),
+        get_string('settings:presential_keywords_heading_desc', 'local_courseprogressnotify')
+    ));
+
+    $settings->add(new admin_setting_configtextarea(
+        'local_courseprogressnotify/presential_exam_keywords',
+        get_string('settings:presential_exam_keywords', 'local_courseprogressnotify'),
+        get_string('settings:presential_exam_keywords_desc', 'local_courseprogressnotify'),
+        "examen\nexam\nevaluacion\nprueba",
+        PARAM_TEXT
+    ));
+
+    $settings->add(new admin_setting_configtextarea(
+        'local_courseprogressnotify/presential_tutoring_keywords',
+        get_string('settings:presential_tutoring_keywords', 'local_courseprogressnotify'),
+        get_string('settings:presential_tutoring_keywords_desc', 'local_courseprogressnotify'),
+        "tutoria\ntuto\nasesoria\nconsulta\nsesion\nsessió",
+        PARAM_TEXT
+    ));
+
     // Combined Spanish and Catalan emails.
     $settings->add(new admin_setting_configcheckbox(
         'local_courseprogressnotify/send_combined_email',

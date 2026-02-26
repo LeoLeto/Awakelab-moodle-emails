@@ -57,9 +57,8 @@ class presential_provider {
     /**
      * Determine the type of presential event (exam or tutoring).
      *
-     * Searches for keywords in both name and description:
-     * - "examen", "exámen", "exam" → 'exam'
-     * - "tutoría", "tutoria", "tuto" → 'tutoring'
+     * Keywords are loaded from plugin settings (configurable by administrators).
+     * Matching is case-insensitive and accent-insensitive.
      *
      * @param \calendar_event $event The calendar event object
      * @return string|null 'exam', 'tutoring', or null if type cannot be determined
@@ -70,18 +69,60 @@ class presential_provider {
         // Remove accents for more flexible matching
         $searchtext = self::remove_accents($searchtext);
 
-        // Check for exam keywords (various spellings and variations)
-        if (preg_match('/\b(examen|exam|evaluacion|prueba)\b/ui', $searchtext)) {
-            return 'exam';
+        // Load keywords from config (falls back to defaults if not set)
+        $examkeywords = self::get_keywords_from_config(
+            'presential_exam_keywords',
+            "examen\nexam\nevaluacion\nprueba"
+        );
+        $tutoringkeywords = self::get_keywords_from_config(
+            'presential_tutoring_keywords',
+            "tutoria\ntuto\nasesoria\nconsulta\nsesion\nsessio"
+        );
+
+        // Check for exam keywords
+        if (!empty($examkeywords)) {
+            $pattern = '/\b(' . implode('|', array_map('preg_quote', $examkeywords)) . ')\b/ui';
+            if (preg_match($pattern, $searchtext)) {
+                return 'exam';
+            }
         }
 
-        // Check for tutoring keywords (with or without accent, partial matches)
-        if (preg_match('/\b(tutoria|tuto|asesoria|consulta|sesion)\b/ui', $searchtext)) {
-            return 'tutoring';
+        // Check for tutoring / session keywords
+        if (!empty($tutoringkeywords)) {
+            $pattern = '/\b(' . implode('|', array_map('preg_quote', $tutoringkeywords)) . ')\b/ui';
+            if (preg_match($pattern, $searchtext)) {
+                return 'tutoring';
+            }
         }
 
         // If we can't determine, return null
         return null;
+    }
+
+    /**
+     * Parse a keyword list from plugin config.
+     *
+     * Each keyword is stored on its own line (newlines are the separator;
+     * commas are also accepted).  Accents are stripped so that, for example,
+     * "sessió" stored in config correctly matches "sessio" in a calendar event.
+     *
+     * @param string $configkey  The plugin config key to read.
+     * @param string $default    Newline-separated default keywords to use when config is empty.
+     * @return string[]          Lowercase, accent-stripped, deduplicated keywords.
+     */
+    private static function get_keywords_from_config(string $configkey, string $default): array {
+        $raw = get_config('local_courseprogressnotify', $configkey);
+        if ($raw === false || trim((string) $raw) === '') {
+            $raw = $default;
+        }
+        // Accept newline- or comma-separated lists
+        $keywords = preg_split('/[\n,]+/', (string) $raw);
+        $keywords = array_map('trim', $keywords);
+        $keywords = array_filter($keywords, fn($k) => $k !== '');
+        // Strip accents and lowercase to match the pre-processed search text
+        $keywords = array_map([self::class, 'remove_accents'], $keywords);
+        $keywords = array_map('strtolower', $keywords);
+        return array_values(array_unique($keywords));
     }
 
     /**

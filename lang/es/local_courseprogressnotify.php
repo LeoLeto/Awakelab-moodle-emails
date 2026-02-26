@@ -74,6 +74,14 @@ $string['settings:presentialdaysbefore_desc'] = 'Número de días antes de la se
 $string['settings:send_combined_email'] = 'Enviar correos combinados en español y catalán';
 $string['settings:send_combined_email_desc'] = 'Cuando está habilitado, los correos contendrán tanto la versión en español como en catalán en el mismo mensaje. Cuando está deshabilitado, los correos se enviarán solo en el idioma preferido del usuario.';
 
+// Palabras clave para clasificación de sesiones presenciales.
+$string['settings:presential_keywords_heading'] = 'Palabras clave de clasificación';
+$string['settings:presential_keywords_heading_desc'] = 'Estas palabras clave determinan cómo se clasifican los eventos del calendario como exámenes o tutorías. <strong>Un evento solo se detecta como presencial si tiene una ubicación definida.</strong> Los acentos se ignoran al comparar (p.ej., &ldquo;sessi&oacute;&rdquo; también coincide con &ldquo;sessio&rdquo;). Introduce una palabra clave por línea.';
+$string['settings:presential_exam_keywords'] = 'Palabras clave para exámenes';
+$string['settings:presential_exam_keywords_desc'] = 'Si alguna de estas palabras aparece en el nombre o descripción de un evento del calendario, se clasificará como <strong>examen</strong>. Una palabra clave por línea.';
+$string['settings:presential_tutoring_keywords'] = 'Palabras clave para tutorías / sesiones';
+$string['settings:presential_tutoring_keywords_desc'] = 'Si alguna de estas palabras aparece en el nombre o descripción de un evento del calendario, se clasificará como <strong>tutoría</strong>. Una palabra clave por línea.';
+
 // Run block in settings page.
 $string['settings:run:desc'] = 'Ejecuta manualmente las verificaciones de notificaciones desde esta página. Se aplicará a los cursos con notificaciones habilitadas mediante el campo personalizado.';
 
