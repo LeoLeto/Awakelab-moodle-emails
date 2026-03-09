@@ -90,6 +90,20 @@ if ($hassiteconfig) {
         1 // Enabled by default
     ));
 
+    // Activity report link.
+    $reporturl = new moodle_url('/local/courseprogressnotify/report.php');
+    $reportdesc = html_writer::tag('p', get_string('settings:report_link_desc', 'local_courseprogressnotify'));
+    $reportdesc .= html_writer::link(
+        $reporturl,
+        get_string('report:viewreport', 'local_courseprogressnotify'),
+        ['class' => 'btn btn-info']
+    );
+    $settings->add(new admin_setting_heading(
+        'local_courseprogressnotify_reportblock',
+        get_string('settings:report_link', 'local_courseprogressnotify'),
+        $reportdesc
+    ));
+
     // Add a manual run block inside the settings page.
     $runurl = new moodle_url('/local/courseprogressnotify/run.php');
     $customfield = get_config('local_courseprogressnotify', 'customfield_shortname');

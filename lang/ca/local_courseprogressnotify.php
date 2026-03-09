@@ -196,6 +196,99 @@ $string['email_last_day_body'] = '<p>Hola {{firstname}},</p>
 
 <p>Una cordial salutació,</p>';
 
+// ── Informe d'activitat ───────────────────────────────────────────────────────
+$string['report:title']   = 'Informe d\'activitat de notificacions';
+$string['report:heading'] = 'Informe d\'activitat de notificacions';
+$string['settings:report_link']      = 'Informe d\'activitat';
+$string['settings:report_link_desc'] = 'Visualitza un informe detallat dels correus enviats per cada curs habilitat i per què els pendents encara no s\'han activat.';
+$string['report:viewreport'] = 'Veure informe d\'activitat';
+
+// Resum del curs.
+$string['report:intro']             = 'Mostrant activitat de {$a} curs(os) amb notificacions habilitades.';
+$string['report:nocourses']         = 'Cap curs té les notificacions habilitades amb el camp personalitzat configurat.';
+$string['report:no_courses_in_filter'] = 'Cap curs coincideix amb el filtre actual.';
+$string['report:haswarnings']       = 'Té advertències de configuració';
+$string['report:open_course']       = 'Obrir curs';
+$string['report:startdate']         = 'Data d\'inici';
+$string['report:enddate']           = 'Data de fi';
+$string['report:students']          = 'Estudiants matriculats';
+$string['report:completion']        = 'Finalització habilitada';
+$string['report:notset']            = 'No configurat';
+
+// Barra de resum.
+$string['report:summary_total']    = '{$a} curs(os) habilitat(s)';
+$string['report:summary_warnings'] = '{$a} amb advertències de configuració';
+$string['report:summary_sent']     = '{$a} registres de correu total';
+$string['report:filter_label']     = 'Mostrar:';
+$string['report:filter_all']       = 'Tots els cursos ({$a})';
+$string['report:filter_warnings']  = 'Només amb advertències ({$a})';
+
+// Advertències.
+$string['report:warnings']               = 'Advertències de configuració';
+$string['report:warn_start_past_year']   = 'La data d\'inici està configurada a {$a->year} ({$a->date}). Les tasques de primer i segon dia només s\'executen en la data exacta d\'inici — amb aquesta configuració aquests correus no s\'enviaran mai.';
+$string['report:warn_end_past_year']     = 'La data de fi està configurada a {$a->year} ({$a->date}). Els correus de fi de curs (7 dies abans, últim dia, diploma) no es dispararan mai.';
+$string['report:warn_no_completion']     = 'La finalització del curs està desactivada. Els correus de progrés (25%, 50%) no es poden enviar.';
+$string['report:warn_no_enddate']        = 'No hi ha cap data de fi configurada. Els correus de fi de curs i diploma no es dispararan.';
+
+// Historial de notificacions.
+$string['report:notificationsent'] = 'Historial de notificacions';
+$string['report:notiftype']        = 'Tipus de notificació';
+$string['report:sentcount']        = 'Enviats';
+$string['report:lastsent']         = 'Darrer enviament';
+$string['report:statusreason']     = 'Estat / Motiu';
+
+// Etiquetes de tipus de notificació.
+$string['report:notiftype_first_day']           = 'Tasques del primer dia';
+$string['report:notiftype_second_day']          = 'Segon dia (info de navegadors)';
+$string['report:notiftype_progress25']          = 'Progrés 25%';
+$string['report:notiftype_progress50']          = 'Progrés 50%';
+$string['report:notiftype_end_soon']            = 'Fi de curs proper (7 dies)';
+$string['report:notiftype_last_day']            = 'Recordatori últim dia';
+$string['report:notiftype_zoom']                = 'Recordatori sessió Zoom';
+$string['report:notiftype_presential_exam']     = 'Recordatori examen presencial';
+$string['report:notiftype_presential_tutoring'] = 'Recordatori tutoria presencial';
+$string['report:notiftype_diploma']             = 'Diploma disponible';
+
+// Motius d'estat.
+$string['report:reason_sent_n']            = 'Enviat a {$a->n} de {$a->total} estudiants matriculats';
+$string['report:reason_no_startdate']      = 'No hi ha cap data d\'inici configurada';
+$string['report:reason_wrong_start_year']  = 'L\'any de la data d\'inici és {$a->year} ({$a->date}) — les tasques només s\'executen en la data exacta d\'inici. Corregeix l\'any a l\'any actual.';
+$string['report:reason_starts_today']      = 'El curs comença avui — la tasca s\'executarà en la propera execució programada d\'avui';
+$string['report:reason_future_start']      = 'El curs encara no ha començat — la tasca s\'executarà el {$a->date}';
+$string['report:reason_window_passed']     = 'Finestra passada (fa {$a->days} dies des de la data d\'inici). Si no s\'ha enviat cap correu, verifica que la tasca programada es va executar en aquella data.';
+$string['report:reason_fires_today']       = 'Condició complerta avui — la tasca s\'executarà en la propera execució programada';
+$string['report:reason_no_completion']     = 'La finalització del curs està desactivada — no es pot fer seguiment del progrés';
+$string['report:reason_below_threshold']   = 'Cap estudiant ha assolit encara el llindar del {$a->pct}% de progrés';
+$string['report:reason_no_enddate']        = 'No hi ha cap data de fi configurada';
+$string['report:reason_end_in_n_days']     = 'El curs finalitza en {$a->days} dies — aquest correu es dispararà en {$a->fires} dies (quan quedin exactament 7 dies)';
+$string['report:reason_end_window_passed_n'] = 'La finestra de 7 dies ha passat sense enviament. La data de fi era {$a->date}. Verifica que la tasca s\'ha executat en el moment correcte.';
+$string['report:reason_course_ended']      = 'El curs va finalitzar el {$a->date}';
+$string['report:reason_last_day_future']   = 'Es dispararà el {$a->date} (d\'aquí a {$a->days} dies — el dia abans del fi del curs)';
+$string['report:reason_diploma_future']    = 'Es dispararà el {$a->date} (30 dies després del fi del curs)';
+$string['report:reason_diploma_pending']   = 'Es dispararà en {$a->days} dia(es) (30 dies després del fi del curs)';
+$string['report:reason_diploma_window_passed'] = 'Finestra passada. El curs va finalitzar el {$a->date}. Verifica que la tasca es va executar 30 dies després del fi.';
+$string['report:reason_zoom_sent']         = 'Enviat a {$a->users} estudiants en {$a->sessions} sessió(ns) Zoom';
+$string['report:reason_zoom_none']         = 'No hi ha recordatoris Zoom registrats per a aquest curs encara';
+$string['report:reason_presential_sent']   = 'Enviat a {$a->users} estudiants en {$a->sessions} sessió(ns)';
+$string['report:reason_presential_none']   = 'No hi ha recordatoris registrats encara — veure la secció d\'esdeveniments presencials avall';
+
+// Secció d'esdeveniments presencials.
+$string['report:presentialevents']      = 'Esdeveniments de sessions presencials (darrers 30 dies → propers 60 dies)';
+$string['report:presentialevents_none'] = 'No s\'han trobat esdeveniments de calendari per a aquest curs a la finestra de l\'informe (darrers 30 → propers 60 dies).';
+$string['report:eventname']             = 'Nom de l\'esdeveniment';
+$string['report:eventdate']             = 'Data';
+$string['report:eventlocation']         = 'Ubicació';
+$string['report:eventdetected']         = 'Detectat com';
+$string['report:eventreason']           = 'Problema / Estat';
+$string['report:nolocation']            = 'Sense ubicació';
+$string['report:detected_no']           = 'No detectat';
+$string['report:notified_n']            = 'Notificats: {$a}';
+$string['report:event_will_notify']     = 'S\'enviarà notificació N dies abans de l\'esdeveniment (segons configuració)';
+$string['report:reason_event_nokeyword']        = 'L\'esdeveniment té ubicació configurada però no s\'ha trobat cap paraula clau d\'examen o tutoria al títol o descripció.';
+$string['report:reason_event_keywords_no_location'] = 'L\'esdeveniment té una paraula clau coincident però NO té ubicació. Afegeix una ubicació física a l\'esdeveniment del calendari per activar la detecció presencial.';
+$string['report:current_exam_kw']     = 'Paraules clau d\'examen actuals:';
+$string['report:current_tutoring_kw'] = 'Paraules clau de tutoria actuals:';
+
 $string['email_exam_subject'] = 'Examen presencial obligatori del curs {{coursename}}';
 $string['email_exam_body'] = '<p>Hola {{firstname}},</p>
 
