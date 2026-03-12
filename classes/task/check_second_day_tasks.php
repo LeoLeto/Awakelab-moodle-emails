@@ -34,7 +34,9 @@ class check_second_day_tasks extends scheduled_task {
         $yesterdaystart = usergetmidnight($now - DAYSECS);
         $yesterdayend = $yesterdaystart + DAYSECS;
 
-        mtrace("Checking courses that started yesterday: " . userdate($yesterdaystart, '%Y-%m-%d'));
+        mtrace("Time window : " . userdate($yesterdaystart, '%Y-%m-%d %H:%M:%S') . " → " . userdate($yesterdayend, '%Y-%m-%d %H:%M:%S'));
+        mtrace("Timestamps  : {$yesterdaystart} → {$yesterdayend}");
+        mtrace("Server time : " . date('Y-m-d H:i:s T', $now));
 
         // Courses that started yesterday (second day is today)
         $courses = $DB->get_records_select('course', 
@@ -44,14 +46,29 @@ class check_second_day_tasks extends scheduled_task {
                 'to' => $yesterdayend,
             ]
         );
-        
-        // Filter courses based on custom field
-        $courses = array_filter($courses, function($course) use ($customfieldshortname) {
-            return $this->is_course_enabled($course->id, $customfieldshortname);
-        });
-        
+
+        mtrace('  Visible courses in window (before custom field filter): ' . count($courses));
+
         if (empty($courses)) {
             mtrace('  No courses on their second day.');
+            return;
+        }
+
+        // Filter courses based on custom field, logging reason for each exclusion.
+        $enabled = [];
+        foreach ($courses as $course) {
+            $startreadable = userdate($course->startdate, '%Y-%m-%d %H:%M:%S');
+            if ($this->is_course_enabled($course->id, $customfieldshortname)) {
+                mtrace("  [ENABLED]  {$course->fullname} (startdate: {$startreadable} / {$course->startdate})");
+                $enabled[] = $course;
+            } else {
+                mtrace("  [SKIPPED]  {$course->fullname} (startdate: {$startreadable} / {$course->startdate}) — custom field '{$customfieldshortname}' not set or not enabled");
+            }
+        }
+        $courses = $enabled;
+
+        if (empty($courses)) {
+            mtrace('  Courses are on their second day but none have notifications enabled (check the custom field setting).');
             return;
         }
 
@@ -76,9 +93,11 @@ class check_second_day_tasks extends scheduled_task {
                 
                 $placeholders = [];
                 
-                email_builder::send($user, $course, 'second_day', $placeholders, 'second_day_tasks');
-                $notified++;
-                $totalnotifs++;
+                $sent = email_builder::send($user, $course, 'second_day', $placeholders, 'second_day_tasks');
+                if ($sent) {
+                    $notified++;
+                    $totalnotifs++;
+                }
             }
             
             mtrace("    Notified: {$notified}");

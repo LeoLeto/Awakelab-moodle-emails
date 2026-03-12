@@ -31,27 +31,55 @@ class check_first_day_tasks extends scheduled_task {
         mtrace("Using custom field: {$customfieldshortname}");
 
         $now = time();
-        $todaystart = usergetmidnight($now);
-        $todayend = $todaystart + DAYSECS;
+        // Look back 1 extra day so that courses configured after the 9:00 AM cron on their start date
+        // are still caught on the following run. The notification_log dedup prevents double-sends.
+        $windowstart = usergetmidnight($now) - DAYSECS; // yesterday midnight
+        $windowend   = usergetmidnight($now) + DAYSECS; // tomorrow midnight
 
-        mtrace("Checking courses starting today: " . userdate($todaystart, '%Y-%m-%d'));
+        mtrace("Time window : " . userdate($windowstart, '%Y-%m-%d %H:%M:%S') . " → " . userdate($windowend, '%Y-%m-%d %H:%M:%S') . " (2-day window)");
+        mtrace("Timestamps  : {$windowstart} → {$windowend}");
+        mtrace("Server time : " . date('Y-m-d H:i:s T', $now));
 
-        // Courses starting today
-        $courses = $DB->get_records_select('course', 
-            'visible = 1 AND startdate >= :from AND startdate < :to', 
+        // Courses that started within the 2-day window and have not yet been notified.
+        $courses = $DB->get_records_select('course',
+            'visible = 1 AND startdate >= :from AND startdate < :to',
             [
-                'from' => $todaystart,
-                'to' => $todayend,
+                'from' => $windowstart,
+                'to'   => $windowend,
             ]
         );
-        
-        // Filter courses based on custom field
-        $courses = array_filter($courses, function($course) use ($customfieldshortname) {
-            return $this->is_course_enabled($course->id, $customfieldshortname);
-        });
-        
+
+        mtrace('  Visible courses in window (before custom field filter): ' . count($courses));
+
         if (empty($courses)) {
-            mtrace('  No courses starting today.');
+            // Also check if there are courses in the window but hidden, to help diagnose visibility issues.
+            $hiddencourses = $DB->get_records_select('course',
+                'visible = 0 AND startdate >= :from AND startdate < :to',
+                ['from' => $windowstart, 'to' => $windowend]
+            );
+            if (!empty($hiddencourses)) {
+                mtrace('  NOTE: ' . count($hiddencourses) . ' hidden (visible=0) course(s) were skipped: '
+                    . implode(', ', array_column($hiddencourses, 'fullname')));
+            }
+            mtrace('  No visible courses starting today or yesterday.');
+            return;
+        }
+
+        // Filter courses based on custom field, logging reason for each exclusion.
+        $enabled = [];
+        foreach ($courses as $course) {
+            $startreadable = userdate($course->startdate, '%Y-%m-%d %H:%M:%S');
+            if ($this->is_course_enabled($course->id, $customfieldshortname)) {
+                mtrace("  [ENABLED]  {$course->fullname} (startdate: {$startreadable} / {$course->startdate})");
+                $enabled[] = $course;
+            } else {
+                mtrace("  [SKIPPED]  {$course->fullname} (startdate: {$startreadable} / {$course->startdate}) — custom field '{$customfieldshortname}' not set or not enabled");
+            }
+        }
+        $courses = $enabled;
+
+        if (empty($courses)) {
+            mtrace('  Courses start today but none have notifications enabled (check the custom field setting).');
             return;
         }
 
@@ -83,9 +111,11 @@ class check_first_day_tasks extends scheduled_task {
                     'image_tutorial' => $imgtuturl->out(false),
                 ];
                 
-                email_builder::send($user, $course, 'first_day', $placeholders, 'first_day_tasks');
-                $notified++;
-                $totalnotifs++;
+                $sent = email_builder::send($user, $course, 'first_day', $placeholders, 'first_day_tasks');
+                if ($sent) {
+                    $notified++;
+                    $totalnotifs++;
+                }
             }
             
             mtrace("    Notified: {$notified}");
