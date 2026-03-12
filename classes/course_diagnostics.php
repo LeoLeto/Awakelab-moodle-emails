@@ -493,12 +493,13 @@ class course_diagnostics {
                 'warning',
             ];
         }
-        $todaystart = usergetmidnight($now);
-        $todayend   = $todaystart + DAYSECS;
-        if ($startdate >= $todaystart && $startdate < $todayend) {
-            return [get_string('report:reason_fires_today', 'local_courseprogressnotify'), 'pending_today'];
+        // 2-day window: matches the task (yesterday midnight → tomorrow midnight).
+        $windowstart = usergetmidnight($now) - DAYSECS;
+        $windowend   = usergetmidnight($now) + DAYSECS;
+        if ($startdate >= $windowstart && $startdate < $windowend) {
+            return [get_string('report:reason_in_recovery_window', 'local_courseprogressnotify'), 'pending_today'];
         }
-        if ($startdate > $now) {
+        if ($startdate >= $windowend) {
             return [
                 get_string('report:reason_future_start', 'local_courseprogressnotify', [
                     'date' => userdate($startdate, get_string('strftimedate', 'langconfig')),
@@ -506,7 +507,7 @@ class course_diagnostics {
                 'pending',
             ];
         }
-        $daysago = max(1, (int)floor(($now - $startdate) / DAYSECS));
+        $daysago = max(2, (int)floor(($now - $startdate) / DAYSECS));
         return [
             get_string('report:reason_window_passed', 'local_courseprogressnotify', ['days' => $daysago]),
             'missed',
