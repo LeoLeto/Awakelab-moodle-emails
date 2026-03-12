@@ -123,7 +123,8 @@ echo html_writer::tag('style', '
     .cpn-card-toggle        { cursor: pointer; user-select: none; }
     .cpn-card-toggle:hover  { opacity: 0.85; }
     .cpn-collapse-arrow     { font-size: 0.8em; transition: transform 0.2s; display: inline-block; margin-left: 0.5rem; color: #6c757d; }
-    .cpn-card-toggle[aria-expanded="true"] .cpn-collapse-arrow  { transform: rotate(180deg); }
+    .cpn-card-toggle.open .cpn-collapse-arrow { transform: rotate(180deg); }
+    .cpn-card-body-wrap     { display: none; }
     .cpn-info-table th      { white-space: nowrap; padding-right: 0.75rem; font-weight: 600; border: 0 !important; color: #495057; }
     .cpn-info-table td      { border: 0 !important; padding-right: 2rem; }
 ');
@@ -211,10 +212,7 @@ foreach ($displaycourses as $course) {
         ['class' => 'h5 mb-0']
     );
     echo html_writer::start_div('card-header d-flex justify-content-between align-items-center cpn-card-toggle', [
-        'data-bs-toggle'  => 'collapse',
-        'data-bs-target'  => '#' . $collapseid,
-        'aria-expanded'   => 'false',
-        'aria-controls'   => $collapseid,
+        'data-cpn-target' => $collapseid,
     ]);
     echo $headertitle;
     echo html_writer::link(
@@ -224,7 +222,7 @@ foreach ($displaycourses as $course) {
     );
     echo html_writer::end_div(); // card-header
 
-    echo html_writer::start_div('collapse', ['id' => $collapseid]);
+    echo html_writer::start_div('cpn-card-body-wrap', ['id' => $collapseid]);
     echo html_writer::start_div('card-body');
 
     // ── Course info table ─────────────────────────────────────────────────
@@ -432,8 +430,28 @@ foreach ($displaycourses as $course) {
     }
 
     echo html_writer::end_div(); // card-body
-    echo html_writer::end_div(); // collapse
+    echo html_writer::end_div(); // cpn-card-body-wrap
     echo html_writer::end_div(); // card
 }
+
+echo html_writer::tag('script', '
+(function() {
+    document.querySelectorAll(".cpn-card-toggle").forEach(function(header) {
+        header.addEventListener("click", function() {
+            var targetId = header.getAttribute("data-cpn-target");
+            var body = document.getElementById(targetId);
+            if (!body) return;
+            var isOpen = header.classList.contains("open");
+            if (isOpen) {
+                body.style.display = "none";
+                header.classList.remove("open");
+            } else {
+                body.style.display = "block";
+                header.classList.add("open");
+            }
+        });
+    });
+})();
+');
 
 echo $OUTPUT->footer();
