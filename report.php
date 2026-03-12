@@ -357,9 +357,14 @@ foreach ($displaycourses as $course) {
         );
     }
 
-            ['class' => $rowclass]
-        );
-    }
+    echo html_writer::tag('tr',
+        html_writer::tag('td', s($ndata['label']))      .
+        html_writer::tag('td', $countbadge, ['class' => 'text-center']) .
+        html_writer::tag('td', $lastsent)               .
+        html_writer::tag('td', $statushtml),
+        ['class' => $rowclass]
+    );
+}
 
     echo html_writer::end_tag('tbody');
     echo html_writer::end_tag('table');
