@@ -40,7 +40,6 @@ $PAGE->set_heading(get_string('report:title', 'local_courseprogressnotify'));
 $filter = optional_param('filter', 'all', PARAM_ALPHA);
 
 echo $OUTPUT->header();
-echo $OUTPUT->heading(get_string('report:heading', 'local_courseprogressnotify'));
 
 // ── Guard: custom field must be configured ────────────────────────────────────
 $customfieldshortname = get_config('local_courseprogressnotify', 'customfield_shortname');
@@ -113,13 +112,20 @@ echo html_writer::tag('style', '
     .cpn-course-card-warning .card-header { background-color: #fff3cd; border-bottom: 2px solid #ffc107; }
     .cpn-course-card-ok     .card-header { background-color: #d4edda; border-bottom: 2px solid #28a745; }
     .cpn-badge-sent         { background-color: #28a745 !important; }
-    .cpn-badge-zero         { background-color: #6c757d !important; }
     .cpn-event-ok           { background-color: #d4edda !important; }
     .cpn-event-warning      { background-color: #fff3cd !important; }
     .cpn-event-danger       { background-color: #f8d7da !important; }
     .cpn-keywords           { font-size: 0.85em; color: #6c757d; font-family: monospace; }
     .cpn-section-title      { font-size: 1rem; font-weight: 600; margin-top: 1.25rem; margin-bottom: 0.5rem; border-bottom: 1px solid #dee2e6; padding-bottom: 0.25rem; }
-    .cpn-nav-bar            { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; flex-wrap: wrap; align-items: center; }
+    .cpn-nav-bar            { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; align-items: center; }
+    .cpn-summary-bar        { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .cpn-filter-bar         { margin-bottom: 2rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+    .cpn-card-toggle        { cursor: pointer; user-select: none; }
+    .cpn-card-toggle:hover  { opacity: 0.85; }
+    .cpn-collapse-arrow     { font-size: 0.8em; transition: transform 0.2s; display: inline-block; margin-left: 0.5rem; color: #6c757d; }
+    .cpn-card-toggle[aria-expanded="true"] .cpn-collapse-arrow  { transform: rotate(180deg); }
+    .cpn-info-table th      { white-space: nowrap; padding-right: 0.75rem; font-weight: 600; border: 0 !important; color: #495057; }
+    .cpn-info-table td      { border: 0 !important; padding-right: 2rem; }
 ');
 
 // ── Summary bar ───────────────────────────────────────────────────────────────
@@ -139,30 +145,29 @@ echo html_writer::link(
 echo html_writer::end_div(); // cpn-nav-bar
 
 // Summary counts.
-echo html_writer::start_div('d-flex gap-3 mb-3 flex-wrap');
+echo html_writer::start_div('cpn-summary-bar');
 echo html_writer::tag('span',
     get_string('report:summary_total', 'local_courseprogressnotify', $totalcourses),
-    ['class' => 'badge bg-primary text-white p-2']
+    ['class' => 'badge bg-primary text-white px-3 py-2 fs-6']
 );
 echo html_writer::tag('span',
     get_string('report:summary_warnings', 'local_courseprogressnotify', $warningcourses),
-    ['class' => 'badge p-2 ' . ($warningcourses > 0 ? 'bg-warning text-dark' : 'bg-secondary text-white')]
+    ['class' => 'badge px-3 py-2 fs-6 ' . ($warningcourses > 0 ? 'bg-warning text-dark' : 'bg-secondary text-white')]
 );
 echo html_writer::tag('span',
     get_string('report:summary_sent', 'local_courseprogressnotify', $totalsent),
-    ['class' => 'badge bg-success text-white p-2']
+    ['class' => 'badge bg-success text-white px-3 py-2 fs-6']
 );
 echo html_writer::end_div();
 
 // Filter links.
-echo html_writer::start_div('mb-3');
-echo html_writer::tag('strong', get_string('report:filter_label', 'local_courseprogressnotify') . ' ');
+echo html_writer::start_div('cpn-filter-bar');
+echo html_writer::tag('strong', get_string('report:filter_label', 'local_courseprogressnotify'));
 echo html_writer::link(
     new moodle_url('/local/courseprogressnotify/report.php', ['filter' => 'all']),
     get_string('report:filter_all', 'local_courseprogressnotify', $totalcourses),
     ['class' => 'btn btn-sm ' . ($filter === 'all' ? 'btn-dark' : 'btn-outline-secondary')]
 );
-echo ' ';
 echo html_writer::link(
     new moodle_url('/local/courseprogressnotify/report.php', ['filter' => 'warnings']),
     get_string('report:filter_warnings', 'local_courseprogressnotify', $warningcourses),
@@ -190,27 +195,36 @@ foreach ($displaycourses as $course) {
     $cardclass    = $haswarnings ? 'cpn-course-card-warning' : 'cpn-course-card-ok';
     $courseurl    = new moodle_url('/course/view.php', ['id' => $cid]);
 
+    $collapseid = 'cpn-course-' . $cid;
     echo html_writer::start_div('card mb-4 ' . $cardclass);
 
-    // ── Card header ──────────────────────────────────────────────────────
-    echo html_writer::start_div('card-header d-flex justify-content-between align-items-center');
+    // ── Card header (collapse toggle) ────────────────────────────────────
     $warningicon = $haswarnings
         ? ' ' . html_writer::tag('span', '⚠', [
             'class' => 'text-warning ms-1',
             'title' => get_string('report:haswarnings', 'local_courseprogressnotify'),
           ])
         : '';
-    echo html_writer::tag('h3',
-        html_writer::link($courseurl, format_string($course->fullname), ['class' => 'text-dark']) . $warningicon,
+    $arrowspan = html_writer::tag('span', '▼', ['class' => 'cpn-collapse-arrow']);
+    $headertitle = html_writer::tag('h3',
+        format_string($course->fullname) . $warningicon . $arrowspan,
         ['class' => 'h5 mb-0']
     );
+    echo html_writer::start_div('card-header d-flex justify-content-between align-items-center cpn-card-toggle', [
+        'data-bs-toggle'  => 'collapse',
+        'data-bs-target'  => '#' . $collapseid,
+        'aria-expanded'   => 'false',
+        'aria-controls'   => $collapseid,
+    ]);
+    echo $headertitle;
     echo html_writer::link(
         $courseurl,
         get_string('report:open_course', 'local_courseprogressnotify'),
-        ['class' => 'btn btn-sm btn-outline-secondary', 'target' => '_blank']
+        ['class' => 'btn btn-sm btn-outline-secondary', 'target' => '_blank', 'onclick' => 'event.stopPropagation();']
     );
     echo html_writer::end_div(); // card-header
 
+    echo html_writer::start_div('collapse', ['id' => $collapseid]);
     echo html_writer::start_div('card-body');
 
     // ── Course info table ─────────────────────────────────────────────────
@@ -225,21 +239,15 @@ foreach ($displaycourses as $course) {
         ? html_writer::tag('span', get_string('yes'), ['class' => 'badge bg-success'])
         : html_writer::tag('span', get_string('no'),  ['class' => 'badge bg-danger']);
 
-    echo html_writer::start_tag('table', ['class' => 'table table-sm w-auto mb-0']);
+    echo html_writer::start_tag('table', ['class' => 'table table-sm cpn-info-table mb-3']);
     echo html_writer::tag('tr',
-        html_writer::tag('th', get_string('report:startdate', 'local_courseprogressnotify'), ['class' => 'pe-4 border-0']) .
-        html_writer::tag('td', $startdatestr, ['class' => 'border-0'])
-    );
-    echo html_writer::tag('tr',
-        html_writer::tag('th', get_string('report:enddate', 'local_courseprogressnotify'), ['class' => 'pe-4']) .
-        html_writer::tag('td', $enddatestr)
-    );
-    echo html_writer::tag('tr',
-        html_writer::tag('th', get_string('report:students', 'local_courseprogressnotify'), ['class' => 'pe-4']) .
-        html_writer::tag('td', $studentcount)
-    );
-    echo html_writer::tag('tr',
-        html_writer::tag('th', get_string('report:completion', 'local_courseprogressnotify'), ['class' => 'pe-4']) .
+        html_writer::tag('th', get_string('report:startdate', 'local_courseprogressnotify')) .
+        html_writer::tag('td', $startdatestr) .
+        html_writer::tag('th', get_string('report:enddate', 'local_courseprogressnotify')) .
+        html_writer::tag('td', $enddatestr) .
+        html_writer::tag('th', get_string('report:students', 'local_courseprogressnotify')) .
+        html_writer::tag('td', $studentcount) .
+        html_writer::tag('th', get_string('report:completion', 'local_courseprogressnotify')) .
         html_writer::tag('td', $completionbadge)
     );
     echo html_writer::end_tag('table');
@@ -296,7 +304,7 @@ foreach ($displaycourses as $course) {
 
         $countbadge = $ndata['sent_count'] > 0
             ? html_writer::tag('span', $ndata['sent_count'], ['class' => 'badge cpn-badge-sent text-white'])
-            : html_writer::tag('span', '0', ['class' => 'badge cpn-badge-zero text-white']);
+            : '0';
 
         $lastsent = $ndata['last_sent'] > 0
             ? userdate($ndata['last_sent'], get_string('strftimedatetime', 'langconfig'))
@@ -424,6 +432,7 @@ foreach ($displaycourses as $course) {
     }
 
     echo html_writer::end_div(); // card-body
+    echo html_writer::end_div(); // collapse
     echo html_writer::end_div(); // card
 }
 
