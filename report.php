@@ -118,7 +118,6 @@ echo html_writer::tag('style', '
     .cpn-keywords           { font-size: 0.85em; color: #6c757d; font-family: monospace; }
     .cpn-section-title      { font-size: 1rem; font-weight: 600; margin-top: 1.25rem; margin-bottom: 0.5rem; border-bottom: 1px solid #dee2e6; padding-bottom: 0.25rem; }
     .cpn-nav-bar            { display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap; align-items: center; }
-    .cpn-summary-bar        { display: flex; gap: 1rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
     .cpn-filter-bar         { margin-bottom: 2rem; display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
     .cpn-card-toggle        { cursor: pointer; user-select: none; }
     .cpn-card-toggle:hover  { opacity: 0.85; }
@@ -144,22 +143,6 @@ echo html_writer::link(
 );
 
 echo html_writer::end_div(); // cpn-nav-bar
-
-// Summary counts.
-echo html_writer::start_div('cpn-summary-bar');
-echo html_writer::tag('span',
-    get_string('report:summary_total', 'local_courseprogressnotify', $totalcourses),
-    ['class' => 'badge bg-primary text-white px-3 py-2 fs-6']
-);
-echo html_writer::tag('span',
-    get_string('report:summary_warnings', 'local_courseprogressnotify', $warningcourses),
-    ['class' => 'badge px-3 py-2 fs-6 ' . ($warningcourses > 0 ? 'bg-warning text-dark' : 'bg-secondary text-white')]
-);
-echo html_writer::tag('span',
-    get_string('report:summary_sent', 'local_courseprogressnotify', $totalsent),
-    ['class' => 'badge bg-success text-white px-3 py-2 fs-6']
-);
-echo html_writer::end_div();
 
 // Filter links.
 echo html_writer::start_div('cpn-filter-bar');
