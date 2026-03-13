@@ -296,67 +296,6 @@ foreach ($displaycourses as $course) {
             ['class' => $iconinfo['class']]
         );
 
-    // For first_day_tasks, append an inline diagnostic panel.
-    if ($ntype === 'first_day_tasks') {
-        $diagid    = 'cpn-firstday-diag-' . $cid;
-        $diagtime  = time();
-        $wstart    = usergetmidnight($diagtime) - DAYSECS;
-        $wend      = usergetmidnight($diagtime) + DAYSECS;
-        $startdate = (int)$course->startdate;
-        $inwindow  = $startdate > 0 && $startdate >= $wstart && $startdate < $wend;
-
-        $diagrows  = html_writer::tag('tr',
-            html_writer::tag('th', get_string('report:firstday_diag_window', 'local_courseprogressnotify'),
-                ['style' => 'white-space:nowrap;padding-right:1em;border:0;font-weight:600']) .
-            html_writer::tag('td', userdate($wstart, '%Y-%m-%d') . ' → ' . userdate($wend - 1, '%Y-%m-%d'), ['style' => 'border:0'])
-        );
-        $diagrows .= html_writer::tag('tr',
-            html_writer::tag('th', get_string('report:firstday_diag_startdate', 'local_courseprogressnotify'),
-                ['style' => 'white-space:nowrap;padding-right:1em;border:0;font-weight:600']) .
-            html_writer::tag('td',
-                $startdate > 0
-                    ? userdate($startdate, '%Y-%m-%d %H:%M:%S') .
-                      html_writer::tag('span', ' (' . $startdate . ')', ['class' => 'text-muted ms-1', 'style' => 'font-size:0.85em'])
-                    : '—',
-                ['style' => 'border:0']
-            )
-        );
-        $diagrows .= html_writer::tag('tr',
-            html_writer::tag('th', get_string('report:firstday_diag_inwindow', 'local_courseprogressnotify'),
-                ['style' => 'white-space:nowrap;padding-right:1em;border:0;font-weight:600']) .
-            html_writer::tag('td',
-                $inwindow
-                    ? html_writer::tag('span', '✓ ' . get_string('report:firstday_diag_inwindow_yes', 'local_courseprogressnotify'), ['class' => 'text-success fw-bold'])
-                    : html_writer::tag('span', '✗ ' . get_string('report:firstday_diag_inwindow_no',  'local_courseprogressnotify'), ['class' => 'text-danger fw-bold']),
-                ['style' => 'border:0']
-            )
-        );
-
-        $diagtable  = html_writer::start_tag('table', ['class' => 'table table-sm mb-1', 'style' => 'font-size:0.85em']);
-        $diagtable .= $diagrows;
-        $diagtable .= html_writer::end_tag('table');
-        $diagtable .= html_writer::link(
-            new moodle_url('/admin/tasklogs.php'),
-            get_string('report:firstday_diag_viewlogs', 'local_courseprogressnotify'),
-            ['class' => 'btn btn-sm btn-outline-secondary', 'target' => '_blank']
-        );
-
-        $statushtml .= html_writer::tag('div',
-            html_writer::tag('button',
-                'ⓘ ' . get_string('report:firstday_diag_toggle', 'local_courseprogressnotify'),
-                [
-                    'type'    => 'button',
-                    'class'   => 'btn btn-sm btn-outline-info d-block mt-1',
-                    'onclick' => "var d=document.getElementById('" . $diagid . "');d.style.display=d.style.display==='none'?'block':'none';return false;",
-                ]
-            ) .
-            html_writer::div($diagtable, [
-                'id'    => $diagid,
-                'style' => 'display:none;margin-top:0.5rem;padding:0.5rem;background:#f8f9fa;border-radius:4px;border:1px solid #dee2e6',
-            ])
-        );
-    }
-
     echo html_writer::tag('tr',
         html_writer::tag('td', s($ndata['label']))      .
         html_writer::tag('td', $countbadge, ['class' => 'text-center']) .
@@ -368,6 +307,61 @@ foreach ($displaycourses as $course) {
 
     echo html_writer::end_tag('tbody');
     echo html_writer::end_tag('table');
+
+    // ── First-day diagnostic panel ────────────────────────────────────────
+    $diagid    = 'cpn-firstday-diag-' . $cid;
+    $diagtime  = time();
+    $wstart    = usergetmidnight($diagtime) - DAYSECS;
+    $wend      = usergetmidnight($diagtime) + DAYSECS;
+    $fdstartdate = (int)$course->startdate;
+    $inwindow  = $fdstartdate > 0 && $fdstartdate >= $wstart && $fdstartdate < $wend;
+
+    $diagcontent  = html_writer::start_tag('table', ['class' => 'table table-sm mb-2', 'style' => 'font-size:0.9em;max-width:600px']);
+    $diagcontent .= html_writer::tag('tr',
+        html_writer::tag('th', get_string('report:firstday_diag_window', 'local_courseprogressnotify'),
+            ['style' => 'white-space:nowrap;padding-right:1.5em;border:0;font-weight:600;width:40%']) .
+        html_writer::tag('td', userdate($wstart, '%Y-%m-%d') . ' → ' . userdate($wend - 1, '%Y-%m-%d'), ['style' => 'border:0'])
+    );
+    $diagcontent .= html_writer::tag('tr',
+        html_writer::tag('th', get_string('report:firstday_diag_startdate', 'local_courseprogressnotify'),
+            ['style' => 'white-space:nowrap;padding-right:1.5em;border:0;font-weight:600']) .
+        html_writer::tag('td',
+            $fdstartdate > 0
+                ? userdate($fdstartdate, '%Y-%m-%d %H:%M:%S') .
+                  html_writer::tag('span', ' (' . $fdstartdate . ')', ['class' => 'text-muted ms-2', 'style' => 'font-size:0.85em'])
+                : '—',
+            ['style' => 'border:0']
+        )
+    );
+    $diagcontent .= html_writer::tag('tr',
+        html_writer::tag('th', get_string('report:firstday_diag_inwindow', 'local_courseprogressnotify'),
+            ['style' => 'white-space:nowrap;padding-right:1.5em;border:0;font-weight:600']) .
+        html_writer::tag('td',
+            $inwindow
+                ? html_writer::tag('span', '✓ ' . get_string('report:firstday_diag_inwindow_yes', 'local_courseprogressnotify'), ['class' => 'text-success fw-bold'])
+                : html_writer::tag('span', '✗ ' . get_string('report:firstday_diag_inwindow_no', 'local_courseprogressnotify'), ['class' => 'text-danger fw-bold']),
+            ['style' => 'border:0']
+        )
+    );
+    $diagcontent .= html_writer::end_tag('table');
+    $diagcontent .= html_writer::link(
+        new moodle_url('/admin/tasklogs.php'),
+        get_string('report:firstday_diag_viewlogs', 'local_courseprogressnotify'),
+        ['class' => 'btn btn-sm btn-outline-secondary mb-1', 'target' => '_blank']
+    );
+
+    $diagpanel = html_writer::tag('div', $diagcontent,
+        ['id' => $diagid, 'class' => 'mt-2 p-2', 'style' => 'display:none;background:#f8f9fa;border-radius:4px;border:1px solid #dee2e6']
+    );
+    $diagtoggle = html_writer::tag('button',
+        'ⓘ ' . get_string('report:firstday_diag_toggle', 'local_courseprogressnotify'),
+        [
+            'type'    => 'button',
+            'class'   => 'btn btn-sm btn-outline-info mt-2',
+            'data-cpn-diag-target' => $diagid,
+        ]
+    );
+    echo html_writer::tag('div', $diagtoggle . $diagpanel, ['class' => 'mt-1 mb-3']);
 
     // ── Presential events analysis ────────────────────────────────────────
     $presential = course_diagnostics::analyze_presential_events($cid, $logs);
@@ -480,6 +474,13 @@ foreach ($displaycourses as $course) {
 
 echo html_writer::tag('script', '
 (function() {
+    document.querySelectorAll("[data-cpn-diag-target]").forEach(function(btn) {
+        btn.addEventListener("click", function() {
+            var panel = document.getElementById(btn.getAttribute("data-cpn-diag-target"));
+            if (!panel) return;
+            panel.style.display = panel.style.display === "none" ? "block" : "none";
+        });
+    });
     document.querySelectorAll(".cpn-card-toggle").forEach(function(header) {
         header.addEventListener("click", function() {
             var targetId = header.getAttribute("data-cpn-target");
