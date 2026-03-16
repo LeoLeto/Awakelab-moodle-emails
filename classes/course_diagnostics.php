@@ -44,7 +44,10 @@ class course_diagnostics {
             return [];
         }
 
-        $datas = $DB->get_records('customfield_data', ['fieldid' => $field->id, 'value' => 1]);
+        $sql = "SELECT * FROM {customfield_data}
+                WHERE fieldid = :fieldid
+                AND " . $DB->sql_compare_text('value') . " = " . $DB->sql_compare_text(':value');
+        $datas = $DB->get_records_sql($sql, ['fieldid' => $field->id, 'value' => '1']);
         if (empty($datas)) {
             return [];
         }
