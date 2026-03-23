@@ -248,8 +248,11 @@ if (empty($customfield)) {
     echo $OUTPUT->notification(get_string('runpage:nocategory', 'local_courseprogressnotify'), notification::NOTIFY_WARNING);
 } else {
     echo html_writer::tag('p', get_string('runpage:desc', 'local_courseprogressnotify'));
-    
-    // Progress checks (25% and 50%)
+
+    if (has_capability('local/courseprogressnotify:managecourses', $context)) {
+        $coursesurl = new moodle_url('/local/courseprogressnotify/courses.php');
+        echo html_writer::link($coursesurl, get_string('coursespage:title', 'local_courseprogressnotify'), ['class' => 'btn btn-outline-info btn-sm mb-3']);
+    }
     echo $OUTPUT->box_start('generalbox mb-3');
     echo html_writer::tag('h4', get_string('runpage:type_progress', 'local_courseprogressnotify'));
     echo html_writer::tag('p', get_string('runpage:confirm_progress', 'local_courseprogressnotify'));
