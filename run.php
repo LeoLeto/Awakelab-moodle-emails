@@ -41,6 +41,8 @@ $PAGE->set_heading(get_string('runpage:title', 'local_courseprogressnotify'));
 $type = optional_param('type', '', PARAM_ALPHA);
 $confirm = optional_param('confirm', 0, PARAM_BOOL);
 $clearlogs = optional_param('clearlogs', 0, PARAM_BOOL);
+$ignorerestrictions = optional_param('ignorerestrictions', 0, PARAM_BOOL);
+$courseid = optional_param('courseid', 0, PARAM_INT);
 
 if ($confirm && !empty($type) && confirm_sesskey()) {
     echo $OUTPUT->header();
@@ -167,8 +169,16 @@ if ($confirm && !empty($type) && confirm_sesskey()) {
         }
     } else if ($type === 'diploma') {
         try {
-            $output[] = '--- Executing Diploma Available Check (30 days) ---';
+            $ignorelabel = $ignorerestrictions ? ' (IGNORANDO RESTRICCIONES DE FECHA)' : '';
+            $courselabel = $courseid ? ' [curso ID: ' . $courseid . ']' : '';
+            $output[] = '--- Executing Diploma Available Check (30 days)' . $ignorelabel . $courselabel . ' ---';
             $tdiploma = new check_diploma_available();
+            if ($ignorerestrictions) {
+                $tdiploma->set_ignore_date_restrictions(true);
+            }
+            if ($courseid) {
+                $tdiploma->set_target_course_id($courseid);
+            }
             $tdiploma->execute();
             $output[] = ob_get_contents();
         } catch (Throwable $e) {
@@ -177,8 +187,16 @@ if ($confirm && !empty($type) && confirm_sesskey()) {
         }
     } else if ($type === 'firstday') {
         try {
-            $output[] = '--- Executing First Day Tasks Check ---';
+            $ignorelabel = $ignorerestrictions ? ' (IGNORANDO RESTRICCIONES DE FECHA)' : '';
+            $courselabel = $courseid ? ' [curso ID: ' . $courseid . ']' : '';
+            $output[] = '--- Executing First Day Tasks Check' . $ignorelabel . $courselabel . ' ---';
             $tfirstday = new check_first_day_tasks();
+            if ($ignorerestrictions) {
+                $tfirstday->set_ignore_date_restrictions(true);
+            }
+            if ($courseid) {
+                $tfirstday->set_target_course_id($courseid);
+            }
             $tfirstday->execute();
             $output[] = ob_get_contents();
         } catch (Throwable $e) {

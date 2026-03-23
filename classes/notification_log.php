@@ -46,6 +46,21 @@ class notification_log {
     }
 
     /**
+     * Returns the list of course IDs configured as "diploma-only".
+     * Diploma-only courses only receive the diploma availability email;
+     * all other notification types are suppressed for them.
+     *
+     * @return int[]
+     */
+    public static function get_diploma_only_course_ids(): array {
+        $config = get_config('local_courseprogressnotify', 'diploma_only_courses');
+        if (empty($config)) {
+            return [];
+        }
+        return array_values(array_filter(array_map('intval', array_filter(explode(',', $config)))));
+    }
+
+    /**
      * Inserts a log entry after a successful email send.
      *
      * @param int $userid

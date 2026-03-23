@@ -60,6 +60,9 @@ $string['run_diploma_button'] = 'Provar Correus de Diploma';
 $string['run_firstday_button'] = 'Provar Correus de Primer Dia';
 $string['run_secondday_button'] = 'Provar Correus de Segon Dia';
 $string['run_clear_button'] = 'Netejar registres i executar';
+$string['run_ignore_restrictions_button'] = 'Enviar a tots (ignorar dates)';
+$string['settings:send_course_firstday'] = '1r Dia (ignorar dates)';
+$string['settings:send_course_diploma'] = 'Diploma (ignorar dates)';
 $string['backtosettings'] = 'Tornar a configuració';
 $string['run_now_button'] = 'Verificar notificacions ara';
 $string['run_now_done'] = 'La verificació s\'ha executat correctament.';
@@ -85,6 +88,19 @@ $string['settings:presential_tutoring_keywords_desc'] = 'Si alguna d\'aquestes p
 
 // Run block in settings page.
 $string['settings:run:desc'] = 'Executa manualment les verificacions de notificacions des d\'aquesta pàgina. S\'aplicarà als cursos amb notificacions habilitades mitjançant el camp personalitzat.';
+
+// Configuració cursos només-diploma.
+$string['settings:diploma_only_heading'] = 'Configuració avançada per curs';
+$string['settings:diploma_only_heading_desc'] = 'Configura el comportament del plugin per a cada curs: activa el mode «només diploma» per suprimir la resta de correus, o executa enviaments manuals ignorant les restriccions de data.';
+$string['settings:diploma_only_courses'] = 'Configuració per curs';
+$string['settings:diploma_only_courses_desc'] = 'Els cursos marcats en <span style="color:#721c24;font-weight:700">vermell/groc</span> tenen el mode «només diploma» actiu — revisa-ho bé abans de desar.';
+$string['settings:col_course'] = 'Curs';
+$string['settings:col_diploma_only'] = 'Només enviar diploma';
+$string['settings:col_manual_send'] = 'Enviament manual (sense dates)';
+$string['settings:diploma_only_configure_first'] = 'Configura primer el nom curt del camp personalitzat.';
+$string['settings:diploma_only_no_courses'] = 'No hi ha cursos habilitats per a aquest connector (cap curs té el camp personalitzat actiu).';
+$string['settings:diploma_only_active_badge'] = '⚠ NOMÉS DIPLOMA';
+$string['settings:diploma_only_warning_active'] = 'ATENCIÓ: un o més cursos tenen el mode només-diploma actiu. NO s\'enviaran correus no-diploma als estudiants d\'aquells cursos.';
 
 // Progress table.
 $string['progress:header:activity'] = 'Activitat';

@@ -56,7 +56,16 @@ class check_presential_sessions extends scheduled_task {
         $totalevents = 0;
         $totalnotifs = 0;
 
+        // Filter out diploma-only courses (they should only receive the diploma email).
+        $diplomaonlyids = notification_log::get_diploma_only_course_ids();
+
         foreach ($courses as $course) {
+            // Skip diploma-only courses.
+            if (!empty($diplomaonlyids) && in_array((int)$course->id, $diplomaonlyids, true)) {
+                mtrace("  [DIPLOMA-ONLY] Skipping {$course->fullname} — configured to only receive diploma email.");
+                continue;
+            }
+
             // Get presential events for this course using smart detection
             $presentialevents = presential_provider::get_presential_events($course->id, $from, $to);
             

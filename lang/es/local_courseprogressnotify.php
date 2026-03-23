@@ -60,6 +60,9 @@ $string['run_diploma_button'] = 'Probar Emails de Diploma';
 $string['run_firstday_button'] = 'Probar Emails de Primer Día';
 $string['run_secondday_button'] = 'Probar Emails de Segundo Día';
 $string['run_clear_button'] = 'Limpiar Logs y Ejecutar';
+$string['run_ignore_restrictions_button'] = 'Enviar a todos (ignorar fechas)';
+$string['settings:send_course_firstday'] = '1er Día (ignorar fechas)';
+$string['settings:send_course_diploma'] = 'Diploma (ignorar fechas)';
 $string['backtosettings'] = 'Volver a configuración';
 $string['run_now_button'] = 'Verificar Notificaciones Ahora';
 $string['run_now_done'] = 'La verificación se ejecutó correctamente.';
@@ -84,6 +87,19 @@ $string['settings:presential_tutoring_keywords_desc'] = 'Si alguna de estas pala
 
 // Run block in settings page.
 $string['settings:run:desc'] = 'Ejecuta manualmente las verificaciones de notificaciones desde esta página. Se aplicará a los cursos con notificaciones habilitadas mediante el campo personalizado.';
+
+// Configuración cursos solo-diploma.
+$string['settings:diploma_only_heading'] = 'Configuración avanzada por curso';
+$string['settings:diploma_only_heading_desc'] = 'Configura el comportamiento del plugin para cada curso: activa el modo «solo diploma» para suprimir todos los demás correos, o ejecuta envíos manuales ignorando las restricciones de fecha.';
+$string['settings:diploma_only_courses'] = 'Configuración por curso';
+$string['settings:diploma_only_courses_desc'] = 'Los cursos marcados en <span style="color:#721c24;font-weight:700">rojo/amarillo</span> tienen el modo «solo diploma» activo — revisa bien antes de guardar.';
+$string['settings:col_course'] = 'Curso';
+$string['settings:col_diploma_only'] = 'Sólo enviar diploma';
+$string['settings:col_manual_send'] = 'Ejecutar envío manual (sin fechas)';
+$string['settings:diploma_only_configure_first'] = 'Configura primero el nombre corto del campo personalizado.';
+$string['settings:diploma_only_no_courses'] = 'No hay cursos habilitados para este plugin (ningún curso tiene el campo personalizado activo).';
+$string['settings:diploma_only_active_badge'] = '⚠ SOLO DIPLOMA';
+$string['settings:diploma_only_warning_active'] = 'ATENCIÓN: uno o más cursos tienen el modo solo-diploma activo. NO se enviarán correos no-diploma a los estudiantes de esos cursos.';
 
 // Progress table.
 $string['progress:header:activity'] = 'Actividad';

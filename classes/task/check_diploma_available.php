@@ -12,6 +12,26 @@ use local_courseprogressnotify\notification_log;
  */
 class check_diploma_available extends scheduled_task {
 
+    /** @var bool When true, skip date-window restrictions (manual override). */
+    protected $ignoredaterestrictions = false;
+
+    /** @var int When > 0, only process this specific course ID. */
+    protected $targetcourseid = 0;
+
+    /**
+     * Enable or disable date restriction bypass for manual/forced execution.
+     */
+    public function set_ignore_date_restrictions(bool $value): void {
+        $this->ignoredaterestrictions = $value;
+    }
+
+    /**
+     * Restrict execution to a single course (used by per-course send from settings).
+     */
+    public function set_target_course_id(int $id): void {
+        $this->targetcourseid = $id;
+    }
+
     public function get_name() {
         return get_string('task_check_diploma_available', 'local_courseprogressnotify');
     }
@@ -31,28 +51,49 @@ class check_diploma_available extends scheduled_task {
         mtrace("Using custom field: {$customfieldshortname}");
 
         $now = time();
-        $targetdaystart = usergetmidnight($now - (30 * DAYSECS));
-        $targetdayend = $targetdaystart + DAYSECS;
 
-        mtrace("Checking courses that ended exactly 30 days ago: " . userdate($targetdaystart, '%Y-%m-%d'));
+        if ($this->ignoredaterestrictions) {
+            // Manual override: process ALL enabled courses that have an end date, regardless of when they ended.
+            mtrace('⚠ Date restrictions IGNORED — processing all enabled courses with an end date.');
+            $allcourses = $DB->get_records_select('course', 'visible = 1 AND enddate > 0', []);
+            $courses = array_filter($allcourses, function($course) use ($customfieldshortname) {
+                return $this->is_course_enabled($course->id, $customfieldshortname);
+            });
+            mtrace('  Found ' . count($courses) . ' enabled course(s) with end dates (date restrictions ignored).');
+        } else {
+            $targetdaystart = usergetmidnight($now - (30 * DAYSECS));
+            $targetdayend = $targetdaystart + DAYSECS;
 
-        // Courses that ended exactly 30 days ago
-        $courses = $DB->get_records_select('course', 
-            'visible = 1 AND enddate > 0 AND enddate >= :from AND enddate < :to', 
-            [
-                'from' => $targetdaystart,
-                'to' => $targetdayend,
-            ]
-        );
-        
-        // Filter courses based on custom field
-        $courses = array_filter($courses, function($course) use ($customfieldshortname) {
-            return $this->is_course_enabled($course->id, $customfieldshortname);
-        });
+            mtrace("Checking courses that ended exactly 30 days ago: " . userdate($targetdaystart, '%Y-%m-%d'));
+
+            // Courses that ended exactly 30 days ago
+            $courses = $DB->get_records_select('course', 
+                'visible = 1 AND enddate > 0 AND enddate >= :from AND enddate < :to', 
+                [
+                    'from' => $targetdaystart,
+                    'to' => $targetdayend,
+                ]
+            );
+            
+            // Filter courses based on custom field
+            $courses = array_filter($courses, function($course) use ($customfieldshortname) {
+                return $this->is_course_enabled($course->id, $customfieldshortname);
+            });
+        }
         
         if (empty($courses)) {
-            mtrace('  No courses ended exactly 30 days ago.');
+            mtrace('  No matching courses found.');
             return;
+        }
+
+        // Filter to a single target course if executing per-course from settings.
+        if ($this->targetcourseid > 0) {
+            $courses = array_filter($courses, fn($c) => (int)$c->id === $this->targetcourseid);
+            if (empty($courses)) {
+                mtrace("  Target course ID {$this->targetcourseid} not found among enabled courses.");
+                return;
+            }
+            mtrace("  Targeting single course ID: {$this->targetcourseid}");
         }
 
         $totalnotifs = 0;

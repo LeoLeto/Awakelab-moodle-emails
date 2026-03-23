@@ -60,6 +60,9 @@ $string['run_diploma_button'] = 'Test Diploma Emails';
 $string['run_firstday_button'] = 'Test First Day Emails';
 $string['run_secondday_button'] = 'Test Second Day Emails';
 $string['run_clear_button'] = 'Clear Logs & Run';
+$string['run_ignore_restrictions_button'] = 'Send to All (Ignore Date Restrictions)';
+$string['settings:send_course_firstday'] = '1st Day (ignore dates)';
+$string['settings:send_course_diploma'] = 'Diploma (ignore dates)';
 $string['backtosettings'] = 'Back to settings';
 $string['run_now_button'] = 'Run Now';
 $string['run_now_done'] = 'Verification completed successfully.';
@@ -84,6 +87,19 @@ $string['settings:presential_tutoring_keywords_desc'] = 'If any of these words a
 
 // Run block in settings page.
 $string['settings:run:desc'] = 'Manually run the notifications verification from this page. It will apply to courses with notifications enabled via the custom field.';
+
+// Diploma-only course settings.
+$string['settings:diploma_only_heading'] = 'Per-course configuration';
+$string['settings:diploma_only_heading_desc'] = 'Configure plugin behaviour per course: enable diploma-only mode to suppress all other emails, or trigger manual sends ignoring date restrictions.';
+$string['settings:diploma_only_courses'] = 'Course settings';
+$string['settings:diploma_only_courses_desc'] = 'Courses marked in <span style="color:#721c24;font-weight:700">red/yellow</span> have diploma-only mode active — double-check before saving.';
+$string['settings:col_course'] = 'Course';
+$string['settings:col_diploma_only'] = 'Diploma-only mode';
+$string['settings:col_manual_send'] = 'Manual send (ignore dates)';
+$string['settings:diploma_only_configure_first'] = 'Configure the custom field shortname above first.';
+$string['settings:diploma_only_no_courses'] = 'No courses are currently enabled for this plugin (no course has the custom field active).';
+$string['settings:diploma_only_active_badge'] = '⚠ DIPLOMA ONLY';
+$string['settings:diploma_only_warning_active'] = 'WARNING: one or more courses have diploma-only mode active. Non-diploma emails will NOT be sent to students in those courses.';
 
 // Progress table.
 $string['progress:header:activity'] = 'Activity';

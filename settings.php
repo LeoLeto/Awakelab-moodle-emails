@@ -121,5 +121,16 @@ if ($hassiteconfig) {
 
     $settings->add(new admin_setting_heading('local_courseprogressnotify_runblock', get_string('runpage:heading', 'local_courseprogressnotify'), $desc));
 
+    // ── Diploma-only course configuration ──────────────────────────────────────
+    $settings->add(new admin_setting_heading(
+        'local_courseprogressnotify_diplomaonly_heading',
+        get_string('settings:diploma_only_heading', 'local_courseprogressnotify'),
+        get_string('settings:diploma_only_heading_desc', 'local_courseprogressnotify')
+    ));
+
+    // Require the custom admin_setting class (not autoloaded by default in settings.php context).
+    require_once(__DIR__ . '/classes/admin_setting_diploma_only_courses.php');
+    $settings->add(new \local_courseprogressnotify\admin_setting_diploma_only_courses());
+
     $ADMIN->add('localplugins', $settings);
 }

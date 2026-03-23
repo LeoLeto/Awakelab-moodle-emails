@@ -59,6 +59,13 @@ class check_zoom_sessions extends scheduled_task {
                 mtrace("  ✗ Skipping (not enabled for notifications)");
                 continue;
             }
+
+            // Skip diploma-only courses (they should only receive the diploma email).
+            $diplomaonlyids = notification_log::get_diploma_only_course_ids();
+            if (!empty($diplomaonlyids) && in_array((int)$course->id, $diplomaonlyids, true)) {
+                mtrace("  [DIPLOMA-ONLY] Skipping {$course->fullname} — configured to only receive diploma email.");
+                continue;
+            }
             
             $students = $this->get_course_students($course->id);
             mtrace("  Found " . count($students) . " enrolled students");

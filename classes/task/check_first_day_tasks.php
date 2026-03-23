@@ -12,6 +12,26 @@ use local_courseprogressnotify\notification_log;
  */
 class check_first_day_tasks extends scheduled_task {
 
+    /** @var bool When true, skip date-window restrictions (manual override). */
+    protected $ignoredaterestrictions = false;
+
+    /** @var int When > 0, only process this specific course ID. */
+    protected $targetcourseid = 0;
+
+    /**
+     * Enable or disable date restriction bypass for manual/forced execution.
+     */
+    public function set_ignore_date_restrictions(bool $value): void {
+        $this->ignoredaterestrictions = $value;
+    }
+
+    /**
+     * Restrict execution to a single course (used by per-course send from settings).
+     */
+    public function set_target_course_id(int $id): void {
+        $this->targetcourseid = $id;
+    }
+
     public function get_name() {
         return get_string('task_check_first_day_tasks', 'local_courseprogressnotify');
     }
@@ -31,55 +51,101 @@ class check_first_day_tasks extends scheduled_task {
         mtrace("Using custom field: {$customfieldshortname}");
 
         $now = time();
-        // Look back 1 extra day so that courses configured after the 9:00 AM cron on their start date
-        // are still caught on the following run. The notification_log dedup prevents double-sends.
-        $windowstart = usergetmidnight($now) - DAYSECS; // yesterday midnight
-        $windowend   = usergetmidnight($now) + DAYSECS; // tomorrow midnight
 
-        mtrace("Time window : " . userdate($windowstart, '%Y-%m-%d %H:%M:%S') . " → " . userdate($windowend, '%Y-%m-%d %H:%M:%S') . " (2-day window)");
-        mtrace("Timestamps  : {$windowstart} → {$windowend}");
-        mtrace("Server time : " . date('Y-m-d H:i:s T', $now));
+        if ($this->ignoredaterestrictions) {
+            // Manual override: process ALL enabled courses regardless of start date.
+            mtrace('⚠ Date restrictions IGNORED — processing all enabled visible courses.');
+            $allcourses = $DB->get_records('course', ['visible' => 1]);
+            $enabled = [];
+            foreach ($allcourses as $c) {
+                if ($this->is_course_enabled($c->id, $customfieldshortname)) {
+                    $enabled[] = $c;
+                }
+            }
+            $courses = $enabled;
+            mtrace('  Found ' . count($courses) . ' enabled course(s) (date restrictions ignored).');
+            if (empty($courses)) {
+                mtrace('  No enabled courses found.');
+                return;
+            }
+        } else {
+            // Look back 1 extra day so that courses configured after the 9:00 AM cron on their start date
+            // are still caught on the following run. The notification_log dedup prevents double-sends.
+            $windowstart = usergetmidnight($now) - DAYSECS; // yesterday midnight
+            $windowend   = usergetmidnight($now) + DAYSECS; // tomorrow midnight
 
-        // Courses that started within the 2-day window and have not yet been notified.
-        $courses = $DB->get_records_select('course',
-            'visible = 1 AND startdate >= :from AND startdate < :to',
-            [
-                'from' => $windowstart,
-                'to'   => $windowend,
-            ]
-        );
+            mtrace("Time window : " . userdate($windowstart, '%Y-%m-%d %H:%M:%S') . " → " . userdate($windowend, '%Y-%m-%d %H:%M:%S') . " (2-day window)");
+            mtrace("Timestamps  : {$windowstart} → {$windowend}");
+            mtrace("Server time : " . date('Y-m-d H:i:s T', $now));
 
-        mtrace('  Visible courses in window (before custom field filter): ' . count($courses));
-
-        if (empty($courses)) {
-            // Also check if there are courses in the window but hidden, to help diagnose visibility issues.
-            $hiddencourses = $DB->get_records_select('course',
-                'visible = 0 AND startdate >= :from AND startdate < :to',
-                ['from' => $windowstart, 'to' => $windowend]
+            // Courses that started within the 2-day window and have not yet been notified.
+            $courses = $DB->get_records_select('course',
+                'visible = 1 AND startdate >= :from AND startdate < :to',
+                [
+                    'from' => $windowstart,
+                    'to'   => $windowend,
+                ]
             );
-            if (!empty($hiddencourses)) {
-                mtrace('  NOTE: ' . count($hiddencourses) . ' hidden (visible=0) course(s) were skipped: '
-                    . implode(', ', array_column($hiddencourses, 'fullname')));
+
+            mtrace('  Visible courses in window (before custom field filter): ' . count($courses));
+
+            if (empty($courses)) {
+                // Also check if there are courses in the window but hidden, to help diagnose visibility issues.
+                $hiddencourses = $DB->get_records_select('course',
+                    'visible = 0 AND startdate >= :from AND startdate < :to',
+                    ['from' => $windowstart, 'to' => $windowend]
+                );
+                if (!empty($hiddencourses)) {
+                    mtrace('  NOTE: ' . count($hiddencourses) . ' hidden (visible=0) course(s) were skipped: '
+                        . implode(', ', array_column($hiddencourses, 'fullname')));
+                }
+                mtrace('  No visible courses starting today or yesterday.');
+                return;
             }
-            mtrace('  No visible courses starting today or yesterday.');
-            return;
+
+            // Filter courses based on custom field, logging reason for each exclusion.
+            $enabled = [];
+            foreach ($courses as $course) {
+                $startreadable = userdate($course->startdate, '%Y-%m-%d %H:%M:%S');
+                if ($this->is_course_enabled($course->id, $customfieldshortname)) {
+                    mtrace("  [ENABLED]  {$course->fullname} (startdate: {$startreadable} / {$course->startdate})");
+                    $enabled[] = $course;
+                } else {
+                    mtrace("  [SKIPPED]  {$course->fullname} (startdate: {$startreadable} / {$course->startdate}) — custom field '{$customfieldshortname}' not set or not enabled");
+                }
+            }
+            $courses = $enabled;
+
+            if (empty($courses)) {
+                mtrace('  Courses start today but none have notifications enabled (check the custom field setting).');
+                return;
+            }
         }
 
-        // Filter courses based on custom field, logging reason for each exclusion.
-        $enabled = [];
-        foreach ($courses as $course) {
-            $startreadable = userdate($course->startdate, '%Y-%m-%d %H:%M:%S');
-            if ($this->is_course_enabled($course->id, $customfieldshortname)) {
-                mtrace("  [ENABLED]  {$course->fullname} (startdate: {$startreadable} / {$course->startdate})");
-                $enabled[] = $course;
-            } else {
-                mtrace("  [SKIPPED]  {$course->fullname} (startdate: {$startreadable} / {$course->startdate}) — custom field '{$customfieldshortname}' not set or not enabled");
-            }
+        // Filter out diploma-only courses (they should only receive the diploma email).
+        $diplomaonlyids = notification_log::get_diploma_only_course_ids();
+        if (!empty($diplomaonlyids)) {
+            $courses = array_filter($courses, function($c) use ($diplomaonlyids) {
+                if (in_array((int)$c->id, $diplomaonlyids, true)) {
+                    mtrace("  [DIPLOMA-ONLY] Skipping {$c->fullname} — configured to only receive diploma email.");
+                    return false;
+                }
+                return true;
+            });
         }
-        $courses = $enabled;
+
+        // Filter to a single target course if executing per-course from settings.
+        if ($this->targetcourseid > 0) {
+            $courses = array_filter($courses, fn($c) => (int)$c->id === $this->targetcourseid);
+            if (empty($courses)) {
+                mtrace("  Target course ID {$this->targetcourseid} not found among enabled courses.");
+                return;
+            }
+            mtrace("  Targeting single course ID: {$this->targetcourseid}");
+        }
 
         if (empty($courses)) {
-            mtrace('  Courses start today but none have notifications enabled (check the custom field setting).');
+            mtrace('  No courses to process after diploma-only filter.');
             return;
         }
 

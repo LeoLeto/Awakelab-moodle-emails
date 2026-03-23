@@ -49,7 +49,16 @@ class check_progress_50 extends scheduled_task {
         $processedcount = 0;
         $sentcount = 0;
 
+        // Filter out diploma-only courses (they should only receive the diploma email).
+        $diplomaonlyids = notification_log::get_diploma_only_course_ids();
+
         foreach ($courses as $course) {
+            // Skip diploma-only courses.
+            if (!empty($diplomaonlyids) && in_array((int)$course->id, $diplomaonlyids, true)) {
+                mtrace("  [DIPLOMA-ONLY] Skipping {$course->fullname} — configured to only receive diploma email.");
+                continue;
+            }
+
             if (!empty($course->enddate) && $course->enddate > 0 && $course->enddate < ($now - 120 * DAYSECS)) {
                 mtrace("  Skipping course {$course->id} ({$course->fullname}): ended > 120 days ago");
                 continue;
