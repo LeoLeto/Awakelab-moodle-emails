@@ -130,7 +130,7 @@ $string['email_zoom_body'] = '<p>¡Hola {{firstname}}!</p>
 
 <p>El mismo día de la sesión, cuando accedas a la plataforma, verás el enlace para unirte directamente a la videollamada.</p>
 
-<p><img src="{{image_zoom_link}}" alt="Ubicación del enlace Zoom" style="max-width: 100%; height: auto;"></p>
+<p><img src="{{image_zoom_link_es}}" alt="Ubicación del enlace Zoom" style="max-width: 100%; height: auto;"></p>
 
 <p>Esta sesión tiene como objetivo:</p>
 <ul>

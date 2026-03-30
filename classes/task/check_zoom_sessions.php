@@ -83,8 +83,7 @@ class check_zoom_sessions extends scheduled_task {
                 $datefmt = get_string('strftimedate', 'langconfig');
                 $timefmt = get_string('strftimetime', 'langconfig');
                 $start = $session->start_time;
-                $end = $session->start_time + ((int)$session->duration * 60);
-                $imgurl = new \moodle_url('/local/courseprogressnotify/pix/email_zoom_link_location.png');
+                $end = $session->start_time + (int)$session->duration;
                 $placeholders = [
                     'zoom_name' => format_string($session->name, true, ['context' => \context_module::instance($session->cmid)]),
                     'zoom_date' => userdate($start, $datefmt, \core_date::get_user_timezone($user)),
@@ -92,7 +91,8 @@ class check_zoom_sessions extends scheduled_task {
                     'zoom_end' => userdate($end, $timefmt, \core_date::get_user_timezone($user)),
                     'zoom_time' => userdate($start, $timefmt, \core_date::get_user_timezone($user)) . ' - ' . userdate($end, $timefmt, \core_date::get_user_timezone($user)),
                     'zoom_link' => (new \moodle_url('/mod/zoom/view.php', ['id' => $session->cmid]))->out(false),
-                    'image_zoom_link' => $imgurl->out(false),
+                    'image_zoom_link_es' => (new \moodle_url('/local/courseprogressnotify/pix/updated_es_email_zoom_link_location.png'))->out(false),
+                    'image_zoom_link_ca' => (new \moodle_url('/local/courseprogressnotify/pix/updated_ca_email_zoom_link_location.png'))->out(false),
                 ];
                 email_builder::send($user, $course, 'zoom', $placeholders, 'zoom_reminder', $session->id);
                 $notified++;

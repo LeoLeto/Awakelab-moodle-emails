@@ -55,7 +55,7 @@ class zoom_provider {
         if (empty($moduleid)) {
             return [];
         }
-        // Note: mod_zoom stores timestamps in 'start_time' (int) and duration in minutes.
+        // Note: mod_zoom stores timestamps in 'start_time' (int) and duration in seconds.
         $sql = "SELECT z.id, z.course, z.name, z.start_time, z.duration, z.join_url, cm.id AS cmid
                   FROM {zoom} z
                   JOIN {course_modules} cm ON cm.instance = z.id AND cm.module = :moduleid
