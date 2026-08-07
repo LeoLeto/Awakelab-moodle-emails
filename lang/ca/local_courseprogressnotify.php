@@ -72,6 +72,9 @@ $string['run_now_button'] = 'Verificar notificacions ara';
 $string['run_now_done'] = 'La verificació s\'ha executat correctament.';
 $string['run_now_error'] = 'S\'ha produït un error durant l\'execució:';
 $string['runpage:nocategory'] = 'No hi ha cap camp personalitzat configurat. Configureu el nom curt del camp personalitzat per habilitar les operacions del connector.';
+$string['runpage:course_selector_heading'] = 'Selecció de curs';
+$string['runpage:course_selector_desc'] = 'Seleccioneu un curs específic per limitar la verificació a aquell curs, o deixeu "Tots els cursos" per executar en tots els cursos habilitats.';
+$string['runpage:all_courses'] = 'Tots els cursos';
 
 // Settings.
 
@@ -411,3 +414,13 @@ $string['email_second_day_body'] = '<p>Bon dia,</p>
 <p>Per a qualsevol dubte, podeu contactar amb el vostre dinamitzador/a del curs.</p>
 
 <p>Moltes gràcies.</p>';
+
+// Pàgina de vista prèvia de plantilles de correu.
+$string['previewpage:title'] = 'Vista prèvia de plantilles de correu';
+$string['previewpage:heading'] = 'Vista prèvia de plantilles de correu';
+$string['previewpage:desc'] = 'Aquesta pàgina mostra totes les plantilles de correu tal com el connector les envia a l\'alumnat, utilitzant dades d\'exemple (no s\'envia cap correu). Els marcadors que el connector mai no substitueix es ressalten en vermell.';
+$string['previewpage:language'] = 'Idioma de les plantilles:';
+$string['previewpage:subject'] = 'Assumpte';
+$string['previewpage:missing'] = 'Atenció: aquesta plantilla conté marcadors que el connector mai no substitueix:';
+$string['previewpage:combined_on'] = 'El mode de correu combinat està ACTIVAT: cada alumne/a rep un únic correu amb la versió en castellà seguida de la versió en català.';
+$string['previewpage:combined_off'] = 'El mode de correu combinat està desactivat: cada alumne/a rep el correu en el seu idioma preferit.';

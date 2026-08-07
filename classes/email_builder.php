@@ -195,7 +195,7 @@ class email_builder {
      * @param string $lang Language code ('es', 'ca', 'en')
      * @return array The $string array from the language file
      */
-    private static function load_lang_strings(string $lang): array {
+    public static function load_lang_strings(string $lang): array {
         $langfile = __DIR__ . '/../lang/' . $lang . '/local_courseprogressnotify.php';
         if (!file_exists($langfile)) {
             return [];

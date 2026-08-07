@@ -72,6 +72,9 @@ $string['run_now_button'] = 'Verificar Notificaciones Ahora';
 $string['run_now_done'] = 'La verificación se ejecutó correctamente.';
 $string['run_now_error'] = 'Se produjo un error durante la ejecución:';
 $string['runpage:nocategory'] = 'No hay un campo personalizado configurado. Configure el nombre corto del campo personalizado para habilitar las operaciones del plugin.';
+$string['runpage:course_selector_heading'] = 'Selección de curso';
+$string['runpage:course_selector_desc'] = 'Selecciona un curso específico para limitar la verificación a ese curso, o deja "Todos los cursos" para ejecutar en todos los cursos habilitados.';
+$string['runpage:all_courses'] = 'Todos los cursos';
 
 // Settings.
 $string['settings:zoomdaysbefore'] = 'Días antes para la invitación Zoom';
@@ -412,3 +415,13 @@ $string['email_second_day_body'] = '<p>Buenos días,</p>
 <p>Para cualquier duda, podéis contactar con vuestro/a dinamizador/a del curso.</p>
 
 <p>Muchas gracias.</p>';
+
+// Página de vista previa de plantillas de correo.
+$string['previewpage:title'] = 'Vista previa de plantillas de correo';
+$string['previewpage:heading'] = 'Vista previa de plantillas de correo';
+$string['previewpage:desc'] = 'Esta página muestra todas las plantillas de correo tal y como el plugin las envía al alumnado, utilizando datos de ejemplo (no se envía ningún correo). Los marcadores que el plugin nunca sustituye se resaltan en rojo.';
+$string['previewpage:language'] = 'Idioma de las plantillas:';
+$string['previewpage:subject'] = 'Asunto';
+$string['previewpage:missing'] = 'Atención: esta plantilla contiene marcadores que el plugin nunca sustituye:';
+$string['previewpage:combined_on'] = 'El modo de correo combinado está ACTIVADO: cada alumno/a recibe un único correo con la versión en español seguida de la versión en catalán.';
+$string['previewpage:combined_off'] = 'El modo de correo combinado está desactivado: cada alumno/a recibe el correo en su idioma preferido.';

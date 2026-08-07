@@ -12,6 +12,13 @@ use local_courseprogressnotify\notification_log;
  */
 class check_course_end_soon extends scheduled_task {
 
+    /** @var int When > 0, only process this specific course ID. */
+    protected $targetcourseid = 0;
+
+    public function set_target_course_id(int $id): void {
+        $this->targetcourseid = $id;
+    }
+
     public function get_name() {
         return get_string('task_check_course_end_soon', 'local_courseprogressnotify');
     }
@@ -38,7 +45,17 @@ class check_course_end_soon extends scheduled_task {
         });
         $coursecount = count($courses);
         mtrace("Found {$coursecount} course(s) with end dates and notifications enabled");
-        
+
+        // Filter to a single target course if executing per-course from the run page.
+        if ($this->targetcourseid > 0) {
+            $courses = array_filter($courses, fn($c) => (int)$c->id === $this->targetcourseid);
+            if (empty($courses)) {
+                mtrace("  Target course ID {$this->targetcourseid} not found among enabled courses.");
+                return;
+            }
+            mtrace("  Targeting single course ID: {$this->targetcourseid}");
+        }
+
         $processedcount = 0;
         $sentcount = 0;
 

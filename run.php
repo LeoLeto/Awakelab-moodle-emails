@@ -105,10 +105,15 @@ if ($confirm && !empty($type) && confirm_sesskey()) {
     
     ob_start();
     
+    $courselabel = $courseid ? ' [curso ID: ' . $courseid . ']' : '';
+
     if ($type === 'progress') {
         try {
-            $output[] = '--- Executing 25% Progress Check ---';
+            $output[] = '--- Executing 25% Progress Check' . $courselabel . ' ---';
             $t25 = new check_progress_25();
+            if ($courseid) {
+                $t25->set_target_course_id($courseid);
+            }
             $t25->execute();
             $output[] = ob_get_contents();
         } catch (Throwable $e) {
@@ -116,10 +121,13 @@ if ($confirm && !empty($type) && confirm_sesskey()) {
             $output[] = 'ERROR in 25% task: ' . $e->getMessage();
         }
         ob_clean();
-        
+
         try {
-            $output[] = '\n--- Executing 50% Progress Check ---';
+            $output[] = '\n--- Executing 50% Progress Check' . $courselabel . ' ---';
             $t50 = new check_progress_50();
+            if ($courseid) {
+                $t50->set_target_course_id($courseid);
+            }
             $t50->execute();
             $output[] = ob_get_contents();
         } catch (Throwable $e) {
@@ -128,8 +136,11 @@ if ($confirm && !empty($type) && confirm_sesskey()) {
         }
     } else if ($type === 'courseend') {
         try {
-            $output[] = '--- Executing Course End Soon Check (7 days before) ---';
+            $output[] = '--- Executing Course End Soon Check (7 days before)' . $courselabel . ' ---';
             $tendSoon = new check_course_end_soon();
+            if ($courseid) {
+                $tendSoon->set_target_course_id($courseid);
+            }
             $tendSoon->execute();
             $output[] = ob_get_contents();
         } catch (Throwable $e) {
@@ -137,10 +148,13 @@ if ($confirm && !empty($type) && confirm_sesskey()) {
             $output[] = 'ERROR in end soon task: ' . $e->getMessage();
         }
         ob_clean();
-        
+
         try {
-            $output[] = '\n--- Executing Course Last Day Check ---';
+            $output[] = '\n--- Executing Course Last Day Check' . $courselabel . ' ---';
             $tlastDay = new check_course_last_day();
+            if ($courseid) {
+                $tlastDay->set_target_course_id($courseid);
+            }
             $tlastDay->execute();
             $output[] = ob_get_contents();
         } catch (Throwable $e) {
@@ -149,8 +163,11 @@ if ($confirm && !empty($type) && confirm_sesskey()) {
         }
     } else if ($type === 'zoom') {
         try {
-            $output[] = '--- Executing Zoom Sessions Check ---';
+            $output[] = '--- Executing Zoom Sessions Check' . $courselabel . ' ---';
             $tzoom = new check_zoom_sessions();
+            if ($courseid) {
+                $tzoom->set_target_course_id($courseid);
+            }
             $tzoom->execute();
             $output[] = ob_get_contents();
         } catch (Throwable $e) {
@@ -159,8 +176,11 @@ if ($confirm && !empty($type) && confirm_sesskey()) {
         }
     } else if ($type === 'presential') {
         try {
-            $output[] = '--- Executing Presential Sessions Check ---';
+            $output[] = '--- Executing Presential Sessions Check' . $courselabel . ' ---';
             $tpresential = new check_presential_sessions();
+            if ($courseid) {
+                $tpresential->set_target_course_id($courseid);
+            }
             $tpresential->execute();
             $output[] = ob_get_contents();
         } catch (Throwable $e) {
@@ -205,8 +225,11 @@ if ($confirm && !empty($type) && confirm_sesskey()) {
         }
     } else if ($type === 'secondday') {
         try {
-            $output[] = '--- Executing Second Day Tasks Check ---';
+            $output[] = '--- Executing Second Day Tasks Check' . $courselabel . ' ---';
             $tsecondday = new check_second_day_tasks();
+            if ($courseid) {
+                $tsecondday->set_target_course_id($courseid);
+            }
             $tsecondday->execute();
             $output[] = ob_get_contents();
         } catch (Throwable $e) {
@@ -252,89 +275,134 @@ if (empty($customfield)) {
     if (has_capability('local/courseprogressnotify:managecourses', $context)) {
         $coursesurl = new moodle_url('/local/courseprogressnotify/courses.php');
         echo html_writer::link($coursesurl, get_string('coursespage:title', 'local_courseprogressnotify'), ['class' => 'btn btn-outline-info btn-sm mb-3']);
+        echo ' ';
     }
+    $previewurl = new moodle_url('/local/courseprogressnotify/preview.php');
+    echo html_writer::link($previewurl, get_string('previewpage:title', 'local_courseprogressnotify'), ['class' => 'btn btn-outline-info btn-sm mb-3']);
+
+    // Course selector.
+    $enabledcourses = \local_courseprogressnotify\course_diagnostics::get_enabled_courses($customfield);
+    echo $OUTPUT->box_start('generalbox mb-4');
+    echo html_writer::tag('h4', get_string('runpage:course_selector_heading', 'local_courseprogressnotify'));
+    echo html_writer::tag('p', get_string('runpage:course_selector_desc', 'local_courseprogressnotify'));
+
+    $selectoptions = [0 => get_string('runpage:all_courses', 'local_courseprogressnotify')];
+    foreach ($enabledcourses as $ec) {
+        $selectoptions[$ec->id] = $ec->fullname;
+    }
+    echo html_writer::select($selectoptions, 'cpn_course_selector', 0, false, [
+        'id' => 'cpn-course-selector',
+        'class' => 'form-control mb-2',
+        'style' => 'max-width: 600px;',
+    ]);
+    echo $OUTPUT->box_end();
+
+    $baseparams = ['confirm' => 1, 'sesskey' => sesskey()];
+
     echo $OUTPUT->box_start('generalbox mb-3');
     echo html_writer::tag('h4', get_string('runpage:type_progress', 'local_courseprogressnotify'));
     echo html_writer::tag('p', get_string('runpage:confirm_progress', 'local_courseprogressnotify'));
-    
-    $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'progress', 'confirm' => 1, 'sesskey' => sesskey()]);
-    echo html_writer::link($formurl, get_string('run_progress_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+
+    $formurl = new moodle_url('/local/courseprogressnotify/run.php', $baseparams + ['type' => 'progress']);
+    echo html_writer::link($formurl, get_string('run_progress_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary cpn-run-btn', 'data-basehref' => $formurl->out(false)]);
     echo ' ';
-    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'progress', 'confirm' => 1, 'clearlogs' => 1, 'sesskey' => sesskey()]);
-    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning']);
+    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', $baseparams + ['type' => 'progress', 'clearlogs' => 1]);
+    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning cpn-run-btn', 'data-basehref' => $clearurl->out(false)]);
     echo $OUTPUT->box_end();
     
     // Course end checks (7 days before and last day)
     echo $OUTPUT->box_start('generalbox mb-3');
     echo html_writer::tag('h4', get_string('runpage:type_courseend', 'local_courseprogressnotify'));
     echo html_writer::tag('p', get_string('runpage:confirm_courseend', 'local_courseprogressnotify'));
-    
-    $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'courseend', 'confirm' => 1, 'sesskey' => sesskey()]);
-    echo html_writer::link($formurl, get_string('run_courseend_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+
+    $formurl = new moodle_url('/local/courseprogressnotify/run.php', $baseparams + ['type' => 'courseend']);
+    echo html_writer::link($formurl, get_string('run_courseend_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary cpn-run-btn', 'data-basehref' => $formurl->out(false)]);
     echo ' ';
-    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'courseend', 'confirm' => 1, 'clearlogs' => 1, 'sesskey' => sesskey()]);
-    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning']);
+    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', $baseparams + ['type' => 'courseend', 'clearlogs' => 1]);
+    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning cpn-run-btn', 'data-basehref' => $clearurl->out(false)]);
     echo $OUTPUT->box_end();
-    
+
     // Zoom session checks
     echo $OUTPUT->box_start('generalbox mb-3');
     echo html_writer::tag('h4', get_string('runpage:type_zoom', 'local_courseprogressnotify'));
     echo html_writer::tag('p', get_string('runpage:confirm_zoom', 'local_courseprogressnotify'));
-    
-    $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'zoom', 'confirm' => 1, 'sesskey' => sesskey()]);
-    echo html_writer::link($formurl, get_string('run_zoom_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+
+    $formurl = new moodle_url('/local/courseprogressnotify/run.php', $baseparams + ['type' => 'zoom']);
+    echo html_writer::link($formurl, get_string('run_zoom_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary cpn-run-btn', 'data-basehref' => $formurl->out(false)]);
     echo ' ';
-    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'zoom', 'confirm' => 1, 'clearlogs' => 1, 'sesskey' => sesskey()]);
-    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning']);
+    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', $baseparams + ['type' => 'zoom', 'clearlogs' => 1]);
+    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning cpn-run-btn', 'data-basehref' => $clearurl->out(false)]);
     echo $OUTPUT->box_end();
-    
+
     // Presential sessions checks
     echo $OUTPUT->box_start('generalbox mb-3');
     echo html_writer::tag('h4', get_string('runpage:type_presential', 'local_courseprogressnotify'));
     echo html_writer::tag('p', get_string('runpage:confirm_presential', 'local_courseprogressnotify'));
-    
-    $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'presential', 'confirm' => 1, 'sesskey' => sesskey()]);
-    echo html_writer::link($formurl, get_string('run_presential_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+
+    $formurl = new moodle_url('/local/courseprogressnotify/run.php', $baseparams + ['type' => 'presential']);
+    echo html_writer::link($formurl, get_string('run_presential_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary cpn-run-btn', 'data-basehref' => $formurl->out(false)]);
     echo ' ';
-    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'presential', 'confirm' => 1, 'clearlogs' => 1, 'sesskey' => sesskey()]);
-    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning']);
+    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', $baseparams + ['type' => 'presential', 'clearlogs' => 1]);
+    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning cpn-run-btn', 'data-basehref' => $clearurl->out(false)]);
     echo $OUTPUT->box_end();
-    
+
     // Diploma checks
     echo $OUTPUT->box_start('generalbox mb-3');
     echo html_writer::tag('h4', get_string('runpage:type_diploma', 'local_courseprogressnotify'));
     echo html_writer::tag('p', get_string('runpage:confirm_diploma', 'local_courseprogressnotify'));
-    
-    $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'diploma', 'confirm' => 1, 'sesskey' => sesskey()]);
-    echo html_writer::link($formurl, get_string('run_diploma_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+
+    $formurl = new moodle_url('/local/courseprogressnotify/run.php', $baseparams + ['type' => 'diploma']);
+    echo html_writer::link($formurl, get_string('run_diploma_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary cpn-run-btn', 'data-basehref' => $formurl->out(false)]);
     echo ' ';
-    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'diploma', 'confirm' => 1, 'clearlogs' => 1, 'sesskey' => sesskey()]);
-    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning']);
+    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', $baseparams + ['type' => 'diploma', 'clearlogs' => 1]);
+    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning cpn-run-btn', 'data-basehref' => $clearurl->out(false)]);
     echo $OUTPUT->box_end();
-    
+
     // First day tasks
     echo $OUTPUT->box_start('generalbox mb-3');
     echo html_writer::tag('h4', get_string('runpage:type_firstday', 'local_courseprogressnotify'));
     echo html_writer::tag('p', get_string('runpage:confirm_firstday', 'local_courseprogressnotify'));
-    
-    $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'firstday', 'confirm' => 1, 'sesskey' => sesskey()]);
-    echo html_writer::link($formurl, get_string('run_firstday_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+
+    $formurl = new moodle_url('/local/courseprogressnotify/run.php', $baseparams + ['type' => 'firstday']);
+    echo html_writer::link($formurl, get_string('run_firstday_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary cpn-run-btn', 'data-basehref' => $formurl->out(false)]);
     echo ' ';
-    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'firstday', 'confirm' => 1, 'clearlogs' => 1, 'sesskey' => sesskey()]);
-    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning']);
+    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', $baseparams + ['type' => 'firstday', 'clearlogs' => 1]);
+    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning cpn-run-btn', 'data-basehref' => $clearurl->out(false)]);
     echo $OUTPUT->box_end();
-    
+
     // Second day tasks
     echo $OUTPUT->box_start('generalbox mb-3');
     echo html_writer::tag('h4', get_string('runpage:type_secondday', 'local_courseprogressnotify'));
     echo html_writer::tag('p', get_string('runpage:confirm_secondday', 'local_courseprogressnotify'));
-    
-    $formurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'secondday', 'confirm' => 1, 'sesskey' => sesskey()]);
-    echo html_writer::link($formurl, get_string('run_secondday_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary']);
+
+    $formurl = new moodle_url('/local/courseprogressnotify/run.php', $baseparams + ['type' => 'secondday']);
+    echo html_writer::link($formurl, get_string('run_secondday_button', 'local_courseprogressnotify'), ['class' => 'btn btn-primary cpn-run-btn', 'data-basehref' => $formurl->out(false)]);
     echo ' ';
-    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', ['type' => 'secondday', 'confirm' => 1, 'clearlogs' => 1, 'sesskey' => sesskey()]);
-    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning']);
+    $clearurl = new moodle_url('/local/courseprogressnotify/run.php', $baseparams + ['type' => 'secondday', 'clearlogs' => 1]);
+    echo html_writer::link($clearurl, get_string('run_clear_button', 'local_courseprogressnotify'), ['class' => 'btn btn-warning cpn-run-btn', 'data-basehref' => $clearurl->out(false)]);
     echo $OUTPUT->box_end();
+
+    // JS: update all button hrefs when the course selector changes.
+    echo html_writer::script("
+(function() {
+    var selector = document.getElementById('cpn-course-selector');
+    if (!selector) return;
+    function updateButtons() {
+        var courseId = selector.value;
+        document.querySelectorAll('.cpn-run-btn').forEach(function(btn) {
+            var base = btn.getAttribute('data-basehref');
+            if (!base) return;
+            if (courseId && courseId !== '0') {
+                btn.href = base + '&courseid=' + encodeURIComponent(courseId);
+            } else {
+                btn.href = base;
+            }
+        });
+    }
+    selector.addEventListener('change', updateButtons);
+    updateButtons();
+})();
+");
 }
 
 $backlink = html_writer::link(new moodle_url('/admin/settings.php', ['section' => 'local_courseprogressnotify']),

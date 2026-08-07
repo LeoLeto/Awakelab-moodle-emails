@@ -13,6 +13,13 @@ use local_courseprogressnotify\zoom_provider;
  */
 class check_zoom_sessions extends scheduled_task {
 
+    /** @var int When > 0, only process this specific course ID. */
+    protected $targetcourseid = 0;
+
+    public function set_target_course_id(int $id): void {
+        $this->targetcourseid = $id;
+    }
+
     public function get_name() {
         return get_string('task_check_zoom_sessions', 'local_courseprogressnotify');
     }
@@ -55,6 +62,11 @@ class check_zoom_sessions extends scheduled_task {
             $course = get_course($session->course);
             mtrace("  Course: {$course->fullname}");
             
+            if ($this->targetcourseid > 0 && (int)$course->id !== $this->targetcourseid) {
+                mtrace("  ✗ Skipping (not the target course)");
+                continue;
+            }
+
             if (!$this->is_course_enabled($course->id, $customfieldshortname)) {
                 mtrace("  ✗ Skipping (not enabled for notifications)");
                 continue;

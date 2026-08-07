@@ -72,6 +72,9 @@ $string['run_now_button'] = 'Run Now';
 $string['run_now_done'] = 'Verification completed successfully.';
 $string['run_now_error'] = 'An error occurred while running:';
 $string['runpage:nocategory'] = 'No custom field configured in settings. Configure the custom field shortname to enable the plugin operations.';
+$string['runpage:course_selector_heading'] = 'Course selection';
+$string['runpage:course_selector_desc'] = 'Select a specific course to limit the check to that course only, or leave on "All courses" to run on every enabled course.';
+$string['runpage:all_courses'] = 'All courses';
 
 // Settings.
 $string['settings:zoomdaysbefore'] = 'Days before Zoom invitation';
@@ -404,4 +407,14 @@ $string['report:reason_event_nokeyword']        = 'Event has a location set but 
 $string['report:reason_event_keywords_no_location'] = 'Event has a matching keyword but NO location is set. Add a physical location to the calendar event to trigger presential detection.';
 $string['report:current_exam_kw']     = 'Current exam keywords:';
 $string['report:current_tutoring_kw'] = 'Current tutoring keywords:';
+
+// Email template preview page.
+$string['previewpage:title'] = 'Email template preview';
+$string['previewpage:heading'] = 'Email template preview';
+$string['previewpage:desc'] = 'This page renders every email template exactly as the plugin sends it to students, using sample data (no email is sent). Placeholders that would never be filled by the plugin are highlighted in red.';
+$string['previewpage:language'] = 'Template language:';
+$string['previewpage:subject'] = 'Subject';
+$string['previewpage:missing'] = 'Warning: this template contains placeholders the plugin never fills:';
+$string['previewpage:combined_on'] = 'Combined email mode is ENABLED: each student receives a single email containing the Spanish version followed by the Catalan version.';
+$string['previewpage:combined_off'] = 'Combined email mode is disabled: each student receives the email in their preferred language.';
 

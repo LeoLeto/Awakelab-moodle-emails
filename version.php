@@ -17,9 +17,8 @@
 defined('MOODLE_INTERNAL') || die();
 
 $plugin->component = 'local_courseprogressnotify';
-$plugin->version   = 2026033002; // YYYYMMDDHH (build number).
-$plugin->release   = '2.8.12';
+$plugin->version   = 2026080700; // YYYYMMDDXX (build number).
+$plugin->release   = '2.10.0';
 $plugin->maturity  = MATURITY_STABLE;
 // Requires Moodle 4.4 or later (approximate build number for 4.4).
 $plugin->requires  = 2024042200;
-https://github.com/LeoLeto/Awakelab-moodle-emails.git

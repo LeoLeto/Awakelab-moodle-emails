@@ -1,0 +1,6 @@
+# Deployment artifacts: release zips and the duplicate plugin folder used to build them.
+*.zip
+courseprogressnotify/
+
+# OS files.
+.DS_Store
